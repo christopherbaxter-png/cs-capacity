@@ -58,27 +58,12 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
 <div class="row-label"><span>Renewals per month (next 90 days average)</span><input type="number" id="renewals" value="12" step="1"></div>
 <div class="row-label"><span>Hours per renewal</span><input type="number" id="renewalHours" value="5" step="0.5"></div>
 
-<h2>Journey stages: touchpoints and hours</h2>
+<h2>Accounts and hours by segment</h2>
 <table>
-  <thead><tr><th>Stage</th><th class="num">Touchpoints per account per month</th><th class="num">Hours per touchpoint</th></tr></thead>
-  <tbody id="stageRows"></tbody>
+  <thead><tr><th>Segment</th><th class="num">Accounts</th><th class="num">Proactive hours per account per month</th><th class="num">Reactive hours per account per month</th></tr></thead>
+  <tbody id="segRows"></tbody>
 </table>
-
-<h2>Accounts by segment and stage (illustrative)</h2>
-<table>
-  <thead><tr><th>Stage</th><th class="num">P1</th><th class="num">P2</th><th class="num">P3</th><th class="num">P4</th></tr></thead>
-  <tbody id="accountRows"></tbody>
-</table>
-
-<h2>Reactive hours per account per month</h2>
-<table>
-  <thead><tr><th>Segment</th><th class="num">P1</th><th class="num">P2</th><th class="num">P3</th><th class="num">P4</th></tr></thead>
-  <tbody><tr><td>Reactive hours</td>
-    <td class="num"><input type="number" id="re0" value="3" step="0.25"></td>
-    <td class="num"><input type="number" id="re1" value="1.5" step="0.25"></td>
-    <td class="num"><input type="number" id="re2" value="0.75" step="0.25"></td>
-    <td class="num"><input type="number" id="re3" value="0.4" step="0.25"></td></tr></tbody>
-</table>
+<p class="note">Placeholder values. Proactive hours are the average monthly CSM time per account across the journey stages.</p>
 
 <h2>Result</h2>
 <div class="grid">
@@ -100,44 +85,37 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
   <thead><tr><th>Scenario</th><th class="num">Account multiplier</th><th class="num">Extra accounts</th><th class="num">Headcount change</th><th class="num">Demand (hours)</th><th class="num">Utilisation</th><th>Status</th></tr></thead>
   <tbody id="scenarios"></tbody>
 </table>
-<p class="note">Extra accounts are added at the current average hours per account. Edit the scenario inputs below.</p>
+<p class="note">Extra accounts are added at the current average hours per account. Headcount change is added to the headcount above.</p>
 </main>
 
 <script>
-const stages = [
-  { name: "Set up", touches: 2, hours: 1.5 },
-  { name: "First value", touches: 2, hours: 1.0 },
-  { name: "Adoption", touches: 1, hours: 0.75 },
-  { name: "Prove value", touches: 0.33, hours: 2.0 },
-  { name: "Expand and renew", touches: 1, hours: 1.5 }
-];
-const accounts = [
-  [4, 8, 10, 12], [3, 8, 12, 15], [10, 30, 50, 80], [5, 15, 25, 35], [3, 8, 15, 20]
+const segments = [
+  { name: "P1", accounts: 25, pro: 1.33, re: 3.0 },
+  { name: "P2", accounts: 69, pro: 1.22, re: 1.5 },
+  { name: "P3", accounts: 112, pro: 1.17, re: 0.75 },
+  { name: "P4", accounts: 162, pro: 1.11, re: 0.4 }
 ];
 const scenarioDefs = [
-  { name: "Base", mult: 1, extra: 0, heads: null },
-  { name: "Growth +20%", mult: 1.2, extra: 0, heads: null },
+  { name: "Base", mult: 1, extra: 0, heads: 0 },
+  { name: "Growth +20%", mult: 1.2, extra: 0, heads: 0 },
   { name: "Lose one CSM", mult: 1, extra: 0, heads: -1 },
-  { name: "MM cutover (+30 accounts)", mult: 1, extra: 30, heads: null }
+  { name: "MM cutover (+30 accounts)", mult: 1, extra: 30, heads: 0 }
 ];
 
-function numInput(id, val, step, onChange) {
-  return `<input type="number" id="${id}" value="${val}" step="${step}">`;
+function numInput(id, v, step) {
+  return `<input type="number" id="${id}" value="${v}" step="${step}">`;
 }
 function buildTables() {
-  document.getElementById("stageRows").innerHTML = stages.map((s, i) =>
+  document.getElementById("segRows").innerHTML = segments.map((s, i) =>
     `<tr><td>${s.name}</td>
-      <td class="num">${numInput("t" + i, s.touches, 0.01)}</td>
-      <td class="num">${numInput("h" + i, s.hours, 0.05)}</td></tr>`).join("");
-  document.getElementById("accountRows").innerHTML = stages.map((s, i) =>
-    `<tr><td>${s.name}</td>` + accounts[i].map((v, j) =>
-      `<td class="num">${numInput("a" + i + "_" + j, v, 1)}</td>`).join("") + `</tr>`).join("");
-  document.getElementById("breakdown").innerHTML = "";
+      <td class="num">${numInput("n" + i, s.accounts, 1)}</td>
+      <td class="num">${numInput("p" + i, s.pro, 0.01)}</td>
+      <td class="num">${numInput("r" + i, s.re, 0.05)}</td></tr>`).join("");
   document.getElementById("scenarios").innerHTML = scenarioDefs.map((sc, i) =>
     `<tr><td>${sc.name}</td>
       <td class="num">${numInput("sm" + i, sc.mult, 0.05)}</td>
       <td class="num">${numInput("se" + i, sc.extra, 1)}</td>
-      <td class="num">${numInput("sh" + i, sc.heads === null ? 0 : sc.heads, 1)}</td>
+      <td class="num">${numInput("sh" + i, sc.heads, 1)}</td>
       <td class="num" id="sd${i}">-</td><td class="num" id="su${i}">-</td><td id="ss${i}">-</td></tr>`).join("");
   document.querySelectorAll("input").forEach(el => el.addEventListener("input", recalc));
 }
@@ -146,25 +124,22 @@ function val(id) { const v = parseFloat(document.getElementById(id).value); retu
 function recalc() {
   const hours = val("hours"), share = val("share") / 100, target = val("target") / 100;
   const headcount = val("headcount"), renewals = val("renewals"), renewalHours = val("renewalHours");
-  const segTotals = [0, 0, 0, 0];
-  const rows = [];
-  stages.forEach((s, i) => {
-    const r = [];
-    for (let j = 0; j < 4; j++) {
-      const h = val("a" + i + "_" + j) * val("t" + i) * val("h" + i);
-      r.push(h); segTotals[j] += h;
-    }
-    rows.push({ name: s.name, vals: r });
+
+  const pro = [], re = [], segTotal = [];
+  let totalAccounts = 0;
+  segments.forEach((_, j) => {
+    const n = val("n" + j);
+    totalAccounts += n;
+    pro.push(n * val("p" + j));
+    re.push(n * val("r" + j));
+    segTotal.push(pro[j] + re[j]);
   });
-  const reactive = [0, 1, 2, 3].map(j => {
-    let n = 0; for (let i = 0; i < stages.length; i++) n += val("a" + i + "_" + j);
-    return n * val("re" + j);
-  });
-  reactive.forEach((h, j) => segTotals[j] += h);
+  const proTotal = pro.reduce((a, b) => a + b, 0);
+  const reTotal = re.reduce((a, b) => a + b, 0);
   const renewalTotal = renewals * renewalHours;
-  const demand = segTotals.reduce((a, b) => a + b, 0) + renewalTotal;
-  let totalAccounts = 0; accounts.forEach((_, i) => { for (let j = 0; j < 4; j++) totalAccounts += val("a" + i + "_" + j); });
+  const demand = proTotal + reTotal + renewalTotal;
   const avgPerAccount = totalAccounts ? demand / totalAccounts : 0;
+
   const perCsmHours = hours * share;
   const available = perCsmHours * headcount;
   const util = available ? demand / available : 0;
@@ -180,14 +155,14 @@ function recalc() {
   document.getElementById("needed").textContent = needed;
   document.getElementById("perCsm").textContent = perCsm.toFixed(0);
 
-  const seg = ["P1", "P2", "P3", "P4"];
-  let bd = rows.map(r => `<tr><td>${r.name}</td>` + r.vals.map(v => `<td class="num">${v.toFixed(1)}</td>`).join("") +
-    `<td class="num">${r.vals.reduce((a, b) => a + b, 0).toFixed(1)}</td></tr>`).join("");
-  bd += `<tr><td>Reactive work</td>` + reactive.map(v => `<td class="num">${v.toFixed(1)}</td>`).join("") +
-    `<td class="num">${reactive.reduce((a, b) => a + b, 0).toFixed(1)}</td></tr>`;
-  bd += `<tr><td>Renewal work (all segments)</td><td class="num" colspan="4"></td><td class="num">${renewalTotal.toFixed(1)}</td></tr>`;
-  bd += `<tr><td><strong>Total</strong></td>` + segTotals.map(v => `<td class="num"><strong>${v.toFixed(1)}</strong></td>`).join("") +
-    `<td class="num"><strong>${demand.toFixed(1)}</strong></td></tr>`;
+  const f = v => v.toFixed(1);
+  let bd = `<tr><td>Proactive work</td>` + pro.map(v => `<td class="num">${f(v)}</td>`).join("") +
+    `<td class="num">${f(proTotal)}</td></tr>`;
+  bd += `<tr><td>Reactive work</td>` + re.map(v => `<td class="num">${f(v)}</td>`).join("") +
+    `<td class="num">${f(reTotal)}</td></tr>`;
+  bd += `<tr><td>Renewal work (all segments)</td><td class="num" colspan="4"></td><td class="num">${f(renewalTotal)}</td></tr>`;
+  bd += `<tr><td><strong>Total</strong></td>` + segTotal.map(v => `<td class="num"><strong>${f(v)}</strong></td>`).join("") +
+    `<td class="num"><strong>${f(demand)}</strong></td></tr>`;
   document.getElementById("breakdown").innerHTML = bd;
 
   scenarioDefs.forEach((sc, i) => {
@@ -198,9 +173,9 @@ function recalc() {
     const u = a ? d / a : 0;
     document.getElementById("sd" + i).textContent = d.toFixed(1);
     document.getElementById("su" + i).textContent = (u * 100).toFixed(0) + "%";
-    const s = document.getElementById("ss" + i);
-    s.textContent = u > target ? "Over capacity" : "Within capacity";
-    s.className = u > target ? "bad" : "ok";
+    const sEl = document.getElementById("ss" + i);
+    sEl.textContent = u > target ? "Over capacity" : "Within capacity";
+    sEl.className = u > target ? "bad" : "ok";
   });
 }
 

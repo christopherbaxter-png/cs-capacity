@@ -37,8 +37,8 @@ rows = [
     ("Purpose: estimate how much CSM time the portfolio needs each month, compare it with available time, and show how many accounts each CSM can hold at target utilisation.", BLK),
     ("", None),
     ("How to use", BOLD),
-    ("1. Inputs tab: replace the yellow cells with real values. Start with headcount, contracted hours and the account counts by segment and stage.", BLK),
-    ("2. Demand tab: calculates monthly hours by stage and segment, plus reactive and renewal work. No inputs here.", BLK),
+    ("1. Inputs tab: replace the yellow cells with real values. Start with headcount, contracted hours and the account counts and hours by segment.", BLK),
+    ("2. Demand tab: calculates monthly hours by segment for proactive and reactive work, plus renewal work. No inputs here.", BLK),
     ("3. Capacity tab: compares demand with available hours and flags whether the team is over capacity.", BLK),
     ("4. Scenarios tab: edit the blue cells to test growth, headcount loss or a cutover.", BLK),
     ("", None),
@@ -49,7 +49,7 @@ rows = [
     ("", None),
     ("Important", BOLD),
     ("All starting numbers are illustrative placeholders, not real data. Account counts, headcount, hours per touchpoint and reactive hours all need replacing.", BLK),
-    ("Touchpoint cadences follow the value realisation touchpoint map (five stages). Health-score bands are not used.", BLK),
+    ("Proactive hours per account are placeholders for the average monthly CSM time per account across the five journey stages. Health-score bands are not used.", BLK),
     ("The model assumes an even spread of work across the team. Reactive load is an average per account, so spikes will not show.", BLK),
 ]
 for i, (t, f) in enumerate(rows, start=1):
@@ -76,37 +76,23 @@ for i, (lab, val, fmt, note) in enumerate(gen, start=4):
     inp(wi.cell(row=i, column=2, value=val), fmt)
     wi.cell(row=i, column=4, value=note).font = NOTE
 
-hdr(wi, 11, ["Journey stage", "Touchpoints per account per month", "Hours per touchpoint", "Notes"])
-stages = [
-    ("Set up", 2, 1.5, "Kick-off, stage gates, forecast user volumes"),
-    ("First value", 2, 1.0, "30-day checkpoint, onboarding follow-through"),
-    ("Adoption", 1, 0.75, "60/90-day checkpoints, user-volume tracking"),
-    ("Prove value", 0.33, 2.0, "Quarterly review and ROI pack (0.33 = once per quarter)"),
-    ("Expand and renew", 1, 1.5, "Renewal forecast, upsell handoff"),
+wi["A11"] = "Accounts and hours by segment"; wi["A11"].font = BOLD
+hdr(wi, 12, ["Segment", "Accounts", "Proactive hours per account per month", "Reactive hours per account per month", "Notes"])
+segments = [
+    ("P1", 25, 1.33, 3.0, "Placeholder count; replace"),
+    ("P2", 69, 1.22, 1.5, "Placeholder count; replace"),
+    ("P3", 112, 1.17, 0.75, "Placeholder count; replace"),
+    ("P4", 162, 1.11, 0.4, "Placeholder count; replace"),
 ]
-for i, (s, t, h, n) in enumerate(stages, start=12):
-    wi.cell(row=i, column=1, value=s).font = BLK
-    inp(wi.cell(row=i, column=2, value=t), "0.00")
-    inp(wi.cell(row=i, column=3, value=h), "0.00")
-    wi.cell(row=i, column=4, value=n).font = NOTE
-
-wi["A18"] = "Accounts by segment and stage (illustrative, replace)"; wi["A18"].font = BOLD
-hdr(wi, 19, ["Journey stage", "P1", "P2", "P3", "P4"])
-accounts = [
-    (4, 8, 10, 12), (3, 8, 12, 15), (10, 30, 50, 80), (5, 15, 25, 35), (3, 8, 15, 20),
-]
-for i, ((s, *_), vals) in enumerate(zip(stages, accounts), start=20):
-    wi.cell(row=i, column=1, value=s).font = BLK
-    for j, v in enumerate(vals):
-        inp(wi.cell(row=i, column=2 + j, value=v), "0")
-
-hdr(wi, 27, ["Reactive load", "P1", "P2", "P3", "P4"])
-wi["A28"] = "Reactive hours per account per month"; wi["A28"].font = BLK
-for j, v in enumerate([3, 1.5, 0.75, 0.4]):
-    inp(wi.cell(row=28, column=2 + j, value=v), "0.00")
-wi["A29"] = "Covers escalations, fraud and support tickets, inbox triage, feature questions"; wi["A29"].font = NOTE
-
-for col, w in zip("ABCDE", [44, 22, 22, 52, 12]):
+for i, (seg, n, pro, re_, note) in enumerate(segments, start=13):
+    wi.cell(row=i, column=1, value=seg).font = BLK
+    inp(wi.cell(row=i, column=2, value=n), "0")
+    inp(wi.cell(row=i, column=3, value=pro), "0.00")
+    inp(wi.cell(row=i, column=4, value=re_), "0.00")
+    wi.cell(row=i, column=5, value=note).font = NOTE
+wi["A17"] = "Proactive hours are the average monthly CSM time per account across the journey stages. Reactive hours cover escalations, fraud and support tickets, inbox triage and feature questions."
+wi["A17"].font = NOTE
+for col, w in zip("ABCDE", [44, 16, 26, 26, 40]):
     wi.column_dimensions[col].width = w
 
 # ---------- Demand ----------
@@ -114,24 +100,21 @@ wd = wb.create_sheet("Demand")
 wd["A1"] = "Monthly demand (hours)"; wd["A1"].font = TITLE
 wd["A2"] = "Formulas only. Driven by the Inputs tab."; wd["A2"].font = NOTE
 hdr(wd, 3, ["Workload", "P1", "P2", "P3", "P4", "Total"])
-for i, (s, *_) in enumerate(stages):
-    r = 4 + i
-    wd.cell(row=r, column=1, value=f"{s} touchpoints").font = BLK
-    for j, col in enumerate("BCDE"):
-        c = wd.cell(row=r, column=2 + j, value=f"=Inputs!{col}{20+i}*Inputs!$B${12+i}*Inputs!$C${12+i}")
-        calc(c, "#,##0.0")
-    calc(wd.cell(row=r, column=6, value=f"=SUM(B{r}:E{r})"), "#,##0.0")
-wd["A9"] = "Reactive work"; wd["A9"].font = BLK
+wd["A4"] = "Proactive work"; wd["A4"].font = BLK
+wd["A5"] = "Reactive work"; wd["A5"].font = BLK
 for j, col in enumerate("BCDE"):
-    calc(wd.cell(row=9, column=2 + j, value=f"=SUM(Inputs!{col}20:{col}24)*Inputs!{col}28"), "#,##0.0")
-calc(wd["F9"] , "#,##0.0"); wd["F9"] = "=SUM(B9:E9)"
-wd["A10"] = "Renewal work (all segments)"; wd["A10"].font = BLK
-calc(wd["F10"], "#,##0.0", GRN); wd["F10"] = "=Inputs!B8*Inputs!B9"
-wd["A11"] = "Total demand"; wd["A11"].font = BOLD
+    src = 13 + j
+    calc(wd[f"{col}4"], "#,##0.0"); wd[f"{col}4"] = f"=Inputs!$B${src}*Inputs!$C${src}"
+    calc(wd[f"{col}5"], "#,##0.0"); wd[f"{col}5"] = f"=Inputs!$B${src}*Inputs!$D${src}"
+calc(wd["F4"], "#,##0.0"); wd["F4"] = "=SUM(B4:E4)"
+calc(wd["F5"], "#,##0.0"); wd["F5"] = "=SUM(B5:E5)"
+wd["A6"] = "Renewal work (all segments)"; wd["A6"].font = BLK
+calc(wd["F6"], "#,##0.0", GRN); wd["F6"] = "=Inputs!B8*Inputs!B9"
+wd["A7"] = "Total demand"; wd["A7"].font = BOLD
 for col in "BCDE":
-    c = wd[f"{col}11"]; c.value = f"=SUM({col}4:{col}9)"; calc(c, "#,##0.0", BOLD); c.border = TOP
-wd["F11"] = "=SUM(F4:F10)"; calc(wd["F11"], "#,##0.0", BOLD); wd["F11"].border = TOP
-wd["A13"] = "Note: renewal work is shown in total only, as it is not split by segment."; wd["A13"].font = NOTE
+    c = wd[f"{col}7"]; c.value = f"=SUM({col}4:{col}5)"; calc(c, "#,##0.0", BOLD); c.border = TOP
+wd["F7"] = "=SUM(F4:F6)"; calc(wd["F7"], "#,##0.0", BOLD); wd["F7"].border = TOP
+wd["A9"] = "Note: renewal work is shown in total only, as it is not split by segment."; wd["A9"].font = NOTE
 wd.column_dimensions["A"].width = 34
 for col in "BCDEF": wd.column_dimensions[col].width = 14
 
@@ -141,8 +124,8 @@ wc["A1"] = "Capacity check"; wc["A1"].font = TITLE
 wc["A2"] = "Compares monthly demand with the portfolio hours the team has available."; wc["A2"].font = NOTE
 hdr(wc, 3, ["Measure", "Value", "How it is calculated"])
 cap_rows = [
-    ("Total demand (hours per month)", "=Demand!F11", "#,##0.0", "Demand tab total", GRN),
-    ("Total accounts", "=SUM(Inputs!B20:E24)", "0", "Sum of account counts on Inputs", BLK),
+    ("Total demand (hours per month)", "=Demand!F7", "#,##0.0", "Demand tab total", GRN),
+    ("Total accounts", "=SUM(Inputs!B13:B16)", "0", "Sum of account counts on Inputs", BLK),
     ("Average demand hours per account", "=B4/B5", "0.00", "Total demand / total accounts", BLK),
     ("Portfolio hours per CSM (at 100%)", "=Inputs!B4*Inputs!B5", "#,##0.0", "Contracted hours x share on portfolio", BLK),
     ("CSM headcount", "=Inputs!B7", "0", "From Inputs", GRN),
