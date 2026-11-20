@@ -77,7 +77,7 @@ for i, (lab, val, fmt, note) in enumerate(gen, start=4):
     wi.cell(row=i, column=4, value=note).font = NOTE
 
 wi["A11"] = "Accounts and hours by segment"; wi["A11"].font = BOLD
-hdr(wi, 12, ["Segment", "Accounts", "Proactive hours per account per month", "Reactive hours per account per month", "Notes"])
+hdr(wi, 12, ["Segment", "Accounts", "Proactive hours per account per month", "Reactive hours per account per month", "Proactive work on? (1 = yes, 0 = reactive only)", "Notes"])
 segments = [
     ("P1", 25, 1.33, 3.0, "Placeholder count; replace"),
     ("P2", 69, 1.22, 1.5, "Placeholder count; replace"),
@@ -89,10 +89,11 @@ for i, (seg, n, pro, re_, note) in enumerate(segments, start=13):
     inp(wi.cell(row=i, column=2, value=n), "0")
     inp(wi.cell(row=i, column=3, value=pro), "0.00")
     inp(wi.cell(row=i, column=4, value=re_), "0.00")
-    wi.cell(row=i, column=5, value=note).font = NOTE
-wi["A17"] = "Proactive hours are the average monthly CSM time per account across the journey stages. Reactive hours cover escalations, fraud and support tickets, inbox triage and feature questions."
+    inp(wi.cell(row=i, column=5, value=1 if seg in ("P1", "P2") else 0), "0")
+    wi.cell(row=i, column=6, value=note).font = NOTE
+wi["A17"] = "Proactive hours are the average monthly CSM time per account across the journey stages. Set the switch to 0 for segments where CSMs only carry out reactive work (P3 and P4 currently). Reactive hours cover escalations, fraud and support tickets, inbox triage and feature questions."
 wi["A17"].font = NOTE
-for col, w in zip("ABCDE", [44, 16, 26, 26, 40]):
+for col, w in zip("ABCDEF", [44, 16, 26, 26, 30, 40]):
     wi.column_dimensions[col].width = w
 
 # ---------- Demand ----------
@@ -104,7 +105,7 @@ wd["A4"] = "Proactive work"; wd["A4"].font = BLK
 wd["A5"] = "Reactive work"; wd["A5"].font = BLK
 for j, col in enumerate("BCDE"):
     src = 13 + j
-    calc(wd[f"{col}4"], "#,##0.0"); wd[f"{col}4"] = f"=Inputs!$B${src}*Inputs!$C${src}"
+    calc(wd[f"{col}4"], "#,##0.0"); wd[f"{col}4"] = f"=Inputs!$B${src}*Inputs!$C${src}*Inputs!$E${src}"
     calc(wd[f"{col}5"], "#,##0.0"); wd[f"{col}5"] = f"=Inputs!$B${src}*Inputs!$D${src}"
 calc(wd["F4"], "#,##0.0"); wd["F4"] = "=SUM(B4:E4)"
 calc(wd["F5"], "#,##0.0"); wd["F5"] = "=SUM(B5:E5)"

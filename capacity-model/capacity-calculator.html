@@ -60,10 +60,10 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
 
 <h2>Accounts and hours by segment</h2>
 <table>
-  <thead><tr><th>Segment</th><th class="num">Accounts</th><th class="num">Proactive hours per account per month</th><th class="num">Reactive hours per account per month</th></tr></thead>
+  <thead><tr><th>Segment</th><th class="num">Accounts</th><th class="num">Proactive hours per account per month</th><th class="num">Reactive hours per account per month</th><th class="num">Proactive work on? (1 = yes, 0 = reactive only)</th></tr></thead>
   <tbody id="segRows"></tbody>
 </table>
-<p class="note">Placeholder values. Proactive hours are the average monthly CSM time per account across the journey stages.</p>
+<p class="note">Placeholder values. Proactive hours are the average monthly CSM time per account across the journey stages. Set the switch to 0 where CSMs only carry out reactive work (P3 and P4 currently).</p>
 
 <h2>Result</h2>
 <div class="grid">
@@ -90,10 +90,10 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
 
 <script>
 const segments = [
-  { name: "P1", accounts: 25, pro: 1.33, re: 3.0 },
-  { name: "P2", accounts: 69, pro: 1.22, re: 1.5 },
-  { name: "P3", accounts: 112, pro: 1.17, re: 0.75 },
-  { name: "P4", accounts: 162, pro: 1.11, re: 0.4 }
+  { name: "P1", accounts: 25, pro: 1.33, re: 3.0, on: 1 },
+  { name: "P2", accounts: 69, pro: 1.22, re: 1.5, on: 1 },
+  { name: "P3", accounts: 112, pro: 1.17, re: 0.75, on: 0 },
+  { name: "P4", accounts: 162, pro: 1.11, re: 0.4, on: 0 }
 ];
 const scenarioDefs = [
   { name: "Base", mult: 1, extra: 0, heads: 0 },
@@ -110,7 +110,8 @@ function buildTables() {
     `<tr><td>${s.name}</td>
       <td class="num">${numInput("n" + i, s.accounts, 1)}</td>
       <td class="num">${numInput("p" + i, s.pro, 0.01)}</td>
-      <td class="num">${numInput("r" + i, s.re, 0.05)}</td></tr>`).join("");
+      <td class="num">${numInput("r" + i, s.re, 0.05)}</td>
+      <td class="num">${numInput("o" + i, s.on, 1)}</td></tr>`).join("");
   document.getElementById("scenarios").innerHTML = scenarioDefs.map((sc, i) =>
     `<tr><td>${sc.name}</td>
       <td class="num">${numInput("sm" + i, sc.mult, 0.05)}</td>
@@ -130,7 +131,7 @@ function recalc() {
   segments.forEach((_, j) => {
     const n = val("n" + j);
     totalAccounts += n;
-    pro.push(n * val("p" + j));
+    pro.push(n * val("p" + j) * val("o" + j));
     re.push(n * val("r" + j));
     segTotal.push(pro[j] + re[j]);
   });
