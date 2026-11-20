@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Managed and pooled CSM calculator</title>
+<style>
+:root {
+  --bg: #ffffff; --fg: #1f2328; --muted: #5f6670; --line: #d0d7de; --panel: #f6f8fa;
+  --accent: #1f4e79; --input-bg: #fff8c5; --input-fg: #0b3a8c; --ok: #1a7f37; --bad: #b42318;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --line: #30363d; --panel: #161b22;
+    --accent: #8ab4f8; --input-bg: #3b3510; --input-fg: #ffe58a; --ok: #3fb950; --bad: #ff7b72;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --line: #30363d; --panel: #161b22;
+  --accent: #8ab4f8; --input-bg: #3b3510; --input-fg: #ffe58a; --ok: #3fb950; --bad: #ff7b72;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 Arial, Helvetica, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 960px; margin: 0 auto; padding-block: 24px 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; color: var(--accent); }
+h2 { font-size: 16px; margin: 28px 0 8px; }
+p.note { color: var(--muted); margin: 0 0 12px; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 8px; display: block; overflow-x: auto; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+td.num, th.num { text-align: right; }
+input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--input-bg); color: var(--input-fg); font: inherit; text-align: right; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.card .label { color: var(--muted); font-size: 12px; }
+.card .value { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ok { color: var(--ok); } .bad { color: var(--bad); }
+.row-label { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<main>
+<h1>Managed and pooled CSM calculator</h1>
+<p class="note">P1 and P2 form a managed book with named CSMs. P3 and P4 are served by a shared pool for reactive work only. Change any blue input and the results update. Hours per account are placeholders.</p>
+
+<h2>Team and capacity</h2>
+<div class="row-label"><span>Contracted hours per CSM per month</span><input type="number" id="hours" value="150" step="1"></div>
+<div class="row-label"><span>Share of time on portfolio work (%)</span><input type="number" id="share" value="70" step="1"></div>
+<div class="row-label"><span>Total CSM headcount</span><input type="number" id="headcount" value="30" step="1"></div>
+<div class="row-label"><span>CSMs in managed book (P1, P2)</span><input type="number" id="managedCsms" value="20" step="1"></div>
+<div class="row-label"><span>CSMs in pool (P3, P4)</span><span id="poolCsms">10</span></div>
+<div class="row-label"><span>Target utilisation: managed book (%)</span><input type="number" id="targetManaged" value="85" step="1"></div>
+<div class="row-label"><span>Target utilisation: pool (%)</span><input type="number" id="targetPool" value="80" step="1"></div>
+<div class="row-label"><span>Renewals per month (assumed in managed book)</span><input type="number" id="renewals" value="12" step="1"></div>
+<div class="row-label"><span>Hours per renewal</span><input type="number" id="renewalHours" value="5" step="0.5"></div>
+
+<h2>Accounts and hours by segment</h2>
+<table>
+  <thead><tr><th>Segment</th><th>Book</th><th class="num">Accounts</th><th class="num">Proactive hours per account</th><th class="num">Reactive hours per account</th></tr></thead>
+  <tbody>
+    <tr><td>P1</td><td>Managed</td><td class="num"><input type="number" id="n0" value="448" step="1"></td><td class="num"><input type="number" id="p0" value="1.33" step="0.01"></td><td class="num"><input type="number" id="r0" value="3" step="0.05"></td></tr>
+    <tr><td>P2</td><td>Managed</td><td class="num"><input type="number" id="n1" value="1436" step="1"></td><td class="num"><input type="number" id="p1" value="1.22" step="0.01"></td><td class="num"><input type="number" id="r1" value="1.5" step="0.05"></td></tr>
+    <tr><td>P3</td><td>Pooled reactive</td><td class="num"><input type="number" id="n2" value="1753" step="1"></td><td class="num">n/a</td><td class="num"><input type="number" id="r2" value="0.75" step="0.05"></td></tr>
+    <tr><td>P4</td><td>Pooled reactive</td><td class="num"><input type="number" id="n3" value="4176" step="1"></td><td class="num">n/a</td><td class="num"><input type="number" id="r3" value="0.4" step="0.05"></td></tr>
+  </tbody>
+</table>
+<p class="note">P4 includes 277 blank-tier accounts. Hours per account are placeholders to replace with time-tracking data.</p>
+
+<h2>Result</h2>
+<div class="grid">
+  <div class="card"><div class="label">Managed utilisation</div><div class="value" id="mUtil">-</div><div class="label" id="mStatus">-</div></div>
+  <div class="card"><div class="label">Pool utilisation</div><div class="value" id="pUtil">-</div><div class="label" id="pStatus">-</div></div>
+  <div class="card"><div class="label">Managed demand (hours per month)</div><div class="value" id="mDemand">-</div></div>
+  <div class="card"><div class="label">Pool demand (hours per month)</div><div class="value" id="pDemand">-</div></div>
+  <div class="card"><div class="label">CSMs needed: managed / pool</div><div class="value" id="needed">-</div></div>
+  <div class="card"><div class="label">Accounts per CSM: managed / pool</div><div class="value" id="perCsm">-</div></div>
+</div>
+
+<h2>Pool split options (total headcount fixed)</h2>
+<table>
+  <thead><tr><th class="num">CSMs in pool</th><th class="num">CSMs in managed book</th><th class="num">Managed utilisation</th><th>Managed status</th><th class="num">Pool utilisation</th><th>Pool status</th></tr></thead>
+  <tbody id="split"></tbody>
+</table>
+</main>
+
+<script>
+function val(id) { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+function status(u, t) { return u > t ? ["Over capacity", "bad"] : ["Within capacity", "ok"]; }
+function setStatus(id, u, t) {
+  const [txt, cls] = status(u, t);
+  const el = document.getElementById(id); el.textContent = txt; el.className = cls;
+}
+
+function recalc() {
+  const perCsm = val("hours") * val("share") / 100;
+  const total = val("headcount");
+  const managedCsms = val("managedCsms");
+  const poolCsms = Math.max(total - managedCsms, 0);
+  document.getElementById("poolCsms").textContent = poolCsms;
+  const tM = val("targetManaged") / 100, tP = val("targetPool") / 100;
+
+  const managedAccounts = val("n0") + val("n1");
+  const poolAccounts = val("n2") + val("n3");
+  const managedDemand = val("n0") * (val("p0") + val("r0")) + val("n1") * (val("p1") + val("r1"))
+    + val("renewals") * val("renewalHours");
+  const poolDemand = val("n2") * val("r2") + val("n3") * val("r3");
+
+  const mAvail = managedCsms * perCsm, pAvail = poolCsms * perCsm;
+  const mU = mAvail ? managedDemand / mAvail : 0;
+  const pU = pAvail ? poolDemand / pAvail : 0;
+
+  document.getElementById("mUtil").textContent = (mU * 100).toFixed(0) + "%";
+  document.getElementById("pUtil").textContent = (pU * 100).toFixed(0) + "%";
+  setStatus("mStatus", mU, tM); setStatus("pStatus", pU, tP);
+  document.getElementById("mDemand").textContent = managedDemand.toFixed(1);
+  document.getElementById("pDemand").textContent = poolDemand.toFixed(1);
+
+  const neededM = perCsm * tM ? Math.ceil(managedDemand / (perCsm * tM)) : 0;
+  const neededP = perCsm * tP ? Math.ceil(poolDemand / (perCsm * tP)) : 0;
+  document.getElementById("needed").textContent = neededM + " / " + neededP;
+  const apM = managedCsms ? (managedAccounts / managedCsms).toFixed(0) : "-";
+  const apP = poolCsms ? (poolAccounts / poolCsms).toFixed(0) : "-";
+  document.getElementById("perCsm").textContent = apM + " / " + apP;
+
+  let rows = "";
+  for (let pool = 4; pool <= 14; pool += 2) {
+    const m = total - pool;
+    const mu = m > 0 && perCsm ? managedDemand / (m * perCsm) : null;
+    const pu = pool > 0 && perCsm ? poolDemand / (pool * perCsm) : null;
+    const mCell = mu === null ? "n/a" : (mu * 100).toFixed(0) + "%";
+    const pCell = pu === null ? "n/a" : (pu * 100).toFixed(0) + "%";
+    const mSt = mu === null ? ["n/a", ""] : status(mu, tM);
+    const pSt = pu === null ? ["n/a", ""] : status(pu, tP);
+    rows += `<tr><td class="num">${pool}</td><td class="num">${m}</td><td class="num">${mCell}</td>` +
+      `<td class="${mSt[1]}">${mSt[0]}</td><td class="num">${pCell}</td><td class="${pSt[1]}">${pSt[0]}</td></tr>`;
+  }
+  document.getElementById("split").innerHTML = rows;
+}
+
+document.querySelectorAll("input").forEach(el => el.addEventListener("input", recalc));
+recalc();
+</script>
+</body>
+</html>
