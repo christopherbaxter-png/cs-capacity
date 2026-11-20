@@ -54,7 +54,7 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
 <div class="row-label"><span>Contracted hours per CSM per month</span><input type="number" id="hours" value="150" step="1"></div>
 <div class="row-label"><span>Share of time on portfolio work (%)</span><input type="number" id="share" value="70" step="1"></div>
 <div class="row-label"><span>Target utilisation (%)</span><input type="number" id="target" value="85" step="1"></div>
-<div class="row-label"><span>CSM headcount</span><input type="number" id="headcount" value="10" step="1"></div>
+<div class="row-label"><span>CSM headcount</span><input type="number" id="headcount" value="30" step="1"></div>
 <div class="row-label"><span>Renewals per month (next 90 days average)</span><input type="number" id="renewals" value="12" step="1"></div>
 <div class="row-label"><span>Hours per renewal</span><input type="number" id="renewalHours" value="5" step="0.5"></div>
 
@@ -63,7 +63,7 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
   <thead><tr><th>Segment</th><th class="num">Accounts</th><th class="num">Proactive hours per account per month</th><th class="num">Reactive hours per account per month</th><th class="num">Proactive work on? (1 = yes, 0 = reactive only)</th></tr></thead>
   <tbody id="segRows"></tbody>
 </table>
-<p class="note">Placeholder values. Proactive hours are the average monthly CSM time per account across the journey stages. Set the switch to 0 where CSMs only carry out reactive work (P3 and P4 currently).</p>
+<p class="note">Account counts are from the team breakdown (P4 includes 277 blank-tier accounts). Hours per account are placeholders. Proactive hours are the average monthly CSM time per account across the journey stages. Set the switch to 0 where CSMs only carry out reactive work (P3 and P4 currently).</p>
 
 <h2>Result</h2>
 <div class="grid">
@@ -90,10 +90,10 @@ input[type="number"] { width: 96px; padding: 4px 6px; border: 1px solid var(--li
 
 <script>
 const segments = [
-  { name: "P1", accounts: 25, pro: 1.33, re: 3.0, on: 1 },
-  { name: "P2", accounts: 69, pro: 1.22, re: 1.5, on: 1 },
-  { name: "P3", accounts: 112, pro: 1.17, re: 0.75, on: 0 },
-  { name: "P4", accounts: 162, pro: 1.11, re: 0.4, on: 0 }
+  { name: "P1", accounts: 448, pro: 1.33, re: 3.0, on: 1 },
+  { name: "P2", accounts: 1436, pro: 1.22, re: 1.5, on: 1 },
+  { name: "P3", accounts: 1753, pro: 1.17, re: 0.75, on: 0 },
+  { name: "P4", accounts: 4176, pro: 1.11, re: 0.4, on: 0 }
 ];
 const scenarioDefs = [
   { name: "Base", mult: 1, extra: 0, heads: 0 },

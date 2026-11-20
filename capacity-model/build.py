@@ -67,7 +67,7 @@ gen = [
     ("Contracted hours per CSM per month", 150, "#,##0", "Replace with contracted hours"),
     ("Share of time on portfolio work", 0.70, "0%", "Remainder covers meetings, internal work, training, holidays"),
     ("Target utilisation", 0.85, "0%", "Leaves buffer for reactive work"),
-    ("CSM headcount", 10, "0", "Number of CSMs carrying a portfolio"),
+    ("CSM headcount", 30, "0", "Number of CSMs carrying a portfolio"),
     ("Renewals per month (next 90 days, average)", 12, "0", "From renewal calendar / 3"),
     ("Hours per renewal", 5, "0.0", "Negotiation, Deal Desk, approvals"),
 ]
@@ -79,10 +79,10 @@ for i, (lab, val, fmt, note) in enumerate(gen, start=4):
 wi["A11"] = "Accounts and hours by segment"; wi["A11"].font = BOLD
 hdr(wi, 12, ["Segment", "Accounts", "Proactive hours per account per month", "Reactive hours per account per month", "Proactive work on? (1 = yes, 0 = reactive only)", "Notes"])
 segments = [
-    ("P1", 25, 1.33, 3.0, "Placeholder count; replace"),
-    ("P2", 69, 1.22, 1.5, "Placeholder count; replace"),
-    ("P3", 112, 1.17, 0.75, "Placeholder count; replace"),
-    ("P4", 162, 1.11, 0.4, "Placeholder count; replace"),
+    ("P1", 448, 1.33, 3.0, "Team account breakdown; hours per account still placeholder"),
+    ("P2", 1436, 1.22, 1.5, "Team account breakdown; hours per account still placeholder"),
+    ("P3", 1753, 1.17, 0.75, "Team account breakdown; hours per account still placeholder"),
+    ("P4", 4176, 1.11, 0.4, "Team account breakdown; includes 277 blank-tier accounts"),
 ]
 for i, (seg, n, pro, re_, note) in enumerate(segments, start=13):
     wi.cell(row=i, column=1, value=seg).font = BLK
