@@ -1,4 +1,4 @@
-# CSM capacity calculator, v3.1 (prototype)
+# CSM capacity calculator, v3.2 (prototype)
 
 A single-page calculator for 2027 CSM capacity across SMB, Mid Market and Upmarket, with Onboarding as a separate population. It combines:
 
