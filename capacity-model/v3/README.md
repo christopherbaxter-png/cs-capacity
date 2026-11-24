@@ -13,7 +13,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 - **The CX Capacity Model is an example, not a spec.** Its values and structure show what a calculator can look like. Several inputs (marked ILLUSTRATIVE in `config/profiles.json`) come from it. They are not validated for this team and should be replaced with the team's own data.
 - **Placeholders drive the result.** Hours per account, touch cadence, hires, availability and pool churn are placeholders (marked in `config/profiles.json`). Utilisation is illustrative until they are replaced.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are entered as inputs. The model reads expansion as SLG + PLG (EUR 18.1m) and the lost-ARR budget as LARR. Both readings need confirming. The Growth & Retention deck still says "2027 Marketing Growth Target: TBD".
-- **Current default result (Mid Market + Upmarket, all regions):** managed utilisation about 190% on average (peak about 220%) against an 85% target, with 17 planned CSMs. Pool utilisation about 240% against 80%, with 4 planned CSMs. This comes from the placeholder touch cadence, not calibrated data. Gong's recorded call time for the sampled CSMs is far lower (about 4 hours per CSM per month), so the hours-per-account inputs need calibrating before anyone relies on the gap.
+- **Current default result (Mid Market + Upmarket, all regions):** managed utilisation about 217% on average (peak about 248%) against an 85% target, with 17 planned CSMs. Pool utilisation about 235% against 80%, with 4 planned CSMs. This comes from the placeholder touch cadence, not calibrated data. Gong's recorded call time for the sampled CSMs is far lower (about 4 hours per CSM per month), so the hours-per-account inputs need calibrating before anyone relies on the gap.
 
 ## Files
 
@@ -32,7 +32,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 ```bash
 cd capacity-model/v3
 # 1. Re-aggregate from the source exports (run locally; the exports stay outside the repo)
-python scripts/build_inputs.py ACCOUNTS.csv CX_PORTFOLIO.xlsx AM_PORTFOLIO.xlsx
+python scripts/build_inputs.py CX_PORTFOLIO.xlsx AM_PORTFOLIO.xlsx ACCOUNTS_EXPORT.csv
 # 2. Rebuild the calculator
 python scripts/build_calculator.py
 ```
@@ -75,9 +75,9 @@ A buffer (15% for proactive books, illustrative, from the CX example) is added. 
 
 | Input | Source |
 |---|---|
-| Team book (7,813 accounts, tiers, segments, country, renewals) | Accounts export (Vitally, current) |
-| ARR | Nov 2026 CX portfolio review workbook, `vitally.custom.arrEur` |
-| AM coverage (named CSM, former employees, market) | AM portfolio extract (`am_customer_extract`) |
+| Team population (8,270 accounts), tiers, segments, country, renewals, ARR | Nov 2026 CX portfolio review workbook, Vitally tab `nov18vitally raw data` (`vitally.custom.arrEur`, `vitally.custom.gtmPriorityTier`). Team = accounts whose CSM is on the roster. |
+| Team roster (45 CSM names) | CSM list in the accounts export. Used only to define the roster. Needs confirming. |
+| AM coverage and conflict checks (owner, ARR, market) | AM portfolio extract (`am_customer_extract`). Not used for account numbers. |
 | Hours, mix, ramp, focus, buffer, cap reference | ILLUSTRATIVE. CX Capacity Model (Account Caps) example, Hours tab. Used to show structure; not validated for this team. |
 | Contracted hours, targets, managed/pool split | Project instructions (v2) |
 | FY26 expansion and lost ARR baselines | CX Strategy Offsite agenda, Nov 2026 |
@@ -89,14 +89,14 @@ A buffer (15% for proactive books, illustrative, from the CX example) is added. 
 
 1. Managed/pool split (20 and 10 is the starting point) and CSMs by segment.
 2. Whether P3 and P4 renewals sit with the pool.
-3. Tier source: the accounts export and the CX workbook disagree on tiers for 1,221 team accounts (84% agreement). The model uses the accounts export, which matches the project's counts.
-4. Blank-tier accounts (277): pool by default.
+3. Team roster: the 45 CSM names in the accounts export define the team. They include former employees and group mailboxes, and the project brief says 30 CSMs. Confirm the roster.
+4. Tiers: Vitally is the source (no blank tiers in the team; the accounts export has 277 blanks). Tiers agree with the export on 84% of overlapping accounts.
 5. Target utilisation for each book.
-6. Which base to size against: the team book (7,813 accounts, 30 CSMs), or the CX model's 1,500-account SMB base.
+6. Which base to size against: the team book (8,270 accounts on the Vitally tab), or the CX example's 1,500-account SMB base.
 7. What SLG, PLG and LARR mean. The model reads expansion = SLG + PLG and lost-ARR budget = LARR. Confirm with Finance.
 8. How the targets split by segment. PLG (EUR 12.6m) is larger than the team's whole SMB ARR (EUR 8.8m), so the targets cannot be allocated from the team book alone. The model applies them as company-wide rates.
 9. The FY27 CSM headcount plan. The org deck ("CX Org planning - Oct 2026") shows vacancies and backfills marked "Decision pending" and no numeric target.
-10. Which tier source is authoritative (accounts export or CX workbook), and whether former-employee accounts (130 matched) are reassigned.
+10. Whether former-employee accounts (159 team accounts in AM) are reassigned, and which of the 5 owner records with different names is correct.
 
 ## Considerations for the next revision
 
@@ -107,6 +107,6 @@ A buffer (15% for proactive books, illustrative, from the CX example) is added. 
 - **Renewal workload.** Renewals are priced per renewal. Long contracts and auto-renewals may need a different treatment.
 - **Churn by segment.** Company-level churn is used. The churn probability field in Vitally is empty in the current export.
 - **Targets.** Confirm the meaning and segment split of SLG, PLG and LARR. Replace the company rates with segment-level rates once they are set.
-- **Governance.** Former-employee owners hold 130 matched accounts. Reassign them before the managed/pool split is decided.
+- **Governance.** Former-employee owners hold 159 team accounts in AM. Reassign them before the managed/pool split is decided. AM is missing 3,315 team accounts, and its ARR differs from Vitally on 569 accounts (EUR 0.6m combined). Both are measured in the calculator's conflicts table.
 - **Example model issues.** The CX example's workload leaves out its own "Net Expansion Playbooks" line (740h per month). Its WIP tab labels a surplus as a gap. Both are noted in the calculator's considerations list, to check before reusing the example's structure.
 - **Privacy.** `data/team_book.json` holds aggregates only. Keep account-level exports out of the repo.

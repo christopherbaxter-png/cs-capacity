@@ -1,398 +1,348 @@
 {
   "source": {
-    "accounts_rows": 7813,
+    "population": "Vitally tab, nov18vitally raw data (CX portfolio workbook). Team = accounts whose Vitally CSM is on the team roster.",
+    "roster": "CSM names from the accounts export (used only to define the team roster).",
     "cx_rows": 44820,
+    "team_accounts": 8270,
     "am_rows": 37613,
-    "note": "Team book = accounts export (7,813). ARR from CX vitally.custom.arrEur. AM coverage shown for accounts that match on externalId."
+    "note": "Tier, segment, region, ARR and renewal dates from Vitally. AM used for coverage and conflict checks only."
   },
   "accounts_by_segment_tier": [
     {
       "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 93
-    },
-    {
-      "segment": "Mid Market",
       "tier": "P1",
-      "accounts": 239
+      "accounts": 304
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
-      "accounts": 910
+      "accounts": 1002
     },
     {
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 1112
+      "accounts": 1134
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 1328
+      "accounts": 1337
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
+      "tier": "P1",
       "accounts": 146
     },
     {
       "segment": "SMB",
-      "tier": "P1",
-      "accounts": 112
-    },
-    {
-      "segment": "SMB",
       "tier": "P2",
-      "accounts": 315
+      "accounts": 416
     },
     {
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 422
+      "accounts": 527
     },
     {
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 2226
+      "accounts": 2450
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
-      "accounts": 11
+      "tier": "P2",
+      "accounts": 1
     },
     {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 27
+      "segment": "Unassigned",
+      "tier": "P3",
+      "accounts": 4
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P4",
+      "accounts": 15
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
-      "accounts": 97
+      "accounts": 115
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 211
+      "accounts": 234
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
-      "accounts": 219
+      "accounts": 212
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 345
+      "accounts": 373
     }
   ],
   "arr_by_segment_tier": [
     {
       "segment": "Mid Market",
-      "tier": "Blank",
-      "arr_eur": 508776.0
-    },
-    {
-      "segment": "Mid Market",
       "tier": "P1",
-      "arr_eur": 7867668.0
+      "arr_eur": 9219336.0
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
-      "arr_eur": 10426536.0
+      "arr_eur": 10603812.0
     },
     {
       "segment": "Mid Market",
       "tier": "P3",
-      "arr_eur": 4865088.0
+      "arr_eur": 4637952.0
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
-      "arr_eur": 955044.0
-    },
-    {
-      "segment": "SMB",
-      "tier": "Blank",
-      "arr_eur": 156372.0
+      "arr_eur": 870936.0
     },
     {
       "segment": "SMB",
       "tier": "P1",
-      "arr_eur": 3120756.0
+      "arr_eur": 3668364.0
     },
     {
       "segment": "SMB",
       "tier": "P2",
-      "arr_eur": 3912180.0
+      "arr_eur": 4534392.0
     },
     {
       "segment": "SMB",
       "tier": "P3",
-      "arr_eur": 1103580.0
+      "arr_eur": 1451928.0
     },
     {
       "segment": "SMB",
       "tier": "P4",
-      "arr_eur": 549924.0
+      "arr_eur": 490572.0
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
-      "arr_eur": 10392.0
+      "tier": "P2",
+      "arr_eur": 4932.0
     },
     {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "arr_eur": 54732.0
+      "segment": "Unassigned",
+      "tier": "P3",
+      "arr_eur": 20736.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P4",
+      "arr_eur": 1632.0
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
-      "arr_eur": 4994268.0
+      "arr_eur": 5436360.0
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
-      "arr_eur": 2846784.0
+      "arr_eur": 2815008.0
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
-      "arr_eur": 1012704.0
+      "arr_eur": 902628.0
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
-      "arr_eur": 246852.0
+      "arr_eur": 196140.0
     }
   ],
   "region_segment_tier": [
     {
       "region": "Benelux",
       "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 12,
-      "arr_eur": 28524.0
-    },
-    {
-      "region": "Benelux",
-      "segment": "Mid Market",
       "tier": "P1",
       "accounts": 6,
-      "arr_eur": 210072.0
+      "arr_eur": 219156.0
     },
     {
       "region": "Benelux",
       "segment": "Mid Market",
       "tier": "P2",
-      "accounts": 47,
-      "arr_eur": 530460.0
+      "accounts": 56,
+      "arr_eur": 583308.0
     },
     {
       "region": "Benelux",
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 86,
-      "arr_eur": 363072.0
+      "accounts": 92,
+      "arr_eur": 352308.0
     },
     {
       "region": "Benelux",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 105,
-      "arr_eur": 81840.0
-    },
-    {
-      "region": "Benelux",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 13,
-      "arr_eur": 4152.0
+      "accounts": 106,
+      "arr_eur": 74628.0
     },
     {
       "region": "Benelux",
       "segment": "SMB",
       "tier": "P1",
-      "accounts": 12,
-      "arr_eur": 217128.0
+      "accounts": 16,
+      "arr_eur": 279852.0
     },
     {
       "region": "Benelux",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 35,
-      "arr_eur": 299556.0
+      "accounts": 41,
+      "arr_eur": 303180.0
     },
     {
       "region": "Benelux",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 58,
-      "arr_eur": 131820.0
+      "accounts": 55,
+      "arr_eur": 112380.0
     },
     {
       "region": "Benelux",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 224,
-      "arr_eur": 18072.0
+      "accounts": 268,
+      "arr_eur": 26352.0
     },
     {
       "region": "Benelux",
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P3",
       "accounts": 1,
       "arr_eur": 5460.0
     },
     {
       "region": "Benelux",
       "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 5,
-      "arr_eur": 0.0
-    },
-    {
-      "region": "Benelux",
-      "segment": "Upmarket",
       "tier": "P1",
-      "accounts": 2,
-      "arr_eur": 60000.0
+      "accounts": 6,
+      "arr_eur": 149496.0
     },
     {
       "region": "Benelux",
       "segment": "Upmarket",
       "tier": "P2",
+      "accounts": 11,
+      "arr_eur": 130944.0
+    },
+    {
+      "region": "Benelux",
+      "segment": "Upmarket",
+      "tier": "P3",
       "accounts": 13,
-      "arr_eur": 208440.0
-    },
-    {
-      "region": "Benelux",
-      "segment": "Upmarket",
-      "tier": "P3",
-      "accounts": 12,
-      "arr_eur": 72348.0
+      "arr_eur": 65892.0
     },
     {
       "region": "Benelux",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 25,
-      "arr_eur": 21180.0
+      "accounts": 30,
+      "arr_eur": 17472.0
     },
     {
       "region": "DACH",
       "segment": "Mid Market",
-      "tier": "Blank",
+      "tier": "P1",
+      "accounts": 47,
+      "arr_eur": 1043700.0
+    },
+    {
+      "region": "DACH",
+      "segment": "Mid Market",
+      "tier": "P2",
+      "accounts": 217,
+      "arr_eur": 2172336.0
+    },
+    {
+      "region": "DACH",
+      "segment": "Mid Market",
+      "tier": "P3",
+      "accounts": 379,
+      "arr_eur": 1574016.0
+    },
+    {
+      "region": "DACH",
+      "segment": "Mid Market",
+      "tier": "P4",
+      "accounts": 430,
+      "arr_eur": 309792.0
+    },
+    {
+      "region": "DACH",
+      "segment": "SMB",
+      "tier": "P1",
       "accounts": 24,
-      "arr_eur": 75204.0
-    },
-    {
-      "region": "DACH",
-      "segment": "Mid Market",
-      "tier": "P1",
-      "accounts": 40,
-      "arr_eur": 948564.0
-    },
-    {
-      "region": "DACH",
-      "segment": "Mid Market",
-      "tier": "P2",
-      "accounts": 207,
-      "arr_eur": 2132148.0
-    },
-    {
-      "region": "DACH",
-      "segment": "Mid Market",
-      "tier": "P3",
-      "accounts": 378,
-      "arr_eur": 1594500.0
-    },
-    {
-      "region": "DACH",
-      "segment": "Mid Market",
-      "tier": "P4",
-      "accounts": 412,
-      "arr_eur": 315540.0
-    },
-    {
-      "region": "DACH",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 54,
-      "arr_eur": 19608.0
-    },
-    {
-      "region": "DACH",
-      "segment": "SMB",
-      "tier": "P1",
-      "accounts": 20,
-      "arr_eur": 498312.0
+      "arr_eur": 585252.0
     },
     {
       "region": "DACH",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 81,
-      "arr_eur": 897768.0
+      "accounts": 80,
+      "arr_eur": 861396.0
     },
     {
       "region": "DACH",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 110,
-      "arr_eur": 276504.0
+      "accounts": 161,
+      "arr_eur": 450180.0
     },
     {
       "region": "DACH",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 631,
-      "arr_eur": 193860.0
+      "accounts": 692,
+      "arr_eur": 126180.0
     },
     {
       "region": "DACH",
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "accounts": 2,
       "arr_eur": 0.0
     },
     {
       "region": "DACH",
       "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 7,
-      "arr_eur": 552.0
-    },
-    {
-      "region": "DACH",
-      "segment": "Upmarket",
       "tier": "P1",
-      "accounts": 23,
-      "arr_eur": 1008996.0
+      "accounts": 24,
+      "arr_eur": 1027668.0
     },
     {
       "region": "DACH",
       "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 60,
-      "arr_eur": 758400.0
+      "accounts": 65,
+      "arr_eur": 767796.0
     },
     {
       "region": "DACH",
       "segment": "Upmarket",
       "tier": "P3",
-      "accounts": 66,
-      "arr_eur": 285708.0
+      "accounts": 62,
+      "arr_eur": 260292.0
     },
     {
       "region": "DACH",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 93,
-      "arr_eur": 54924.0
+      "accounts": 98,
+      "arr_eur": 52824.0
     },
     {
       "region": "France & Italy",
@@ -405,64 +355,50 @@
       "region": "France & Italy",
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 8,
-      "arr_eur": 14664.0
+      "accounts": 12,
+      "arr_eur": 22596.0
     },
     {
       "region": "France & Italy",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 40,
-      "arr_eur": 19776.0
-    },
-    {
-      "region": "France & Italy",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 1,
-      "arr_eur": 0.0
+      "accounts": 36,
+      "arr_eur": 11844.0
     },
     {
       "region": "France & Italy",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 1,
-      "arr_eur": 17112.0
+      "accounts": 5,
+      "arr_eur": 30252.0
     },
     {
       "region": "France & Italy",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 15,
-      "arr_eur": 34164.0
+      "accounts": 18,
+      "arr_eur": 39180.0
     },
     {
       "region": "France & Italy",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 70,
-      "arr_eur": 11856.0
+      "accounts": 74,
+      "arr_eur": 7164.0
     },
     {
       "region": "France & Italy",
-      "segment": "Upmarket",
-      "tier": "Blank",
+      "segment": "Unassigned",
+      "tier": "P4",
       "accounts": 1,
       "arr_eur": 0.0
     },
     {
       "region": "France & Italy",
       "segment": "Upmarket",
-      "tier": "P1",
-      "accounts": 1,
-      "arr_eur": 21312.0
-    },
-    {
-      "region": "France & Italy",
-      "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 1,
-      "arr_eur": 25368.0
+      "accounts": 2,
+      "arr_eur": 46680.0
     },
     {
       "region": "France & Italy",
@@ -475,85 +411,71 @@
       "region": "France & Italy",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 1,
+      "accounts": 2,
       "arr_eur": 0.0
     },
     {
       "region": "Iberia",
       "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 11,
-      "arr_eur": 69036.0
-    },
-    {
-      "region": "Iberia",
-      "segment": "Mid Market",
       "tier": "P1",
-      "accounts": 14,
-      "arr_eur": 449532.0
+      "accounts": 18,
+      "arr_eur": 551028.0
     },
     {
       "region": "Iberia",
       "segment": "Mid Market",
       "tier": "P2",
-      "accounts": 72,
-      "arr_eur": 884064.0
+      "accounts": 90,
+      "arr_eur": 957132.0
     },
     {
       "region": "Iberia",
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 268,
-      "arr_eur": 1248720.0
+      "accounts": 265,
+      "arr_eur": 1189944.0
     },
     {
       "region": "Iberia",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 266,
-      "arr_eur": 288804.0
-    },
-    {
-      "region": "Iberia",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 38,
-      "arr_eur": 55956.0
+      "accounts": 260,
+      "arr_eur": 246828.0
     },
     {
       "region": "Iberia",
       "segment": "SMB",
       "tier": "P1",
-      "accounts": 8,
-      "arr_eur": 133620.0
+      "accounts": 6,
+      "arr_eur": 99780.0
     },
     {
       "region": "Iberia",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 35,
-      "arr_eur": 480960.0
+      "accounts": 67,
+      "arr_eur": 802212.0
     },
     {
       "region": "Iberia",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 60,
-      "arr_eur": 275064.0
+      "accounts": 86,
+      "arr_eur": 382164.0
     },
     {
       "region": "Iberia",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 344,
-      "arr_eur": 96348.0
+      "accounts": 393,
+      "arr_eur": 99504.0
     },
     {
       "region": "Iberia",
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 3,
-      "arr_eur": 27600.0
+      "segment": "Unassigned",
+      "tier": "P4",
+      "accounts": 1,
+      "arr_eur": 0.0
     },
     {
       "region": "Iberia",
@@ -566,146 +488,125 @@
       "region": "Iberia",
       "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 20,
-      "arr_eur": 302700.0
+      "accounts": 26,
+      "arr_eur": 358212.0
     },
     {
       "region": "Iberia",
       "segment": "Upmarket",
       "tier": "P3",
-      "accounts": 34,
-      "arr_eur": 183492.0
+      "accounts": 32,
+      "arr_eur": 158868.0
     },
     {
       "region": "Iberia",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 40,
-      "arr_eur": 38616.0
-    },
-    {
-      "region": "Nordics",
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 4,
-      "arr_eur": 48012.0
+      "accounts": 39,
+      "arr_eur": 35328.0
     },
     {
       "region": "Nordics",
       "segment": "Mid Market",
       "tier": "P1",
-      "accounts": 72,
-      "arr_eur": 2710740.0
+      "accounts": 96,
+      "arr_eur": 3240948.0
     },
     {
       "region": "Nordics",
       "segment": "Mid Market",
       "tier": "P2",
-      "accounts": 242,
-      "arr_eur": 2927964.0
+      "accounts": 258,
+      "arr_eur": 2662704.0
     },
     {
       "region": "Nordics",
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 255,
-      "arr_eur": 1037868.0
+      "accounts": 240,
+      "arr_eur": 859848.0
     },
     {
       "region": "Nordics",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 370,
-      "arr_eur": 215988.0
-    },
-    {
-      "region": "Nordics",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 16,
-      "arr_eur": 20700.0
+      "accounts": 350,
+      "arr_eur": 180072.0
     },
     {
       "region": "Nordics",
       "segment": "SMB",
       "tier": "P1",
-      "accounts": 23,
-      "arr_eur": 722928.0
+      "accounts": 37,
+      "arr_eur": 944292.0
     },
     {
       "region": "Nordics",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 69,
-      "arr_eur": 981600.0
+      "accounts": 95,
+      "arr_eur": 963372.0
     },
     {
       "region": "Nordics",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 84,
-      "arr_eur": 158688.0
+      "accounts": 93,
+      "arr_eur": 158520.0
     },
     {
       "region": "Nordics",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 448,
-      "arr_eur": 67116.0
+      "accounts": 475,
+      "arr_eur": 68964.0
     },
     {
       "region": "Nordics",
       "segment": "Unassigned",
-      "tier": "Blank",
-      "accounts": 3,
+      "tier": "P2",
+      "accounts": 1,
       "arr_eur": 4932.0
     },
     {
       "region": "Nordics",
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 2,
-      "arr_eur": 852.0
+      "segment": "Unassigned",
+      "tier": "P4",
+      "accounts": 4,
+      "arr_eur": 1632.0
     },
     {
       "region": "Nordics",
       "segment": "Upmarket",
       "tier": "P1",
       "accounts": 23,
-      "arr_eur": 1009176.0
+      "arr_eur": 1046616.0
     },
     {
       "region": "Nordics",
       "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 32,
-      "arr_eur": 526056.0
+      "accounts": 38,
+      "arr_eur": 518880.0
     },
     {
       "region": "Nordics",
       "segment": "Upmarket",
       "tier": "P3",
-      "accounts": 42,
-      "arr_eur": 139572.0
+      "accounts": 35,
+      "arr_eur": 118608.0
     },
     {
       "region": "Nordics",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 112,
-      "arr_eur": 49476.0
+      "accounts": 115,
+      "arr_eur": 41028.0
     },
     {
       "region": "Other",
       "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 2,
-      "arr_eur": 0.0
-    },
-    {
-      "region": "Other",
-      "segment": "Mid Market",
-      "tier": "P1",
+      "tier": "P2",
       "accounts": 1,
       "arr_eur": 0.0
     },
@@ -720,15 +621,8 @@
       "region": "Other",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 23,
-      "arr_eur": 0.0
-    },
-    {
-      "region": "Other",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 2,
-      "arr_eur": 0.0
+      "accounts": 26,
+      "arr_eur": 456.0
     },
     {
       "region": "Other",
@@ -741,28 +635,21 @@
       "region": "Other",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 2,
+      "accounts": 1,
       "arr_eur": 5676.0
     },
     {
       "region": "Other",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 58,
-      "arr_eur": 17520.0
+      "accounts": 67,
+      "arr_eur": 17976.0
     },
     {
       "region": "Other",
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "accounts": 5,
-      "arr_eur": 0.0
-    },
-    {
-      "region": "Other",
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 2,
       "arr_eur": 0.0
     },
     {
@@ -783,325 +670,258 @@
       "region": "Other",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 9,
+      "accounts": 12,
       "arr_eur": 0.0
     },
     {
       "region": "UKI",
       "segment": "Mid Market",
-      "tier": "Blank",
-      "accounts": 40,
-      "arr_eur": 288000.0
-    },
-    {
-      "region": "UKI",
-      "segment": "Mid Market",
       "tier": "P1",
-      "accounts": 106,
-      "arr_eur": 3548760.0
+      "accounts": 137,
+      "arr_eur": 4164504.0
     },
     {
       "region": "UKI",
       "segment": "Mid Market",
       "tier": "P2",
-      "accounts": 340,
-      "arr_eur": 3923460.0
+      "accounts": 378,
+      "arr_eur": 4199892.0
     },
     {
       "region": "UKI",
       "segment": "Mid Market",
       "tier": "P3",
-      "accounts": 116,
-      "arr_eur": 606264.0
+      "accounts": 145,
+      "arr_eur": 639240.0
     },
     {
       "region": "UKI",
       "segment": "Mid Market",
       "tier": "P4",
-      "accounts": 112,
-      "arr_eur": 33096.0
-    },
-    {
-      "region": "UKI",
-      "segment": "SMB",
-      "tier": "Blank",
-      "accounts": 22,
-      "arr_eur": 55956.0
+      "accounts": 129,
+      "arr_eur": 47316.0
     },
     {
       "region": "UKI",
       "segment": "SMB",
       "tier": "P1",
-      "accounts": 49,
-      "arr_eur": 1548768.0
+      "accounts": 63,
+      "arr_eur": 1759188.0
     },
     {
       "region": "UKI",
       "segment": "SMB",
       "tier": "P2",
-      "accounts": 93,
-      "arr_eur": 1218336.0
+      "accounts": 127,
+      "arr_eur": 1557132.0
     },
     {
       "region": "UKI",
       "segment": "SMB",
       "tier": "P3",
-      "accounts": 93,
-      "arr_eur": 221664.0
+      "accounts": 113,
+      "arr_eur": 303828.0
     },
     {
       "region": "UKI",
       "segment": "SMB",
       "tier": "P4",
-      "accounts": 451,
-      "arr_eur": 145152.0
+      "accounts": 481,
+      "arr_eur": 144432.0
     },
     {
       "region": "UKI",
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "accounts": 7,
-      "arr_eur": 25728.0
+      "segment": "Unassigned",
+      "tier": "P3",
+      "accounts": 3,
+      "arr_eur": 15276.0
+    },
+    {
+      "region": "UKI",
+      "segment": "Unassigned",
+      "tier": "P4",
+      "accounts": 2,
+      "arr_eur": 0.0
     },
     {
       "region": "UKI",
       "segment": "Upmarket",
       "tier": "P1",
-      "accounts": 42,
-      "arr_eur": 2428632.0
+      "accounts": 56,
+      "arr_eur": 2746428.0
     },
     {
       "region": "UKI",
       "segment": "Upmarket",
       "tier": "P2",
-      "accounts": 84,
-      "arr_eur": 1015548.0
+      "accounts": 91,
+      "arr_eur": 982224.0
     },
     {
       "region": "UKI",
       "segment": "Upmarket",
       "tier": "P3",
-      "accounts": 64,
-      "arr_eur": 325044.0
+      "accounts": 69,
+      "arr_eur": 292428.0
     },
     {
       "region": "UKI",
       "segment": "Upmarket",
       "tier": "P4",
-      "accounts": 65,
-      "arr_eur": 82656.0
+      "accounts": 77,
+      "arr_eur": 49488.0
     }
   ],
   "renewals_2027": [
     {
       "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 2,
-      "renewals": 1
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 3,
-      "renewals": 4
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 4,
-      "renewals": 2
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 5,
-      "renewals": 2
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 6,
-      "renewals": 4
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 7,
-      "renewals": 8
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 8,
-      "renewals": 13
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 9,
-      "renewals": 13
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 10,
-      "renewals": 12
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "Blank",
-      "month": 11,
-      "renewals": 2
-    },
-    {
-      "segment": "Mid Market",
       "tier": "P1",
       "month": 1,
-      "renewals": 18
+      "renewals": 24
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 2,
-      "renewals": 25
+      "renewals": 27
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 3,
-      "renewals": 17
+      "renewals": 24
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 4,
-      "renewals": 18
+      "renewals": 22
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 5,
-      "renewals": 17
+      "renewals": 22
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 6,
-      "renewals": 23
+      "renewals": 24
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "month": 7,
+      "renewals": 15
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P1",
+      "month": 8,
       "renewals": 11
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
-      "month": 8,
+      "month": 9,
+      "renewals": 19
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P1",
+      "month": 10,
+      "renewals": 22
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P1",
+      "month": 11,
       "renewals": 8
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
-      "month": 9,
-      "renewals": 13
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P1",
-      "month": 10,
-      "renewals": 18
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P1",
-      "month": 11,
-      "renewals": 7
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P1",
       "month": 12,
-      "renewals": 4
+      "renewals": 6
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 1,
-      "renewals": 72
+      "renewals": 73
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 2,
-      "renewals": 73
+      "renewals": 76
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 3,
-      "renewals": 82
+      "renewals": 87
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 4,
-      "renewals": 73
+      "renewals": 81
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 5,
-      "renewals": 61
+      "renewals": 62
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 6,
-      "renewals": 66
+      "renewals": 74
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 7,
-      "renewals": 44
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P2",
-      "month": 8,
       "renewals": 50
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
+      "month": 8,
+      "renewals": 55
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P2",
       "month": 9,
-      "renewals": 65
+      "renewals": 75
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 10,
-      "renewals": 60
+      "renewals": 72
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 11,
-      "renewals": 26
+      "renewals": 25
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "month": 12,
-      "renewals": 4
+      "renewals": 2
     },
     {
       "segment": "Mid Market",
       "tier": "P3",
       "month": 1,
-      "renewals": 88
+      "renewals": 92
     },
     {
       "segment": "Mid Market",
@@ -1119,49 +939,49 @@
       "segment": "Mid Market",
       "tier": "P3",
       "month": 4,
-      "renewals": 63
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P3",
-      "month": 5,
-      "renewals": 73
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P3",
-      "month": 6,
-      "renewals": 75
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P3",
-      "month": 7,
       "renewals": 65
     },
     {
       "segment": "Mid Market",
       "tier": "P3",
-      "month": 8,
-      "renewals": 55
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P3",
-      "month": 9,
-      "renewals": 83
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P3",
-      "month": 10,
+      "month": 5,
       "renewals": 73
     },
     {
       "segment": "Mid Market",
       "tier": "P3",
+      "month": 6,
+      "renewals": 72
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P3",
+      "month": 7,
+      "renewals": 67
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P3",
+      "month": 8,
+      "renewals": 67
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P3",
+      "month": 9,
+      "renewals": 85
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P3",
+      "month": 10,
+      "renewals": 67
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P3",
       "month": 11,
-      "renewals": 27
+      "renewals": 26
     },
     {
       "segment": "Mid Market",
@@ -1173,67 +993,67 @@
       "segment": "Mid Market",
       "tier": "P4",
       "month": 1,
-      "renewals": 73
-    },
-    {
-      "segment": "Mid Market",
-      "tier": "P4",
-      "month": 2,
       "renewals": 67
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
+      "month": 2,
+      "renewals": 68
+    },
+    {
+      "segment": "Mid Market",
+      "tier": "P4",
       "month": 3,
-      "renewals": 69
+      "renewals": 67
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 4,
-      "renewals": 80
+      "renewals": 74
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 5,
-      "renewals": 38
+      "renewals": 36
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 6,
-      "renewals": 63
+      "renewals": 62
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 7,
-      "renewals": 35
+      "renewals": 36
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 8,
-      "renewals": 51
+      "renewals": 53
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 9,
-      "renewals": 50
+      "renewals": 52
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 10,
-      "renewals": 81
+      "renewals": 86
     },
     {
       "segment": "Mid Market",
       "tier": "P4",
       "month": 11,
-      "renewals": 32
+      "renewals": 27
     },
     {
       "segment": "Mid Market",
@@ -1243,129 +1063,69 @@
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
+      "tier": "P1",
       "month": 1,
-      "renewals": 3
+      "renewals": 16
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
+      "tier": "P1",
       "month": 2,
-      "renewals": 1
+      "renewals": 8
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
+      "tier": "P1",
       "month": 3,
-      "renewals": 15
+      "renewals": 7
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
+      "tier": "P1",
       "month": 4,
-      "renewals": 6
+      "renewals": 11
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
-      "month": 6,
-      "renewals": 6
-    },
-    {
-      "segment": "SMB",
-      "tier": "Blank",
-      "month": 7,
-      "renewals": 18
-    },
-    {
-      "segment": "SMB",
-      "tier": "Blank",
-      "month": 8,
-      "renewals": 19
-    },
-    {
-      "segment": "SMB",
-      "tier": "Blank",
-      "month": 9,
+      "tier": "P1",
+      "month": 5,
       "renewals": 12
     },
     {
       "segment": "SMB",
-      "tier": "Blank",
-      "month": 10,
-      "renewals": 7
-    },
-    {
-      "segment": "SMB",
-      "tier": "Blank",
-      "month": 11,
-      "renewals": 4
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 1,
-      "renewals": 11
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 2,
-      "renewals": 5
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 3,
-      "renewals": 6
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 4,
-      "renewals": 10
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 5,
-      "renewals": 13
-    },
-    {
-      "segment": "SMB",
       "tier": "P1",
       "month": 6,
-      "renewals": 11
+      "renewals": 12
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "month": 7,
-      "renewals": 5
+      "renewals": 6
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "month": 8,
-      "renewals": 4
+      "renewals": 11
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "month": 9,
-      "renewals": 5
-    },
-    {
-      "segment": "SMB",
-      "tier": "P1",
-      "month": 10,
       "renewals": 7
     },
     {
       "segment": "SMB",
       "tier": "P1",
+      "month": 10,
+      "renewals": 9
+    },
+    {
+      "segment": "SMB",
+      "tier": "P1",
       "month": 11,
-      "renewals": 2
+      "renewals": 4
     },
     {
       "segment": "SMB",
@@ -1377,61 +1137,61 @@
       "segment": "SMB",
       "tier": "P2",
       "month": 1,
-      "renewals": 35
+      "renewals": 47
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 2,
-      "renewals": 19
+      "renewals": 25
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 3,
-      "renewals": 24
-    },
-    {
-      "segment": "SMB",
-      "tier": "P2",
-      "month": 4,
       "renewals": 34
     },
     {
       "segment": "SMB",
       "tier": "P2",
+      "month": 4,
+      "renewals": 38
+    },
+    {
+      "segment": "SMB",
+      "tier": "P2",
       "month": 5,
-      "renewals": 19
+      "renewals": 25
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 6,
-      "renewals": 29
+      "renewals": 42
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 7,
-      "renewals": 17
+      "renewals": 26
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 8,
-      "renewals": 17
+      "renewals": 19
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 9,
-      "renewals": 20
+      "renewals": 30
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "month": 10,
-      "renewals": 18
+      "renewals": 21
     },
     {
       "segment": "SMB",
@@ -1443,25 +1203,25 @@
       "segment": "SMB",
       "tier": "P3",
       "month": 1,
-      "renewals": 30
+      "renewals": 31
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 2,
-      "renewals": 35
+      "renewals": 28
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 3,
-      "renewals": 27
+      "renewals": 26
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 4,
-      "renewals": 28
+      "renewals": 30
     },
     {
       "segment": "SMB",
@@ -1473,37 +1233,37 @@
       "segment": "SMB",
       "tier": "P3",
       "month": 6,
-      "renewals": 42
+      "renewals": 52
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 7,
-      "renewals": 18
+      "renewals": 29
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 8,
-      "renewals": 18
+      "renewals": 34
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 9,
-      "renewals": 37
+      "renewals": 56
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 10,
-      "renewals": 23
+      "renewals": 37
     },
     {
       "segment": "SMB",
       "tier": "P3",
       "month": 11,
-      "renewals": 17
+      "renewals": 19
     },
     {
       "segment": "SMB",
@@ -1515,61 +1275,61 @@
       "segment": "SMB",
       "tier": "P4",
       "month": 1,
-      "renewals": 137
+      "renewals": 135
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 2,
-      "renewals": 147
+      "renewals": 154
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 3,
-      "renewals": 132
+      "renewals": 154
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 4,
-      "renewals": 184
+      "renewals": 191
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 5,
-      "renewals": 103
+      "renewals": 116
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 6,
-      "renewals": 224
+      "renewals": 239
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 7,
-      "renewals": 76
+      "renewals": 94
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 8,
-      "renewals": 110
+      "renewals": 123
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 9,
-      "renewals": 102
+      "renewals": 135
     },
     {
       "segment": "SMB",
       "tier": "P4",
       "month": 10,
-      "renewals": 132
+      "renewals": 146
     },
     {
       "segment": "SMB",
@@ -1585,99 +1345,51 @@
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "month": 2,
       "renewals": 1
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "month": 5,
       "renewals": 1
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "month": 6,
       "renewals": 1
     },
     {
       "segment": "Unassigned",
-      "tier": "Blank",
+      "tier": "P4",
       "month": 10,
       "renewals": 3
     },
     {
       "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 1,
-      "renewals": 2
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 2,
-      "renewals": 1
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 3,
-      "renewals": 3
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 5,
-      "renewals": 1
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 6,
-      "renewals": 1
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 7,
-      "renewals": 1
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 9,
-      "renewals": 5
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "Blank",
-      "month": 11,
-      "renewals": 1
-    },
-    {
-      "segment": "Upmarket",
       "tier": "P1",
       "month": 1,
-      "renewals": 13
+      "renewals": 14
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "month": 2,
-      "renewals": 7
+      "renewals": 8
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "month": 3,
-      "renewals": 7
+      "renewals": 8
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "month": 4,
-      "renewals": 4
+      "renewals": 3
     },
     {
       "segment": "Upmarket",
@@ -1701,67 +1413,67 @@
       "segment": "Upmarket",
       "tier": "P1",
       "month": 8,
-      "renewals": 3
+      "renewals": 4
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "month": 9,
-      "renewals": 2
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "P1",
-      "month": 10,
       "renewals": 5
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
-      "month": 11,
+      "month": 10,
       "renewals": 6
+    },
+    {
+      "segment": "Upmarket",
+      "tier": "P1",
+      "month": 11,
+      "renewals": 7
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 1,
-      "renewals": 25
+      "renewals": 27
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 2,
-      "renewals": 13
-    },
-    {
-      "segment": "Upmarket",
-      "tier": "P2",
-      "month": 3,
       "renewals": 16
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
+      "month": 3,
+      "renewals": 20
+    },
+    {
+      "segment": "Upmarket",
+      "tier": "P2",
       "month": 4,
-      "renewals": 7
+      "renewals": 9
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 5,
-      "renewals": 7
+      "renewals": 9
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 6,
-      "renewals": 18
+      "renewals": 19
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 7,
-      "renewals": 11
+      "renewals": 13
     },
     {
       "segment": "Upmarket",
@@ -1773,19 +1485,19 @@
       "segment": "Upmarket",
       "tier": "P2",
       "month": 9,
-      "renewals": 17
+      "renewals": 15
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 10,
-      "renewals": 18
+      "renewals": 19
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "month": 11,
-      "renewals": 5
+      "renewals": 2
     },
     {
       "segment": "Upmarket",
@@ -1797,43 +1509,43 @@
       "segment": "Upmarket",
       "tier": "P3",
       "month": 1,
-      "renewals": 22
+      "renewals": 20
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 2,
-      "renewals": 10
+      "renewals": 8
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 3,
-      "renewals": 28
+      "renewals": 29
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 4,
-      "renewals": 10
+      "renewals": 9
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 5,
-      "renewals": 10
+      "renewals": 12
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 6,
-      "renewals": 13
+      "renewals": 14
     },
     {
       "segment": "Upmarket",
       "tier": "P3",
       "month": 7,
-      "renewals": 9
+      "renewals": 7
     },
     {
       "segment": "Upmarket",
@@ -1845,7 +1557,7 @@
       "segment": "Upmarket",
       "tier": "P3",
       "month": 9,
-      "renewals": 11
+      "renewals": 13
     },
     {
       "segment": "Upmarket",
@@ -1861,9 +1573,15 @@
     },
     {
       "segment": "Upmarket",
+      "tier": "P3",
+      "month": 12,
+      "renewals": 1
+    },
+    {
+      "segment": "Upmarket",
       "tier": "P4",
       "month": 1,
-      "renewals": 19
+      "renewals": 21
     },
     {
       "segment": "Upmarket",
@@ -1875,55 +1593,55 @@
       "segment": "Upmarket",
       "tier": "P4",
       "month": 3,
-      "renewals": 18
+      "renewals": 19
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 4,
-      "renewals": 15
+      "renewals": 16
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 5,
-      "renewals": 3
+      "renewals": 4
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 6,
-      "renewals": 18
+      "renewals": 16
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 7,
-      "renewals": 12
+      "renewals": 13
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 8,
-      "renewals": 9
+      "renewals": 8
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 9,
-      "renewals": 9
+      "renewals": 13
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 10,
-      "renewals": 21
+      "renewals": 23
     },
     {
       "segment": "Upmarket",
       "tier": "P4",
       "month": 11,
-      "renewals": 7
+      "renewals": 9
     },
     {
       "segment": "Upmarket",
@@ -1934,189 +1652,134 @@
   ],
   "renewals_2027_by_month_tier": [
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 1,
-      "renewals": 5
+      "renewals": 54
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 2,
-      "renewals": 4
+      "renewals": 43
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 3,
-      "renewals": 22
+      "renewals": 39
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 4,
-      "renewals": 8
+      "renewals": 36
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 5,
-      "renewals": 4
+      "renewals": 36
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 6,
-      "renewals": 12
+      "renewals": 44
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 7,
-      "renewals": 27
+      "renewals": 25
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 8,
-      "renewals": 32
+      "renewals": 26
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 9,
-      "renewals": 30
+      "renewals": 31
     },
     {
-      "tier": "Blank",
+      "tier": "P1",
       "month": 10,
-      "renewals": 22
-    },
-    {
-      "tier": "Blank",
-      "month": 11,
-      "renewals": 7
-    },
-    {
-      "tier": "P1",
-      "month": 1,
-      "renewals": 42
-    },
-    {
-      "tier": "P1",
-      "month": 2,
       "renewals": 37
     },
     {
       "tier": "P1",
-      "month": 3,
-      "renewals": 30
-    },
-    {
-      "tier": "P1",
-      "month": 4,
-      "renewals": 32
-    },
-    {
-      "tier": "P1",
-      "month": 5,
-      "renewals": 32
-    },
-    {
-      "tier": "P1",
-      "month": 6,
-      "renewals": 42
-    },
-    {
-      "tier": "P1",
-      "month": 7,
-      "renewals": 20
-    },
-    {
-      "tier": "P1",
-      "month": 8,
-      "renewals": 15
-    },
-    {
-      "tier": "P1",
-      "month": 9,
-      "renewals": 20
-    },
-    {
-      "tier": "P1",
-      "month": 10,
-      "renewals": 30
-    },
-    {
-      "tier": "P1",
       "month": 11,
-      "renewals": 15
+      "renewals": 19
     },
     {
       "tier": "P1",
       "month": 12,
-      "renewals": 5
+      "renewals": 7
     },
     {
       "tier": "P2",
       "month": 1,
-      "renewals": 132
+      "renewals": 147
     },
     {
       "tier": "P2",
       "month": 2,
-      "renewals": 105
+      "renewals": 117
     },
     {
       "tier": "P2",
       "month": 3,
-      "renewals": 122
+      "renewals": 141
     },
     {
       "tier": "P2",
       "month": 4,
-      "renewals": 114
+      "renewals": 128
     },
     {
       "tier": "P2",
       "month": 5,
-      "renewals": 87
-    },
-    {
-      "tier": "P2",
-      "month": 6,
-      "renewals": 113
-    },
-    {
-      "tier": "P2",
-      "month": 7,
-      "renewals": 72
-    },
-    {
-      "tier": "P2",
-      "month": 8,
-      "renewals": 75
-    },
-    {
-      "tier": "P2",
-      "month": 9,
-      "renewals": 102
-    },
-    {
-      "tier": "P2",
-      "month": 10,
       "renewals": 96
     },
     {
       "tier": "P2",
+      "month": 6,
+      "renewals": 135
+    },
+    {
+      "tier": "P2",
+      "month": 7,
+      "renewals": 89
+    },
+    {
+      "tier": "P2",
+      "month": 8,
+      "renewals": 82
+    },
+    {
+      "tier": "P2",
+      "month": 9,
+      "renewals": 120
+    },
+    {
+      "tier": "P2",
+      "month": 10,
+      "renewals": 112
+    },
+    {
+      "tier": "P2",
       "month": 11,
-      "renewals": 40
+      "renewals": 36
     },
     {
       "tier": "P2",
       "month": 12,
-      "renewals": 5
+      "renewals": 3
     },
     {
       "tier": "P3",
       "month": 1,
-      "renewals": 140
+      "renewals": 143
     },
     {
       "tier": "P3",
       "month": 2,
-      "renewals": 113
+      "renewals": 104
     },
     {
       "tier": "P3",
@@ -2126,102 +1789,102 @@
     {
       "tier": "P3",
       "month": 4,
-      "renewals": 101
+      "renewals": 104
     },
     {
       "tier": "P3",
       "month": 5,
-      "renewals": 110
+      "renewals": 112
     },
     {
       "tier": "P3",
       "month": 6,
-      "renewals": 130
+      "renewals": 138
     },
     {
       "tier": "P3",
       "month": 7,
-      "renewals": 92
+      "renewals": 103
     },
     {
       "tier": "P3",
       "month": 8,
-      "renewals": 85
+      "renewals": 113
     },
     {
       "tier": "P3",
       "month": 9,
-      "renewals": 131
+      "renewals": 154
     },
     {
       "tier": "P3",
       "month": 10,
-      "renewals": 107
+      "renewals": 115
     },
     {
       "tier": "P3",
       "month": 11,
-      "renewals": 52
+      "renewals": 53
     },
     {
       "tier": "P3",
       "month": 12,
-      "renewals": 7
+      "renewals": 8
     },
     {
       "tier": "P4",
       "month": 1,
-      "renewals": 229
+      "renewals": 223
     },
     {
       "tier": "P4",
       "month": 2,
-      "renewals": 226
+      "renewals": 235
     },
     {
       "tier": "P4",
       "month": 3,
-      "renewals": 219
+      "renewals": 240
     },
     {
       "tier": "P4",
       "month": 4,
-      "renewals": 279
+      "renewals": 281
     },
     {
       "tier": "P4",
       "month": 5,
-      "renewals": 144
+      "renewals": 157
     },
     {
       "tier": "P4",
       "month": 6,
-      "renewals": 305
+      "renewals": 318
     },
     {
       "tier": "P4",
       "month": 7,
-      "renewals": 123
+      "renewals": 143
     },
     {
       "tier": "P4",
       "month": 8,
-      "renewals": 170
+      "renewals": 184
     },
     {
       "tier": "P4",
       "month": 9,
-      "renewals": 161
+      "renewals": 200
     },
     {
       "tier": "P4",
       "month": 10,
-      "renewals": 234
+      "renewals": 258
     },
     {
       "tier": "P4",
       "month": 11,
-      "renewals": 143
+      "renewals": 140
     },
     {
       "tier": "P4",
@@ -2234,29 +1897,29 @@
       "segment": "Mid Market",
       "tier": "P1",
       "band": "<5k",
-      "accounts": 7,
-      "arr_eur": 10308.0
+      "accounts": 5,
+      "arr_eur": 11808.0
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "band": "5k-10k",
-      "accounts": 6,
-      "arr_eur": 48492.0
+      "accounts": 15,
+      "arr_eur": 125400.0
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "band": "10k-20k",
-      "accounts": 41,
-      "arr_eur": 646212.0
+      "accounts": 65,
+      "arr_eur": 1014936.0
     },
     {
       "segment": "Mid Market",
       "tier": "P1",
       "band": "20k-50k",
-      "accounts": 153,
-      "arr_eur": 4823484.0
+      "accounts": 187,
+      "arr_eur": 5728020.0
     },
     {
       "segment": "Mid Market",
@@ -2276,29 +1939,29 @@
       "segment": "Mid Market",
       "tier": "P2",
       "band": "<5k",
-      "accounts": 108,
-      "arr_eur": 315048.0
+      "accounts": 134,
+      "arr_eur": 427320.0
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "band": "5k-10k",
-      "accounts": 317,
-      "arr_eur": 2403360.0
+      "accounts": 389,
+      "arr_eur": 2899680.0
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "band": "10k-20k",
-      "accounts": 396,
-      "arr_eur": 5487864.0
+      "accounts": 412,
+      "arr_eur": 5653944.0
     },
     {
       "segment": "Mid Market",
       "tier": "P2",
       "band": "20k-50k",
-      "accounts": 89,
-      "arr_eur": 2220264.0
+      "accounts": 67,
+      "arr_eur": 1622868.0
     },
     {
       "segment": "Mid Market",
@@ -2318,29 +1981,29 @@
       "segment": "SMB",
       "tier": "P1",
       "band": "<5k",
-      "accounts": 11,
-      "arr_eur": 9912.0
+      "accounts": 16,
+      "arr_eur": 19800.0
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "band": "5k-10k",
-      "accounts": 6,
-      "arr_eur": 46560.0
+      "accounts": 8,
+      "arr_eur": 63084.0
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "band": "10k-20k",
-      "accounts": 20,
-      "arr_eur": 318480.0
+      "accounts": 38,
+      "arr_eur": 573576.0
     },
     {
       "segment": "SMB",
       "tier": "P1",
       "band": "20k-50k",
-      "accounts": 64,
-      "arr_eur": 1949856.0
+      "accounts": 73,
+      "arr_eur": 2215956.0
     },
     {
       "segment": "SMB",
@@ -2360,29 +2023,29 @@
       "segment": "SMB",
       "tier": "P2",
       "band": "<5k",
-      "accounts": 55,
-      "arr_eur": 53724.0
+      "accounts": 82,
+      "arr_eur": 126276.0
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "band": "5k-10k",
-      "accounts": 56,
-      "arr_eur": 458868.0
+      "accounts": 114,
+      "arr_eur": 883224.0
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "band": "10k-20k",
-      "accounts": 163,
-      "arr_eur": 2344404.0
+      "accounts": 181,
+      "arr_eur": 2566872.0
     },
     {
       "segment": "SMB",
       "tier": "P2",
       "band": "20k-50k",
-      "accounts": 41,
-      "arr_eur": 1055184.0
+      "accounts": 39,
+      "arr_eur": 958020.0
     },
     {
       "segment": "SMB",
@@ -2393,6 +2056,48 @@
     },
     {
       "segment": "SMB",
+      "tier": "P2",
+      "band": "100k+",
+      "accounts": 0,
+      "arr_eur": 0.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P2",
+      "band": "<5k",
+      "accounts": 1,
+      "arr_eur": 4932.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P2",
+      "band": "5k-10k",
+      "accounts": 0,
+      "arr_eur": 0.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P2",
+      "band": "10k-20k",
+      "accounts": 0,
+      "arr_eur": 0.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P2",
+      "band": "20k-50k",
+      "accounts": 0,
+      "arr_eur": 0.0
+    },
+    {
+      "segment": "Unassigned",
+      "tier": "P2",
+      "band": "50k-100k",
+      "accounts": 0,
+      "arr_eur": 0.0
+    },
+    {
+      "segment": "Unassigned",
       "tier": "P2",
       "band": "100k+",
       "accounts": 0,
@@ -2410,21 +2115,21 @@
       "tier": "P1",
       "band": "5k-10k",
       "accounts": 2,
-      "arr_eur": 17676.0
+      "arr_eur": 17796.0
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "band": "10k-20k",
-      "accounts": 4,
-      "arr_eur": 57336.0
+      "accounts": 9,
+      "arr_eur": 142824.0
     },
     {
       "segment": "Upmarket",
       "tier": "P1",
       "band": "20k-50k",
-      "accounts": 63,
-      "arr_eur": 2099556.0
+      "accounts": 76,
+      "arr_eur": 2456040.0
     },
     {
       "segment": "Upmarket",
@@ -2444,29 +2149,29 @@
       "segment": "Upmarket",
       "tier": "P2",
       "band": "<5k",
-      "accounts": 21,
-      "arr_eur": 60492.0
+      "accounts": 31,
+      "arr_eur": 87828.0
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "band": "5k-10k",
-      "accounts": 53,
-      "arr_eur": 403872.0
+      "accounts": 74,
+      "arr_eur": 562728.0
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "band": "10k-20k",
-      "accounts": 91,
-      "arr_eur": 1272960.0
+      "accounts": 92,
+      "arr_eur": 1277760.0
     },
     {
       "segment": "Upmarket",
       "tier": "P2",
       "band": "20k-50k",
-      "accounts": 46,
-      "arr_eur": 1109460.0
+      "accounts": 37,
+      "arr_eur": 886692.0
     },
     {
       "segment": "Upmarket",
@@ -2485,73 +2190,94 @@
   ],
   "arr_concentration": {
     "Mid Market": {
-      "accounts": 3682,
-      "top10pct_accounts": 368,
-      "top10pct_arr_share": 0.4519
+      "accounts": 3777,
+      "top10pct_accounts": 378,
+      "top10pct_arr_share": 0.4484
     },
     "SMB": {
-      "accounts": 3221,
-      "top10pct_accounts": 322,
-      "top10pct_arr_share": 0.7623
+      "accounts": 3539,
+      "top10pct_accounts": 354,
+      "top10pct_arr_share": 0.7135
     },
     "Unassigned": {
-      "accounts": 11,
-      "top10pct_accounts": 1,
-      "top10pct_arr_share": 0.5254
+      "accounts": 20,
+      "top10pct_accounts": 2,
+      "top10pct_arr_share": 0.5257
     },
     "Upmarket": {
-      "accounts": 899,
-      "top10pct_accounts": 90,
-      "top10pct_arr_share": 0.5567
+      "accounts": 934,
+      "top10pct_accounts": 93,
+      "top10pct_arr_share": 0.5551
     }
   },
+  "renewals_2027_total": 5304,
+  "renewals_blank_date": 1397,
   "coverage": [
     {
-      "tier": "Blank",
-      "accounts": 277,
-      "in_am_extract": 112,
-      "named_csm_in_am": 109,
-      "former_employee_in_am": 3
-    },
-    {
       "tier": "P1",
-      "accounts": 448,
-      "in_am_extract": 389,
-      "named_csm_in_am": 379,
-      "former_employee_in_am": 10
+      "accounts": 565,
+      "in_am_extract": 499,
+      "named_csm_in_am": 485,
+      "former_employee_in_am": 14
     },
     {
       "tier": "P2",
-      "accounts": 1436,
-      "in_am_extract": 1295,
-      "named_csm_in_am": 1279,
-      "former_employee_in_am": 13
+      "accounts": 1653,
+      "in_am_extract": 1489,
+      "named_csm_in_am": 1466,
+      "former_employee_in_am": 21
     },
     {
       "tier": "P3",
-      "accounts": 1753,
-      "in_am_extract": 1465,
-      "named_csm_in_am": 1268,
-      "former_employee_in_am": 29
+      "accounts": 1877,
+      "in_am_extract": 1527,
+      "named_csm_in_am": 1323,
+      "former_employee_in_am": 39
     },
     {
       "tier": "P4",
-      "accounts": 3899,
-      "in_am_extract": 1399,
-      "named_csm_in_am": 1072,
-      "former_employee_in_am": 81
+      "accounts": 4175,
+      "in_am_extract": 1440,
+      "named_csm_in_am": 1101,
+      "former_employee_in_am": 85
     }
   ],
+  "source_conflicts": {
+    "team_accounts": 8270,
+    "matched_in_am": 4955,
+    "not_in_am": 3315,
+    "arr_both_positive": 4756,
+    "arr_differs_over_1pct": 569,
+    "arr_abs_diff_eur": 600346.0,
+    "arr_only_in_am": 16,
+    "arr_only_in_vitally": 3,
+    "market_compared": 4955,
+    "market_differs_from_vitally_region": 0,
+    "market_other_markets_for_named_region_country": 185,
+    "owner_am_named_vitally_group_or_blank": 0,
+    "owner_am_named_vitally_person": 4375,
+    "owner_name_agrees": 4370,
+    "owner_name_no_shared_token": 5,
+    "owner_am_pool_vitally_person": 0,
+    "owner_am_former_employee": 159
+  },
+  "export_comparison": {
+    "accounts_export_rows": 7813,
+    "team_in_export": 7810,
+    "team_not_in_export": 460,
+    "export_not_in_team": 3,
+    "tier_agreement_on_overlap": 0.8438,
+    "export_blank_tiers": 277,
+    "vitally_blank_tiers_in_team": 0
+  },
   "headline": {
-    "total_accounts": 7813,
-    "total_arr_eur": 42631656.0,
-    "managed_book_P1_P2_accounts": 1884,
-    "pool_book_P3_P4_accounts": 5652,
-    "blank_tier_accounts": 277,
+    "total_accounts": 8270,
+    "total_arr_eur": 44854728.0,
+    "managed_book_P1_P2_accounts": 2218,
+    "pool_book_P3_P4_accounts": 6052,
+    "blank_tier_accounts": 0,
     "fy26_expansion_baseline_eur": 17700000,
     "fy26_lost_arr_baseline_eur": 18000000,
     "source_fy26_baselines": "CX Strategy Offsite agenda (Nov 2026), 'The strategy in 30 seconds'. 2027 targets are shown as TBD in the source."
-  },
-  "renewals_2027_total": 5032,
-  "renewals_blank_date": 1317
+  }
 }

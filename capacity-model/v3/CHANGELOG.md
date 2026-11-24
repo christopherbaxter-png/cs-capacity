@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.2 (prototype), 24 Nov 2026
+
+Switches the account source to the Vitally tab and measures AM vs Vitally conflicts.
+
+- **Population:** the Vitally tab (`nov18vitally raw data`) is now the source for account numbers. The team is the Vitally accounts whose CSM is on the roster (the CSM names in the accounts export). This gives 8,270 accounts, up from 7,813: 7,810 of the export's accounts plus 460 more. Three export accounts drop out.
+- **Tiers:** from Vitally. The team has no blank tiers there (the export has 277), and tiers agree with the export on 84% of overlapping accounts. Managed P1/P2 is now 2,218 accounts (was 1,884).
+- **ARR:** from Vitally, EUR 44.9m for the team (was EUR 42.6m).
+- **AM conflicts:** a new table measures where AM and Vitally disagree. ARR differs by more than 1% on 569 accounts (EUR 0.6m combined). 3,315 team accounts are not in AM. Five owner records name different people. AM's "OTHER MARKETS" label is a taxonomy gap (185 accounts), not a conflict.
+- **Builder:** `scripts/build_inputs.py` now takes the CX workbook, AM extract and accounts export (the export is used only for the roster). The CX population drives the aggregates.
+- **Open:** the team roster (45 names, the brief says 30) needs confirming. Former-employee owners (159) need reassigning.
+
 ## v3.1 (prototype), 24 Nov 2026
 
 Adds the 2027 company targets from the project brief and the P1/P2 managed-book and P3/P4 pool views.
