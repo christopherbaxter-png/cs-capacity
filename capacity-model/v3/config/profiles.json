@@ -1,5 +1,5 @@
 {
-  "_about": "Default assumptions for the v3.1 calculator. Every value is either sourced (see 'source') or a PLACEHOLDER to be replaced. 2027 targets come from the project brief and are interpreted, not yet confirmed. Edit here, or edit in the calculator and use 'Export scenario' to copy values back.",
+  "_about": "Default assumptions for the v3.1 calculator. Every value is sourced (see 'source'), a PLACEHOLDER to be replaced, or ILLUSTRATIVE: taken from the CX Capacity Model example, which shows a structure to follow, not a spec to match. 2027 targets come from the project brief and are interpreted, not yet confirmed.",
   "globals": {
     "contracted_hours_per_csm": {
       "value": 150,
@@ -7,7 +7,7 @@
     },
     "portfolio_share": {
       "value": 0.7,
-      "source": "v2 model / CX Capacity Model 'Customer-Facing Focus Allocation' (70%)"
+      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 70% customer-facing focus."
     },
     "availability": {
       "value": 1.0,
@@ -47,7 +47,7 @@
         0.66,
         1.0
       ],
-      "source": "CX Capacity Model 'New Hire Full Ramp Period' (33% / 66% / 100%). Applied from the first month of a hire."
+      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. Ramp 33% / 66% / 100% over three months. Confirm against actual onboarding."
     },
     "pool_incremental_churn": {
       "value": 0.05,
@@ -58,17 +58,17 @@
     "SMB": {
       "inflow_per_month": 10,
       "pool_share_of_new": 0.9,
-      "source": "CX Capacity Model SMB inflow (10 per month)"
+      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. SMB inflow of 10 new accounts per month."
     },
     "Mid Market": {
       "inflow_per_month": 10,
       "pool_share_of_new": 0.5,
-      "source": "PLACEHOLDER. No Mid Market inflow in the CX model."
+      "source": "PLACEHOLDER. No Mid Market inflow in any source."
     },
     "Upmarket": {
       "inflow_per_month": 2,
       "pool_share_of_new": 0.3,
-      "source": "PLACEHOLDER. No Upmarket inflow in the CX model."
+      "source": "PLACEHOLDER. No Upmarket inflow in any source."
     },
     "Onboarding": {
       "inflow_per_month": 22,
@@ -125,7 +125,7 @@
             "type": "share",
             "share": 0.35,
             "hours": 2.0,
-            "source": "CX Capacity Model 'Hours' tab: 35% mix x 2h"
+            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 35% share x 2h."
           },
           {
             "id": "at_risk",
@@ -133,7 +133,7 @@
             "type": "share",
             "share": 0.25,
             "hours": 2.0,
-            "source": "CX Capacity Model: 25% x 2h"
+            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 25% share x 2h."
           },
           {
             "id": "expansion",
@@ -141,9 +141,10 @@
             "type": "share",
             "share": 0.25,
             "hours": 2.0,
-            "source": "CX Capacity Model: 25% x 2h"
+            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 25% share x 2h."
           }
-        ]
+        ],
+        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
       },
       "pool": {
         "buffer": 0.0,
@@ -154,9 +155,10 @@
             "label": "Reactive inbound (per account per month)",
             "type": "per_month",
             "hours": 0.26,
-            "source": "Derived: 15% buffer on the CX SMB core of about 1.7h. PLACEHOLDER."
+            "source": "PLACEHOLDER. Derived from the CX example's SMB core hours (about 1.7h) with its 15% buffer."
           }
-        ]
+        ],
+        "buffer_source": "No buffer on reactive work."
       }
     },
     "Mid Market": {
@@ -190,7 +192,8 @@
             "hours": 2.0,
             "source": "PLACEHOLDER. Share of book in an expansion motion."
           }
-        ]
+        ],
+        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
       },
       "pool": {
         "buffer": 0.0,
@@ -203,7 +206,8 @@
             "hours": 0.3,
             "source": "PLACEHOLDER"
           }
-        ]
+        ],
+        "buffer_source": "No buffer on reactive work."
       }
     },
     "Upmarket": {
@@ -244,7 +248,8 @@
             "hours": 2.5,
             "source": "PLACEHOLDER"
           }
-        ]
+        ],
+        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
       },
       "pool": {
         "buffer": 0.0,
@@ -257,7 +262,8 @@
             "hours": 0.3,
             "source": "PLACEHOLDER"
           }
-        ]
+        ],
+        "buffer_source": "No buffer on reactive work."
       }
     },
     "Onboarding": {
@@ -273,14 +279,15 @@
             "over_months": 3,
             "source": "PLACEHOLDER. Assisted onboarding touches across 90 days."
           }
-        ]
+        ],
+        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
       }
     }
   },
   "reference": {
     "cx_capacity_model_cap": {
       "value": 57,
-      "source": "CX Capacity Model 'Theoretical Account Cap / CSM' (57). Constant with no derivation shown in the source."
+      "source": "ILLUSTRATIVE REFERENCE ONLY. Example cap from the CX Capacity Model. Not a target; the source gives no derivation."
     }
   }
 }

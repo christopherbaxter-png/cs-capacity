@@ -12,6 +12,7 @@ Adds the 2027 company targets from the project brief and the P1/P2 managed-book 
 - **Monthly view:** accounts, demand, capacity, utilisation and CSM gap per book.
 - **Fixes:** the monthly table header; utilisation now divides by average planned CSMs (it used month 12); the segment table shows ARR per book, not per segment.
 - **Removed:** the annual gross churn and FY26 expansion placeholders. Churn and expansion now come from the 2027 targets.
+- **CX example values relabelled:** the 70% focus, 33/66/100 ramp, SMB mix and buffer, SMB inflow and 57-account cap are marked ILLUSTRATIVE in the config, README and calculator. They show structure, not targets.
 - **Still open:** bottom-up reactive volumes; renewal calendar by book (renewals are scaled pro rata by region); region-level CSM allocation; the FY27 headcount plan (the org deck shows vacancies, not a target).
 
 ## v3.0 (prototype), 23 Nov 2026

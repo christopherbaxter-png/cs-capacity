@@ -525,8 +525,8 @@ function renderStatic() {
     "PLG (EUR 12.6m) is larger than the team's entire SMB ARR (EUR 8.8m), so the targets cannot be allocated to segments from the team book. They are applied as company-wide rates. Confirm the SLG/PLG split by segment.",
     "The FY27 Org Plan link resolves to 'CX Org planning - Oct 2026'. It shows roles, vacancies and backfills marked 'Decision pending', and no numeric FY27 CSM target. Confirm the headcount plan before setting the start and hires inputs.",
     "Headcount: the project brief says 30 CSMs (20 managed, 10 pool). The org deck shows Enterprise/High Touch and SMB Growth teams with open and vacant roles. The per-segment split in this calculator is a placeholder, and open roles are not in the default hires.",
-    "Two source bases disagree. The CX Hours tab models 1,500 SMB accounts on 12 CSMs. The WIP tab models 200 accounts on 10 CSMs. The team book is 7,813 accounts across all segments.",
-    "The CX model's workload excludes its own 'Net Expansion Playbooks' line (740h per month). It is either a double count or an omission. It is off by default here.",
+    "The CX example uses different base populations: 1,500 SMB accounts on 12 CSMs in its Hours tab, and 200 accounts on 10 CSMs in its WIP tab. The team book is 7,813 accounts. Do not carry the example's bases across without checking.",
+    "The CX example's workload leaves out its 'Net Expansion Playbooks' line (740h per month). It is not included here. Check whether that work belongs in the team's demand before reusing the structure.",
     "Hours per account are the biggest unknown. Gong call data for the sampled CSMs shows about 4 hours of recorded calls per CSM per month, far below the model's demand. Calibrate with a time study before trusting utilisation.",
     "Tier sources disagree on 1,221 team accounts (84% agreement between the accounts export and the CX workbook). The model uses the accounts export. Decide which tier source is authoritative.",
     "Former-employee owners: 130 matched accounts sit with two former employees. Reassign them before deciding the managed/pool split.",
@@ -663,7 +663,7 @@ function refresh() {
 }
 
 document.getElementById("banner").textContent =
-  "Prototype v3.1. Hours per account, touch cadence, hires, availability, the expansion deal size and pool churn are placeholders. The 2027 targets are read as stated, and their segment split is unconfirmed.";
+  "Prototype v3.1. Hours per account, touch cadence, hires, availability, the expansion deal size and pool churn are placeholders. Some inputs (focus share, ramp, SMB mix and buffer, SMB inflow) are illustrative values from the CX Capacity Model example, which shows structure rather than a spec. The 2027 targets are read as stated, and their segment split is unconfirmed.";
 renderInputs();
 bindInputs();
 bindRowInputs();

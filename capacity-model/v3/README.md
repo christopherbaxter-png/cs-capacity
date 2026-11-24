@@ -3,13 +3,14 @@
 A single-page calculator for 2027 CSM capacity across SMB, Mid Market and Upmarket, with Onboarding as a separate population. It combines:
 
 - **Top-down:** a monthly roll-forward of accounts and ARR for 2027, using new accounts per month, annual gross churn and the FY26 expansion baseline.
-- **Bottom-up:** hours per account-month by activity (proactive touchpoints, at-risk, expansion, reactive, renewals, onboarding), sized from the CX Capacity Model and the project's v2 assumptions.
+- **Bottom-up:** hours per account-month by activity (proactive touchpoints, at-risk, expansion, reactive, renewals, onboarding). Some values are illustrated from the CX Capacity Model example and the project's v2 assumptions. They show structure, not targets.
 - **Revenue lens:** ARR in the managed and pool books, what moving low-ARR accounts to the pool frees up, and what ARR we accept at risk.
 
 Open `index.html` in a browser. It has no dependencies and no server. Data is embedded, and nothing is sent anywhere.
 
 ## Status: read before using
 
+- **The CX Capacity Model is an example, not a spec.** Its values and structure show what a calculator can look like. Several inputs (marked ILLUSTRATIVE in `config/profiles.json`) come from it. They are not validated for this team and should be replaced with the team's own data.
 - **Placeholders drive the result.** Hours per account, touch cadence, hires, availability and pool churn are placeholders (marked in `config/profiles.json`). Utilisation is illustrative until they are replaced.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are entered as inputs. The model reads expansion as SLG + PLG (EUR 18.1m) and the lost-ARR budget as LARR. Both readings need confirming. The Growth & Retention deck still says "2027 Marketing Growth Target: TBD".
 - **Current default result (Mid Market + Upmarket, all regions):** managed utilisation about 190% on average (peak about 220%) against an 85% target, with 17 planned CSMs. Pool utilisation about 240% against 80%, with 4 planned CSMs. This comes from the placeholder touch cadence, not calibrated data. Gong's recorded call time for the sampled CSMs is far lower (about 4 hours per CSM per month), so the hours-per-account inputs need calibrating before anyone relies on the gap.
@@ -56,7 +57,7 @@ Churn and expansion are company rates, derived from the 2027 targets: lost ARR =
 | `per_year` | hours per account-year / 12 |
 | `onboarding_total` | total hours / months in the onboarding window |
 
-A buffer (15% for proactive books, from the CX model) is added. Renewals are added separately, as hours per renewal x renewals in that month from the 2027 Zuora calendar.
+A buffer (15% for proactive books, illustrative, from the CX example) is added. Renewals are added separately, as hours per renewal x renewals in that month from the 2027 Zuora calendar.
 
 **3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 100% by default). Planned CSMs = starting CSMs + hires, with hires ramping 33% / 66% / 100% over three months.
 
@@ -77,7 +78,7 @@ A buffer (15% for proactive books, from the CX model) is added. Renewals are add
 | Team book (7,813 accounts, tiers, segments, country, renewals) | Accounts export (Vitally, current) |
 | ARR | Nov 2026 CX portfolio review workbook, `vitally.custom.arrEur` |
 | AM coverage (named CSM, former employees, market) | AM portfolio extract (`am_customer_extract`) |
-| Hours, mix, ramp, focus, buffer, cap reference | CX Capacity Model (Account Caps), Hours tab |
+| Hours, mix, ramp, focus, buffer, cap reference | ILLUSTRATIVE. CX Capacity Model (Account Caps) example, Hours tab. Used to show structure; not validated for this team. |
 | Contracted hours, targets, managed/pool split | Project instructions (v2) |
 | FY26 expansion and lost ARR baselines | CX Strategy Offsite agenda, Nov 2026 |
 | 2027 targets: SLG EUR 5.5m, PLG EUR 12.6m, LARR EUR 18.2m | Project brief, 24 Nov 2026. Interpreted (see Open decisions). |
@@ -107,5 +108,5 @@ A buffer (15% for proactive books, from the CX model) is added. Renewals are add
 - **Churn by segment.** Company-level churn is used. The churn probability field in Vitally is empty in the current export.
 - **Targets.** Confirm the meaning and segment split of SLG, PLG and LARR. Replace the company rates with segment-level rates once they are set.
 - **Governance.** Former-employee owners hold 130 matched accounts. Reassign them before the managed/pool split is decided.
-- **Source model issues.** The CX model's workload excludes its own "Net Expansion Playbooks" line (740h per month). Its WIP tab labels a surplus as a gap. Both are noted in the calculator's considerations list.
+- **Example model issues.** The CX example's workload leaves out its own "Net Expansion Playbooks" line (740h per month). Its WIP tab labels a surplus as a gap. Both are noted in the calculator's considerations list, to check before reusing the example's structure.
 - **Privacy.** `data/team_book.json` holds aggregates only. Keep account-level exports out of the repo.
