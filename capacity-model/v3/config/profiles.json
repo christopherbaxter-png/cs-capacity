@@ -1,31 +1,117 @@
 {
-  "_about": "Default assumptions for the v3 calculator. Every value is either sourced (see 'source') or a PLACEHOLDER to be replaced. Edit here, or edit in the calculator and use 'Export scenario' to copy values back.",
+  "_about": "Default assumptions for the v3.1 calculator. Every value is either sourced (see 'source') or a PLACEHOLDER to be replaced. 2027 targets come from the project brief and are interpreted, not yet confirmed. Edit here, or edit in the calculator and use 'Export scenario' to copy values back.",
   "globals": {
-    "contracted_hours_per_csm": { "value": 150, "source": "v2 model / project instructions" },
-    "portfolio_share": { "value": 0.70, "source": "v2 model / CX Capacity Model 'Customer-Facing Focus Allocation' (70%)" },
-    "availability": { "value": 1.00, "source": "PLACEHOLDER. Holidays, sickness and internal time are not yet modelled. 100% keeps v2 like-for-like. Expect roughly 0.85 to 0.90." },
-    "target_managed": { "value": 0.85, "source": "Project instructions (managed book target)" },
-    "target_pool": { "value": 0.80, "source": "Project instructions (pool target; reactive queues need more slack)" },
-    "ramp": { "value": [0.33, 0.66, 1.0], "source": "CX Capacity Model 'New Hire Full Ramp Period' (33% / 66% / 100%). Applied from the first month of a hire." },
-    "annual_gross_churn": { "value": 0.205, "source": "FY26 lost ARR EUR 18m / CX ARR EUR 87.9m = 20.5%. CX offsite agenda. Company-level, not by segment. PLACEHOLDER by segment." },
-    "fy26_expansion_eur": { "value": 17700000, "source": "CX offsite agenda: FY26 baseline EUR 17.7m. The 2027 target is TBD in the source." },
-    "expansion_growth_2027": { "value": 0.0, "source": "PLACEHOLDER. Set to the 2027 expansion target growth once confirmed." },
-    "pool_incremental_churn": { "value": 0.05, "source": "PLACEHOLDER. Extra churn on ARR moved to the pool. Needs evidence from pooled accounts." }
+    "contracted_hours_per_csm": {
+      "value": 150,
+      "source": "v2 model / project instructions"
+    },
+    "portfolio_share": {
+      "value": 0.7,
+      "source": "v2 model / CX Capacity Model 'Customer-Facing Focus Allocation' (70%)"
+    },
+    "availability": {
+      "value": 1.0,
+      "source": "PLACEHOLDER. Holidays, sickness and internal time are not yet modelled. 100% keeps v2 like-for-like. Expect roughly 0.85 to 0.90."
+    },
+    "target_managed": {
+      "value": 0.85,
+      "source": "Project instructions (managed book target)"
+    },
+    "target_pool": {
+      "value": 0.8,
+      "source": "Project instructions (pool target; reactive queues need more slack)"
+    },
+    "slg_eur": {
+      "value": 5500000,
+      "source": "2027 target from the project brief (Sales Led Growth EUR 5.5m). Interpreted as expansion, mapped to the company base. Confirm with Finance."
+    },
+    "plg_eur": {
+      "value": 12600000,
+      "source": "2027 target from the project brief (Product Led Growth EUR 12.6m). Interpreted as expansion. Confirm with Finance."
+    },
+    "larr_eur": {
+      "value": 18200000,
+      "source": "2027 target from the project brief (LARR EUR 18.2m). Interpreted as the lost-ARR budget. FY26 comparator EUR 18m lost ARR (CX offsite). Confirm with Finance."
+    },
+    "company_arr_eur": {
+      "value": 87900000,
+      "source": "CX ARR EUR 87.9m (CX offsite agenda, used for the FY26 churn rate of 20.5%). Company base for company-wide rates."
+    },
+    "asp_eur": {
+      "value": 12800,
+      "source": "CX Capacity Model WIP tab: ASP USD 12,000 to 12,800. Currency not confirmed; top of range used as a EUR placeholder."
+    },
+    "ramp": {
+      "value": [
+        0.33,
+        0.66,
+        1.0
+      ],
+      "source": "CX Capacity Model 'New Hire Full Ramp Period' (33% / 66% / 100%). Applied from the first month of a hire."
+    },
+    "pool_incremental_churn": {
+      "value": 0.05,
+      "source": "PLACEHOLDER. Extra churn on ARR moved to the pool. Needs evidence from pooled accounts."
+    }
   },
   "growth": {
-    "SMB": { "inflow_per_month": 10, "pool_share_of_new": 0.9, "source": "CX Capacity Model SMB inflow (10 per month)" },
-    "Mid Market": { "inflow_per_month": 10, "pool_share_of_new": 0.5, "source": "PLACEHOLDER. No Mid Market inflow in the CX model." },
-    "Upmarket": { "inflow_per_month": 2, "pool_share_of_new": 0.3, "source": "PLACEHOLDER. No Upmarket inflow in the CX model." },
-    "Onboarding": { "inflow_per_month": 22, "window_months": 3, "source": "PLACEHOLDER. Sum of new accounts across segments, 90-day onboarding window." }
+    "SMB": {
+      "inflow_per_month": 10,
+      "pool_share_of_new": 0.9,
+      "source": "CX Capacity Model SMB inflow (10 per month)"
+    },
+    "Mid Market": {
+      "inflow_per_month": 10,
+      "pool_share_of_new": 0.5,
+      "source": "PLACEHOLDER. No Mid Market inflow in the CX model."
+    },
+    "Upmarket": {
+      "inflow_per_month": 2,
+      "pool_share_of_new": 0.3,
+      "source": "PLACEHOLDER. No Upmarket inflow in the CX model."
+    },
+    "Onboarding": {
+      "inflow_per_month": 22,
+      "window_months": 3,
+      "source": "PLACEHOLDER. Sum of new accounts across segments, 90-day onboarding window."
+    }
   },
   "headcount": {
-    "SMB|managed": { "start": 3, "hires_2027": 0, "source": "PLACEHOLDER split of the 20 managed CSMs (project instructions)" },
-    "SMB|pool": { "start": 6, "hires_2027": 0, "source": "PLACEHOLDER split of the 10 pool CSMs (project instructions)" },
-    "Mid Market|managed": { "start": 10, "hires_2027": 0, "source": "PLACEHOLDER" },
-    "Mid Market|pool": { "start": 2, "hires_2027": 0, "source": "PLACEHOLDER" },
-    "Upmarket|managed": { "start": 7, "hires_2027": 0, "source": "PLACEHOLDER" },
-    "Upmarket|pool": { "start": 2, "hires_2027": 0, "source": "PLACEHOLDER" },
-    "Onboarding|onb": { "start": 6, "hires_2027": 0, "source": "PLACEHOLDER. Onboarding team size not confirmed." }
+    "SMB|managed": {
+      "start": 3,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER split of the 20 managed CSMs (project instructions)"
+    },
+    "SMB|pool": {
+      "start": 6,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER split of the 10 pool CSMs (project instructions)"
+    },
+    "Mid Market|managed": {
+      "start": 10,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER"
+    },
+    "Mid Market|pool": {
+      "start": 2,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER"
+    },
+    "Upmarket|managed": {
+      "start": 7,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER"
+    },
+    "Upmarket|pool": {
+      "start": 2,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER"
+    },
+    "Onboarding|onb": {
+      "start": 6,
+      "hires_2027": 0,
+      "source": "PLACEHOLDER. Onboarding team size not confirmed."
+    }
   },
   "profiles": {
     "SMB": {
@@ -33,16 +119,43 @@
         "buffer": 0.15,
         "renewal_hours": 1.0,
         "activities": [
-          { "id": "adoption", "label": "Adoption (share of book active)", "type": "share", "share": 0.35, "hours": 2.0, "source": "CX Capacity Model 'Hours' tab: 35% mix x 2h" },
-          { "id": "at_risk", "label": "At-risk (share of book active)", "type": "share", "share": 0.25, "hours": 2.0, "source": "CX Capacity Model: 25% x 2h" },
-          { "id": "expansion", "label": "Expansion (share of book active)", "type": "share", "share": 0.25, "hours": 2.0, "source": "CX Capacity Model: 25% x 2h" }
+          {
+            "id": "adoption",
+            "label": "Adoption (share of book active)",
+            "type": "share",
+            "share": 0.35,
+            "hours": 2.0,
+            "source": "CX Capacity Model 'Hours' tab: 35% mix x 2h"
+          },
+          {
+            "id": "at_risk",
+            "label": "At-risk (share of book active)",
+            "type": "share",
+            "share": 0.25,
+            "hours": 2.0,
+            "source": "CX Capacity Model: 25% x 2h"
+          },
+          {
+            "id": "expansion",
+            "label": "Expansion (share of book active)",
+            "type": "share",
+            "share": 0.25,
+            "hours": 2.0,
+            "source": "CX Capacity Model: 25% x 2h"
+          }
         ]
       },
       "pool": {
         "buffer": 0.0,
         "renewal_hours": 0.5,
         "activities": [
-          { "id": "reactive", "label": "Reactive inbound (per account per month)", "type": "per_month", "hours": 0.26, "source": "Derived: 15% buffer on the CX SMB core of about 1.7h. PLACEHOLDER." }
+          {
+            "id": "reactive",
+            "label": "Reactive inbound (per account per month)",
+            "type": "per_month",
+            "hours": 0.26,
+            "source": "Derived: 15% buffer on the CX SMB core of about 1.7h. PLACEHOLDER."
+          }
         ]
       }
     },
@@ -51,16 +164,45 @@
         "buffer": 0.15,
         "renewal_hours": 5.0,
         "activities": [
-          { "id": "value_reviews", "label": "Proactive value reviews (multi-stakeholder)", "type": "touchpoints", "touches_per_year": 4, "hours_per_touch": 1.5, "stakeholders": 2, "extra_stakeholder_hours": 0.5, "source": "PLACEHOLDER. 'Multiple touchpoints per year across stakeholders' (CX leadership brief)." },
-          { "id": "at_risk", "label": "At-risk (share of book active)", "type": "share", "share": 0.15, "hours": 2.0, "source": "PLACEHOLDER. Share of book in save motion at any time." },
-          { "id": "expansion", "label": "Expansion (share of book active)", "type": "share", "share": 0.25, "hours": 2.0, "source": "PLACEHOLDER. Share of book in an expansion motion." }
+          {
+            "id": "value_reviews",
+            "label": "Proactive value reviews (multi-stakeholder)",
+            "type": "touchpoints",
+            "touches_per_year": 4,
+            "hours_per_touch": 1.5,
+            "stakeholders": 2,
+            "extra_stakeholder_hours": 0.5,
+            "source": "PLACEHOLDER. 'Multiple touchpoints per year across stakeholders' (CX leadership brief)."
+          },
+          {
+            "id": "at_risk",
+            "label": "At-risk (share of book active)",
+            "type": "share",
+            "share": 0.15,
+            "hours": 2.0,
+            "source": "PLACEHOLDER. Share of book in save motion at any time."
+          },
+          {
+            "id": "expansion",
+            "label": "Expansion (share of book active)",
+            "type": "share",
+            "share": 0.25,
+            "hours": 2.0,
+            "source": "PLACEHOLDER. Share of book in an expansion motion."
+          }
         ]
       },
       "pool": {
         "buffer": 0.0,
         "renewal_hours": 1.0,
         "activities": [
-          { "id": "reactive", "label": "Reactive inbound (per account per month)", "type": "per_month", "hours": 0.3, "source": "PLACEHOLDER" }
+          {
+            "id": "reactive",
+            "label": "Reactive inbound (per account per month)",
+            "type": "per_month",
+            "hours": 0.3,
+            "source": "PLACEHOLDER"
+          }
         ]
       }
     },
@@ -69,17 +211,52 @@
         "buffer": 0.15,
         "renewal_hours": 10.0,
         "activities": [
-          { "id": "value_reviews", "label": "Proactive value reviews (multi-stakeholder)", "type": "touchpoints", "touches_per_year": 6, "hours_per_touch": 2.0, "stakeholders": 3, "extra_stakeholder_hours": 0.75, "source": "PLACEHOLDER. 'Multiple touchpoints per year across multiple stakeholders' (CX leadership brief)." },
-          { "id": "strategic_plan", "label": "Top-account strategic plan (per account per year)", "type": "per_year", "hours_per_year": 8, "source": "PLACEHOLDER. Plan build and refresh." },
-          { "id": "at_risk", "label": "At-risk (share of book active)", "type": "share", "share": 0.15, "hours": 2.5, "source": "PLACEHOLDER" },
-          { "id": "expansion", "label": "Expansion (share of book active)", "type": "share", "share": 0.25, "hours": 2.5, "source": "PLACEHOLDER" }
+          {
+            "id": "value_reviews",
+            "label": "Proactive value reviews (multi-stakeholder)",
+            "type": "touchpoints",
+            "touches_per_year": 6,
+            "hours_per_touch": 2.0,
+            "stakeholders": 3,
+            "extra_stakeholder_hours": 0.75,
+            "source": "PLACEHOLDER. 'Multiple touchpoints per year across multiple stakeholders' (CX leadership brief)."
+          },
+          {
+            "id": "strategic_plan",
+            "label": "Top-account strategic plan (per account per year)",
+            "type": "per_year",
+            "hours_per_year": 8,
+            "source": "PLACEHOLDER. Plan build and refresh."
+          },
+          {
+            "id": "at_risk",
+            "label": "At-risk (share of book active)",
+            "type": "share",
+            "share": 0.15,
+            "hours": 2.5,
+            "source": "PLACEHOLDER"
+          },
+          {
+            "id": "expansion",
+            "label": "Expansion (share of book active)",
+            "type": "share",
+            "share": 0.25,
+            "hours": 2.5,
+            "source": "PLACEHOLDER"
+          }
         ]
       },
       "pool": {
         "buffer": 0.0,
         "renewal_hours": 1.5,
         "activities": [
-          { "id": "reactive", "label": "Reactive inbound (per account per month)", "type": "per_month", "hours": 0.3, "source": "PLACEHOLDER" }
+          {
+            "id": "reactive",
+            "label": "Reactive inbound (per account per month)",
+            "type": "per_month",
+            "hours": 0.3,
+            "source": "PLACEHOLDER"
+          }
         ]
       }
     },
@@ -88,12 +265,22 @@
         "buffer": 0.15,
         "renewal_hours": 0.0,
         "activities": [
-          { "id": "assisted_onboarding", "label": "Assisted onboarding (total hours per account over the window)", "type": "onboarding_total", "total_hours": 6.0, "over_months": 3, "source": "PLACEHOLDER. Assisted onboarding touches across 90 days." }
+          {
+            "id": "assisted_onboarding",
+            "label": "Assisted onboarding (total hours per account over the window)",
+            "type": "onboarding_total",
+            "total_hours": 6.0,
+            "over_months": 3,
+            "source": "PLACEHOLDER. Assisted onboarding touches across 90 days."
+          }
         ]
       }
     }
   },
   "reference": {
-    "cx_capacity_model_cap": { "value": 57, "source": "CX Capacity Model 'Theoretical Account Cap / CSM' (57). Constant with no derivation shown in the source." }
+    "cx_capacity_model_cap": {
+      "value": 57,
+      "source": "CX Capacity Model 'Theoretical Account Cap / CSM' (57). Constant with no derivation shown in the source."
+    }
   }
 }

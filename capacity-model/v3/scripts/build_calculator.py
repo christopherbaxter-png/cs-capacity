@@ -15,7 +15,6 @@ def flatten(cfg):
     growth = {}
     for seg, gr in cfg["growth"].items():
         growth[seg] = {k: v for k, v in gr.items() if k != "source"}
-        growth[seg]["churn_annual"] = g["annual_gross_churn"]["value"]
     headcount = {}
     for key, h in cfg["headcount"].items():
         headcount[key] = {"start": h["start"], "hires_2027": h["hires_2027"], "source": h.get("source", "")}
