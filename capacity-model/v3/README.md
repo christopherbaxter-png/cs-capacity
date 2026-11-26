@@ -10,7 +10,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 
 - **Hours per account are placeholders, and they drive almost all of the result.** At the default 12,000 tARR threshold the calculator shows 46.3 managed and 12.8 pool CSMs needed (59.1 in total), against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
 - **The threshold is the brief's, but tARR is unconfirmed.** Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before the tiers are used for the managed split.
-- **Leaders and available CSMs.** UKI is led by Tom Macbride (confirmed 26 Nov 2026). Stina Grahn is on maternity leave, and Jakob Klöfver manages Nordics while owning a book. His management share is entered as a leader-time input, 0 until set, so Nordics availability is overstated until then. The review and the chart still differ on the roster, and the Multi-region CSM is not counted in any region.
+- **Leaders and available CSMs.** The base is the org chart, which is the 2027 team: 27 named ICs (UKI 11, Nordics 7, Central & South 9) and 3 open roles (UKI 2, Nordics 1). UKI is led by Tom Macbride. Stina Grahn is on maternity leave, and Jakob Klöfver manages Nordics while owning a book; his management share is a leader-time input, 0 until set. Nikol Rej Notlev is marked vacant on the chart, which would make Nordics 6 filled. The review's 26 active MM/UM CSMs differ from the chart: some have no accounts yet, and some have left.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are inputs. The model reads expansion as SLG + PLG and the lost-ARR budget as LARR. Both readings need confirming.
 - **The CX Capacity Model is an example, not a spec.** Values marked ILLUSTRATIVE in `config/profiles.json` come from it and are not validated for this team.
 
@@ -71,7 +71,7 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 
 **4. CSMs needed.** Average monthly demand divided by (effective hours x target utilisation). Targets are 85% for managed and 80% for the pool, both from the v2 project instructions. The peak month is shown alongside the average.
 
-**5. Regions and leaders.** Accounts are assigned to the review's regions: UKI, Nordics, Central & South, and Rest of World. Leaders come from the org chart and the review. Available CSMs default to the review's active MM/UM CSM counts (UKI 10, Nordics 6, Central & South 9) and can be edited. Rest of World has 38 MM/UM accounts and no named leader or MM/UM CSM.
+**5. Regions and leaders.** Accounts are assigned to the review's regions: UKI, Nordics, Central & South, and Rest of World. Leaders are UKI: Tom Macbride, and Nordics: Jakob Klöfver (acting). Available CSMs are the org chart's named ICs, less leader time. Open roles are counted only in the gap incl. open roles. Rest of World has 38 MM/UM accounts and no named leader or CSM.
 
 **6. Attrition check.** Company rates are applied to the MM/UM ARR in scope: lost ARR = LARR / company ARR (20.7%), and expansion = (SLG + PLG) / company ARR (20.6%). This is a drift check against the budget, not a segment forecast.
 
@@ -81,7 +81,7 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 |---|---|
 | Accounts, tARR, ARR, country, segment, CSM, 2027 renewal dates | Nov 2026 CX portfolio review, Vitally tab `nov18vitally raw data` (`vitally.custom.tarr`, `vitally.custom.arrEur`, `hspot.zuora_termenddate`) |
 | Tier bands and coverage model (P1 to P4) | "Implementing Four Priority Tiers" image |
-| Region mapping, active CSM counts by region | Nov 2026 CX portfolio review: Country Analysis and Portfolio by CSM |
+| Region mapping (review); 2027 CSM counts and open roles (org chart) | Nov 2026 CX portfolio review: Country Analysis; Enterprise org chart (image) |
 | Leaders, named ICs, open and vacant roles | Enterprise org chart (image) |
 | Team roster (45 CSM names) | CSM list in the accounts export. Used only to define the team. Needs confirming. |
 | AM coverage and conflict checks | AM portfolio extract (`am_customer_extract`). Not used for account numbers. |
@@ -97,7 +97,7 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 2. **tARR definition.** Confirm what tARR measures, and whether tiers should use it rather than ARR.
 3. **P3 and P4 renewals.** Confirmed: the pool handles them.
 4. **Target utilisation** for each book (85% and 80% are the v2 placeholders).
-5. **Roster and leadership.** Confirmed: UKI is led by Tom Macbride, and Nordics is managed by Jakob Klöfver (acting) while Stina Grahn is on leave. Still to do: enter Jakob's management share, and confirm the roster, since the review shows 25 MM/UM CSMs (UKI 10, Nordics 6, Central & South 9) and the chart shows named ICs and open roles that differ. Aida Selam's region is unconfirmed.
+5. **Roster.** The base is the org chart: 27 named ICs and 3 open roles. Confirm Aida Selam's place on the chart, Nikol Rej Notlev's vacancy, and whether the UKI vacant senior role should count. Enter Jakob's management share.
 6. **Deactivated CSMs** still hold 148 MM/UM accounts. These need reassigning.
 7. **Adoption CSM vs CSM.** 224 accounts have a different Adoption CSM from the CSM field. The review counts by Adoption CSM; this model uses CSM.
 8. **Rest of World.** 38 MM/UM accounts have no leader. Confirm where they belong.

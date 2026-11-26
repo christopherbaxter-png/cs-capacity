@@ -77,7 +77,7 @@ button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); b
 <div class="wrap"><table id="tierTable"></table></div>
 
 <h2>CSMs needed by leader region</h2>
-<p class="note">Managed CSMs cover accounts at or above the threshold. Pool CSMs cover the rest. Needed CSMs are demand divided by capacity at the target utilisation. Available CSMs are MM/UM ICs with active accounts in the review (editable below).</p>
+<p class="note">Managed CSMs cover accounts at or above the threshold. Pool CSMs cover the rest. Needed CSMs are demand divided by capacity at the target utilisation. Available CSMs are the org chart's named ICs (the 2027 team), less leader time. Open roles are shown separately (editable below).</p>
 <div class="wrap"><table id="leaderTable"></table></div>
 <p class="small" id="leaderNote"></p>
 
@@ -96,9 +96,9 @@ button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); b
 <ul class="list" id="considerations"></ul>
 
 <h2>Inputs</h2>
-<details open><summary>CSMs available by region (MM/UM)</summary>
-<div class="wrap"><table><thead><tr><th>Region</th><th class="num">Available CSMs</th><th class="num">Leader time (CSM-eq.)</th><th>Default</th></tr></thead><tbody id="availRows"></tbody></table></div>
-<p class="small">Defaults are active MM/UM CSMs in the Nov 2026 review. The Multi-region CSM is not counted in any region.</p>
+<details open><summary>CSMs by region (org chart, 2027 team)</summary>
+<div class="wrap"><table><thead><tr><th>Region</th><th class="num">Named ICs (chart)</th><th class="num">Leader time (CSM-eq.)</th><th class="num">Open roles</th><th>Default</th></tr></thead><tbody id="availRows"></tbody></table></div>
+<p class="small">Defaults are named ICs on the org chart and its open roles. Open roles count only in the gap incl. open roles column. Aida Selam, multi-region in the review, is not in any chart region.</p>
 </details>
 <details open><summary>Capacity and targets</summary>
 <div class="controls" id="globalInputs"></div>
@@ -141,14 +141,17 @@ const pct = n => (Number(n || 0) * 100).toFixed(0) + "%";
 const pct1 = n => (Number(n || 0) * 100).toFixed(1) + "%";
 const eurm = n => "EUR " + (Number(n || 0) / 1e6).toLocaleString("en-GB", { maximumFractionDigits: 2 }) + "m";
 const clone = o => JSON.parse(JSON.stringify(o));
+const sgn = x => (x >= 0 ? "+" : "");
 
 // Available CSMs default from the review (active MM/UM, primary segment MM or UM).
 const DEFAULT_AVAIL = {};
+const DEFAULT_OPEN = {};
 for (const r of REGIONS) {
-  const h = DATA.headcount_review[r];
-  DEFAULT_AVAIL[r] = h ? h.active_mm_um_csms : 0;
+  const o = CONFIG.org_chart[r];
+  DEFAULT_AVAIL[r] = o ? o.named_ics_chart : 0;
+  DEFAULT_OPEN[r] = o ? o.open_roles_chart : 0;
 }
-const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL), mgmt: { "UKI": 0, "Nordics": 0, "Central & South": 0, "Rest of World": 0 } };
+const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL), open: clone(DEFAULT_OPEN), mgmt: { "UKI": 0, "Nordics": 0, "Central & South": 0, "Rest of World": 0 } };
 let S = clone(DEFAULT_STATE);
 const UI = { seg: "Both", thrIdx: 4, region: "All" };   // thrIdx 4 = 12k
 const thrValue = () => EDGES[UI.thrIdx];
@@ -211,6 +214,8 @@ function renderCards() {
   const avail = availFor(regs);
   const need = t.managed.need + t.pool.need;
   const gap = avail - need;
+  const openTot = regs.reduce((s, r) => s + (Number(S.open[r]) || 0), 0);
+  const gapOpen = avail + openTot - need;
   const thrTxt = fmt0(thrValue()) + " tARR";
   document.getElementById("cards").innerHTML = [
     card("MM/UM accounts", fmt0(t.managed.accounts + t.pool.accounts), UI.region === "All" ? "All leader regions" : UI.region),
@@ -219,8 +224,9 @@ function renderCards() {
     card("CSMs needed: managed", fmt1(t.managed.need), "Peak month " + fmt1(t.managed.needPeak)),
     card("CSMs needed: pool", fmt1(t.pool.need), "Peak month " + fmt1(t.pool.needPeak)),
     card("CSMs needed: total", fmt1(need), "Average month"),
-    card("Available MM/UM CSMs", fmt1(avail), "Review count less leader time, editable below"),
-    card("Surplus / (gap)", (gap >= 0 ? "+" : "") + fmt1(gap), gap >= 0 ? "Covered at the target" : "Short of the target", gap >= 0 ? "ok" : "bad"),
+    card("Available ICs (chart)", fmt1(avail), "Named ICs on the org chart, less leader time"),
+    card("Open roles (chart)", fmt1(openTot), "Planned, not yet filled"),
+    card("Surplus / (gap)", (gap >= 0 ? "+" : "") + fmt1(gap), "Incl. open roles: " + sgn(gapOpen) + fmt1(gapOpen), gap >= 0 ? "ok" : "bad"),
   ].join("");
   document.getElementById("cardNote").textContent =
     "Hours per account are placeholders and drive almost all of the result. Renewals use 2027 term-end dates; accounts without a date are excluded.";
@@ -251,37 +257,43 @@ function renderTiers() {
 function renderLeaders() {
   const org = CONFIG.org_chart;
   const rows = [];
-  let tot = { acc: 0, man: 0, pool: 0, nM: 0, nP: 0, avail: 0, dem: 0, E: 0 };
+  const tot = { acc: 0, man: 0, pool: 0, nM: 0, nP: 0, avail: 0, open: 0, dem: 0, E: 0 };
   const sel = UI.region;
   for (const r of REGIONS) {
     const t = compute([r]);
     const avail = Math.max(0, (Number(S.avail[r]) || 0) - (Number(S.mgmt[r]) || 0));
+    const open = Number(S.open[r]) || 0;
     const need = t.managed.need + t.pool.need;
+    const gap = avail - need;
+    const gapOpen = avail + open - need;
     const util = avail > 0 ? (t.managed.avgDem + t.pool.avgDem) / (avail * t.E) : 0;
-    const lead = org[r];
+    const lead = org[r] || {};
     const leaderTxt = r === "Rest of World" ? "No leader on either chart" :
       `${lead.leader_review}${lead.leader_chart !== lead.leader_review ? "; chart: " + lead.leader_chart : ""}`;
-    const openTxt = r === "Rest of World" ? "-" : `${lead.open_roles_chart} open${lead.vacant_senior_chart ? ", " + lead.vacant_senior_chart + " vacant" : ""}`;
     rows.push(`<tr class="${sel === r ? "sel" : ""}"><td>${r}</td><td>${leaderTxt}</td>
       <td class="num">${fmt0(t.managed.accounts + t.pool.accounts)}</td><td class="num">${fmt0(t.managed.accounts)}</td><td class="num">${fmt0(t.pool.accounts)}</td>
       <td class="num">${fmt1(t.managed.need)}</td><td class="num">${fmt1(t.pool.need)}</td><td class="num">${fmt1(need)}</td>
-      <td class="num">${fmt1(avail)}</td><td class="num ${avail - need >= 0 ? "ok" : "bad"}">${(avail - need >= 0 ? "+" : "") + fmt1(avail - need)}</td>
-      <td class="num">${pct(util)}</td><td>${openTxt}</td></tr>`);
+      <td class="num">${fmt1(avail)}</td><td class="num ${gap >= 0 ? "ok" : "bad"}">${sgn(gap)}${fmt1(gap)}</td>
+      <td class="num">${fmt0(open)}</td><td class="num ${gapOpen >= 0 ? "ok" : "bad"}">${sgn(gapOpen)}${fmt1(gapOpen)}</td>
+      <td class="num">${pct(util)}</td></tr>`);
     tot.acc += t.managed.accounts + t.pool.accounts; tot.man += t.managed.accounts; tot.pool += t.pool.accounts;
-    tot.nM += t.managed.need; tot.nP += t.pool.need; tot.avail += avail; tot.dem += t.managed.avgDem + t.pool.avgDem; tot.E = t.E;
+    tot.nM += t.managed.need; tot.nP += t.pool.need; tot.avail += avail; tot.open += open;
+    tot.dem += t.managed.avgDem + t.pool.avgDem; tot.E = t.E;
   }
   const all = tot.nM + tot.nP;
-  const totUtil = tot.avail > 0 ? tot.dem / (tot.avail * tot.E) : 0;
+  const gapT = tot.avail - all, gapOpenT = tot.avail + tot.open - all;
+  const utilT = tot.avail > 0 ? tot.dem / (tot.avail * tot.E) : 0;
   rows.push(`<tr class="total"><td>Total</td><td></td><td class="num">${fmt0(tot.acc)}</td><td class="num">${fmt0(tot.man)}</td><td class="num">${fmt0(tot.pool)}</td>
     <td class="num">${fmt1(tot.nM)}</td><td class="num">${fmt1(tot.nP)}</td><td class="num">${fmt1(all)}</td>
-    <td class="num">${fmt1(tot.avail)}</td><td class="num ${tot.avail - all >= 0 ? "ok" : "bad"}">${(tot.avail - all >= 0 ? "+" : "") + fmt1(tot.avail - all)}</td>
-    <td class="num">${pct(totUtil)}</td><td></td></tr>`);
+    <td class="num">${fmt1(tot.avail)}</td><td class="num ${gapT >= 0 ? "ok" : "bad"}">${sgn(gapT)}${fmt1(gapT)}</td>
+    <td class="num">${fmt0(tot.open)}</td><td class="num ${gapOpenT >= 0 ? "ok" : "bad"}">${sgn(gapOpenT)}${fmt1(gapOpenT)}</td>
+    <td class="num">${pct(utilT)}</td></tr>`);
   document.getElementById("leaderTable").innerHTML =
     `<thead><tr><th>Region</th><th>Leader</th><th class="num">MM/UM accounts</th><th class="num">Managed</th><th class="num">Pooled</th>
      <th class="num">Managed CSMs needed</th><th class="num">Pool CSMs needed</th><th class="num">Total needed</th>
-     <th class="num">Available</th><th class="num">Surplus / (gap)</th><th class="num">Utilisation at available</th><th>Open roles (chart)</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+     <th class="num">Named ICs (net of leader time)</th><th class="num">Gap</th><th class="num">Open roles</th><th class="num">Gap incl. open roles</th><th class="num">Utilisation at named ICs</th></tr></thead><tbody>${rows.join("")}</tbody>`;
   document.getElementById("leaderNote").textContent =
-    `Segment: ${UI.seg}. Threshold: ${fmt0(thrValue())} tARR. Utilisation at available = demand divided by available CSMs x capacity. The Rest of World accounts have no named leader.`;
+    `Segment: ${UI.seg}. Threshold: ${fmt0(thrValue())} tARR. Named ICs are the org chart's 2027 team, less leader time. Open roles count only in the last gap column. The Rest of World accounts have no named leader.`;
 }
 
 function renderHeadcount() {
@@ -341,7 +353,8 @@ function renderConsiderations() {
     "Scope: SMB accounts and accounts with no segment are excluded from this view (3,559 team accounts). PLG covers SMB.",
     "tARR, not ARR: the tiers and the managed threshold use vitally.custom.tarr. Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before setting the threshold.",
     "The managed threshold is 12,000 tARR, the image's P2 floor. P3 and P4 accounts are pooled, including their renewals. A 10,000 threshold would move about 240 P3 accounts into managed.",
-    "Headcount: the review shows 10 active MM/UM CSMs in UKI, 6 in Nordics and 9 in Central & South. The org chart shows 11, 7 and 9 named ICs plus open or vacant roles. The UKI leader is confirmed as Tom Macbride. Confirm the roster.",
+    "Headcount base: the org chart, which is the 2027 team. It has 27 named ICs (UKI 11, Nordics 7, Central & South 9) and 3 open roles (UKI 2, Nordics 1). The UKI vacant senior role is not counted. The review's 26 active MM/UM CSMs differ: some have no accounts yet, and some have left.",
+    "Nikol Rej Notlev is marked vacant on the chart, which would make Nordics 6 filled rather than 7. Confirm.",
     "Nordics: Stina Grahn is on maternity leave. Jakob Klöfver manages the region while owning a 94-account UM book. His management time is not deducted until entered in the leader time input, so Nordics availability is overstated until then.",
     "One multi-region MM/UM CSM (Aida Selam, per the open items) is not counted in any region. Confirm which region's accounts she holds before the regional totals are used.",
     `Deactivated CSMs still hold ${fmt0(deact)} MM/UM accounts. These need reassigning before any managed-book load is trusted.`,
@@ -363,7 +376,7 @@ function renderInputs() {
   document.getElementById("region").innerHTML = ["All"].concat(REGIONS).map(r => `<option ${r === UI.region ? "selected" : ""}>${r}</option>`).join("");
 
   document.getElementById("availRows").innerHTML = REGIONS.map(r =>
-    `<tr><td>${r}</td><td class="num"><input type="number" step="1" data-avail="${r}" value="${S.avail[r]}"></td><td class="num"><input type="number" step="0.1" min="0" data-mgmt="${r}" value="${S.mgmt[r]}"></td><td class="small">${DEFAULT_AVAIL[r]} active MM/UM CSMs in the review${r === "Nordics" ? ". Jakob Klöfver manages the region and holds a book: enter his management share as CSM-equivalents" : ""}</td></tr>`).join("");
+    `<tr><td>${r}</td><td class="num"><input type="number" step="1" data-avail="${r}" value="${S.avail[r]}"></td><td class="num"><input type="number" step="0.1" min="0" data-mgmt="${r}" value="${S.mgmt[r]}"></td><td class="num"><input type="number" step="1" min="0" data-open="${r}" value="${S.open[r]}"></td><td class="small">Chart: ${DEFAULT_AVAIL[r]} named ICs${r === "Nordics" ? ". Jakob Klöfver manages the region and holds a book: enter his management share as leader time" : ""}</td></tr>`).join("");
 
   document.getElementById("globalInputs").innerHTML = GLOBAL_INPUTS.map(gi =>
     `<label>${gi.label} <input type="number" step="${gi.step}" data-glob="${gi.key}" data-div="${gi.div}" value="${Number((S.globals[gi.key] / gi.div).toFixed(4))}"></label>`).join("");
@@ -389,6 +402,7 @@ function renderInputs() {
 document.addEventListener("input", e => {
   const el = e.target;
   if (el.dataset.avail) { const v = Number(el.value); if (!isNaN(v)) S.avail[el.dataset.avail] = v; }
+  else if (el.dataset.open) { const v = Number(el.value); if (!isNaN(v)) S.open[el.dataset.open] = v; }
   else if (el.dataset.mgmt) { const v = Number(el.value); if (!isNaN(v)) S.mgmt[el.dataset.mgmt] = v; }
   else if (el.dataset.glob) { const v = Number(el.value); if (!isNaN(v)) S.globals[el.dataset.glob] = v * Number(el.dataset.div); }
   else if (el.dataset.prof) {
@@ -414,7 +428,7 @@ function refresh() {
 }
 
 document.getElementById("banner").textContent =
-  "Prototype v4. Mid Market and Upmarket only. Hours per account, touch cadence, availability and the expansion deal size are placeholders. The available-CSM counts come from the Nov 2026 review and need confirming.";
+  "Prototype v4. Mid Market and Upmarket only. Hours per account, touch cadence, availability and the expansion deal size are placeholders. The available counts come from the org chart (the 2027 team) and need confirming.";
 renderInputs();
 renderHeadcount();
 renderConflicts();
