@@ -50,7 +50,7 @@
     "Mid Market": {
       "managed": {
         "buffer": 0.15,
-        "renewal_hours": 5.0,
+        "renewal_hours": 1.0,
         "activities": [
           {
             "id": "value_reviews",
@@ -83,7 +83,7 @@
       },
       "pool": {
         "buffer": 0.0,
-        "renewal_hours": 1.0,
+        "renewal_hours": 0.5,
         "activities": [
           {
             "id": "reactive",
@@ -99,7 +99,7 @@
     "Upmarket": {
       "managed": {
         "buffer": 0.15,
-        "renewal_hours": 10.0,
+        "renewal_hours": 1.0,
         "activities": [
           {
             "id": "value_reviews",
@@ -139,7 +139,7 @@
       },
       "pool": {
         "buffer": 0.0,
-        "renewal_hours": 1.5,
+        "renewal_hours": 0.5,
         "activities": [
           {
             "id": "reactive",

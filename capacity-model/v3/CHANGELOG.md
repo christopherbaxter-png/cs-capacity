@@ -9,7 +9,8 @@ Narrows the calculator to Mid Market and Upmarket, and sizes the managed and poo
 - **Regions and leaders:** accounts mapped to the review's regions. Leaders: UKI, Tom Macbride; Nordics, Jakob Klöfver (acting), with Stina Grahn on maternity leave. Available CSMs are the org chart's named ICs (UKI 11, Nordics 7, Central & South 9), the 2027 team, less leader time. Open roles (UKI 2, Nordics 1) are shown separately.
 - **CSMs needed:** average monthly demand divided by effective hours (105 per CSM by default) at target utilisation, per book and per region, with the peak month. Renewal hours use 2027 term-end dates.
 - **Decisions:** managed threshold 12,000 tARR; P3 and P4 renewals sit with the pool.
-- **Result at defaults:** 4,711 MM/UM accounts; 1,642 managed and 3,069 pooled at 12,000 tARR. 46.3 managed and 12.8 pool CSMs are needed (59.1 in total), against 27 named ICs (gap -32.1), or 30 with open roles (gap -29.1).
+- **Result at defaults:** 4,711 MM/UM accounts; 1,642 managed and 3,069 pooled at 12,000 tARR. 40.8 managed and 11.8 pool CSMs are needed (52.7 in total), against 27 named ICs (gap -25.7), or 30 with open roles (gap -22.7).
+- **Renewal hours (26 Nov):** 1 hour per managed renewal (MM and UM) and 30 minutes per pooled renewal, down from 5 and 10 hours managed and 1 and 1.5 hours pooled. Placeholders until the time study.
 - **Data:** `scripts/build_inputs.py` now also emits bins, renewals and image tiers by segment and region, review headcount, and AM vs Vitally conflicts. The team population is unchanged (8,270 accounts).
 - **Corrections:** the v3.2 status text and considerations have been rewritten for MM/UM only. Some v3.2 numbers no longer apply.
 - **Leaders (26 Nov):** UKI is led by Tom Macbride. Stina Grahn is on maternity leave; Jakob Klöfver manages Nordics and owns a book. A leader-time input per region records management share, at 0 until set.
