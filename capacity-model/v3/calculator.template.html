@@ -362,7 +362,7 @@ function renderConsiderations() {
     "Rest of World holds 38 MM/UM accounts (the 'OTHER MARKETS' label), with no named leader and no MM/UM CSMs in the review.",
     "France and Italy sit in Central & South in the review. The chart's leader is labelled DACH, Benelux, Spain.",
     "Hours per account are placeholders and dominate the result. Gong shows about 4 hours of recorded calls per CSM per month for the sampled CSMs, far below the modelled demand. Calibrate with a time study before using the CSM numbers.",
-    "Availability is a 100% placeholder, for comparison with v2. Set it from holidays, sickness, meetings and internal time. Attrition, ramp and backfill lag are not modelled.",
+    "Availability is an 85% working assumption (26 Nov 2026), set in place of the 100% placeholder. Replace it with holiday, sickness, meeting and internal-time data. Attrition, ramp and backfill lag are not modelled.",
     "2027 targets: SLG + PLG (EUR 18.1m) is read as expansion and LARR (EUR 18.2m) as the lost-ARR budget. Both readings need Finance to confirm.",
     "The average expansion deal (USD 12,000 to 12,800 in the CX WIP tab) is used as a EUR placeholder. Confirm the currency.",
   ];
@@ -428,7 +428,7 @@ function refresh() {
 }
 
 document.getElementById("banner").textContent =
-  "Prototype v4. Mid Market and Upmarket only. Hours per account, touch cadence, availability and the expansion deal size are placeholders. The available counts come from the org chart (the 2027 team) and need confirming.";
+  "Prototype v4. Mid Market and Upmarket only. Hours per account, touch cadence, availability (85%), renewal hours and the expansion deal size are working assumptions with no time study. The available counts come from the org chart (the 2027 team) and need confirming.";
 renderInputs();
 renderHeadcount();
 renderConflicts();

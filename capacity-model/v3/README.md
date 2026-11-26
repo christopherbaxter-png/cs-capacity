@@ -8,7 +8,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 
 ## Status: read before using
 
-- **Hours per account are placeholders, and they drive almost all of the result.** At the default 12,000 tARR threshold the calculator shows 40.8 managed and 11.8 pool CSMs needed (52.7 in total), with 1 hour per managed renewal and 30 minutes per pooled renewal, against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
+- **Hours per account are placeholders, and they drive almost all of the result.** At the default 12,000 tARR threshold the calculator shows 48.1 managed and 13.9 pool CSMs needed (62.0 in total), with 85% availability, with 1 hour per managed renewal and 30 minutes per pooled renewal, against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
 - **The threshold is the brief's, but tARR is unconfirmed.** Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before the tiers are used for the managed split.
 - **Leaders and available CSMs.** The base is the org chart, which is the 2027 team: 27 named ICs (UKI 11, Nordics 7, Central & South 9) and 3 open roles (UKI 2, Nordics 1). UKI is led by Tom Macbride. Stina Grahn is on maternity leave, and Jakob Klöfver manages Nordics while owning a book; his management share is a leader-time input, 0 until set. Nikol Rej Notlev is marked vacant on the chart, which would make Nordics 6 filled. The review's 26 active MM/UM CSMs differ from the chart: some have no accounts yet, and some have left.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are inputs. The model reads expansion as SLG + PLG and the lost-ARR budget as LARR. Both readings need confirming.
@@ -67,7 +67,7 @@ The v2 workbook and calculator in the parent folder are unchanged and kept for r
 
 The managed book's buffer (15%, illustrative) is added to its activities. The pool buffer is 0. Renewals are added separately, as hours per renewal x renewals in each month from the 2027 Zuora term-end dates. P3 and P4 renewals sit with the pool, as confirmed on 26 Nov 2026. 1,024 MM/UM accounts have no renewal date and are excluded.
 
-**3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 100% = 105 by default).
+**3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 85% = 89.25 by default). Availability and the other inputs in `config/profiles.json` are working assumptions set on 26 Nov 2026, with no time study yet.
 
 **4. CSMs needed.** Average monthly demand divided by (effective hours x target utilisation). Targets are 85% for managed and 80% for the pool, both from the v2 project instructions. The peak month is shown alongside the average.
 
@@ -109,7 +109,7 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 ## Considerations for the next revision
 
 - **Calibration first.** Replace the placeholder hours with a time study by tier. Gong call data can cross-check it.
-- **Availability and attrition.** Holidays, sickness, meetings, internal time, attrition and ramp are not modelled.
+- **Attrition and ramp.** Attrition, backfill lag and ramp are not modelled. Availability is an 85% working assumption, to be replaced with holiday, sickness, meeting and internal-time data.
 - **Reactive load.** It is a percentage buffer for now. Ticket, escalation and fraud volumes per account per month would make it bottom-up.
 - **Region allocation.** The model compares demand with CSM counts by review region. It does not model which accounts each CSM actually holds.
 - **Privacy.** `data/team_book.json` holds aggregates only. Keep account-level exports out of the repo.

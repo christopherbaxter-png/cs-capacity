@@ -3,23 +3,23 @@
   "globals": {
     "contracted_hours_per_csm": {
       "value": 150,
-      "source": "Project brief / v2 model (150 hours per CSM per month)."
+      "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Project brief / v2 model (150 hours per CSM per month)."
     },
     "portfolio_share": {
       "value": 0.7,
-      "source": "ILLUSTRATIVE. 70% customer-facing focus from the CX Capacity Model example."
+      "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). ILLUSTRATIVE. 70% customer-facing focus from the CX Capacity Model example."
     },
     "availability": {
-      "value": 1.0,
-      "source": "PLACEHOLDER. Holidays, sickness and internal time are not yet modelled. 100% keeps v2 like-for-like. Expect roughly 0.85 to 0.90."
+      "value": 0.85,
+      "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). 85% allows for holidays, sickness, meetings and internal time. Replace with team data once available."
     },
     "target_managed": {
       "value": 0.85,
-      "source": "Project brief (managed book target)."
+      "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Project brief (managed book target)."
     },
     "target_pool": {
       "value": 0.8,
-      "source": "Project brief (pool target; reactive queues need more slack)."
+      "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Project brief (pool target; reactive queues need more slack)."
     },
     "slg_eur": {
       "value": 5500000,
@@ -60,7 +60,7 @@
             "hours_per_touch": 1.5,
             "stakeholders": 2,
             "extra_stakeholder_hours": 0.5,
-            "source": "PLACEHOLDER. 'Multiple touchpoints per year across stakeholders' (CX leadership brief)."
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER. 'Multiple touchpoints per year across stakeholders' (CX leadership brief)."
           },
           {
             "id": "at_risk",
@@ -68,7 +68,7 @@
             "type": "share",
             "share": 0.15,
             "hours": 2.0,
-            "source": "PLACEHOLDER. Share of book in save motion at any time."
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER. Share of book in save motion at any time."
           },
           {
             "id": "expansion",
@@ -76,10 +76,11 @@
             "type": "share",
             "share": 0.25,
             "hours": 2.0,
-            "source": "PLACEHOLDER. Share of book in an expansion motion."
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER. Share of book in an expansion motion."
           }
         ],
-        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
+        "buffer_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work.",
+        "renewal_hours_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Renewal hours per renewal: 1.0, set 26 Nov 2026 (managed 1 hour)."
       },
       "pool": {
         "buffer": 0.0,
@@ -90,10 +91,11 @@
             "label": "Reactive inbound (per account per month)",
             "type": "per_month",
             "hours": 0.3,
-            "source": "PLACEHOLDER"
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER"
           }
         ],
-        "buffer_source": "No buffer on reactive work."
+        "buffer_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). No buffer on reactive work.",
+        "renewal_hours_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Renewal hours per renewal: 0.5, set 26 Nov 2026 (pool 30 minutes)."
       }
     },
     "Upmarket": {
@@ -109,14 +111,14 @@
             "hours_per_touch": 2.0,
             "stakeholders": 3,
             "extra_stakeholder_hours": 0.75,
-            "source": "PLACEHOLDER. 'Multiple touchpoints per year across multiple stakeholders' (CX leadership brief)."
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER. 'Multiple touchpoints per year across multiple stakeholders' (CX leadership brief)."
           },
           {
             "id": "strategic_plan",
             "label": "Top-account strategic plan (per account per year)",
             "type": "per_year",
             "hours_per_year": 8,
-            "source": "PLACEHOLDER. Plan build and refresh."
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER. Plan build and refresh."
           },
           {
             "id": "at_risk",
@@ -124,7 +126,7 @@
             "type": "share",
             "share": 0.15,
             "hours": 2.5,
-            "source": "PLACEHOLDER"
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER"
           },
           {
             "id": "expansion",
@@ -132,10 +134,11 @@
             "type": "share",
             "share": 0.25,
             "hours": 2.5,
-            "source": "PLACEHOLDER"
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER"
           }
         ],
-        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
+        "buffer_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work.",
+        "renewal_hours_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Renewal hours per renewal: 1.0, set 26 Nov 2026 (managed 1 hour)."
       },
       "pool": {
         "buffer": 0.0,
@@ -146,10 +149,11 @@
             "label": "Reactive inbound (per account per month)",
             "type": "per_month",
             "hours": 0.3,
-            "source": "PLACEHOLDER"
+            "source": "WORKING ASSUMPTION (26 Nov 2026, no time study). PLACEHOLDER"
           }
         ],
-        "buffer_source": "No buffer on reactive work."
+        "buffer_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). No buffer on reactive work.",
+        "renewal_hours_source": "WORKING ASSUMPTION (26 Nov 2026, no time study). Renewal hours per renewal: 0.5, set 26 Nov 2026 (pool 30 minutes)."
       }
     }
   },
