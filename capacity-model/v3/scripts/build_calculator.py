@@ -10,20 +10,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def flatten(cfg):
-    g = cfg["globals"]
-    globals_flat = {k: v["value"] for k, v in g.items()}
-    growth = {}
-    for seg, gr in cfg["growth"].items():
-        growth[seg] = {k: v for k, v in gr.items() if k != "source"}
-    headcount = {}
-    for key, h in cfg["headcount"].items():
-        headcount[key] = {"start": h["start"], "hires_2027": h["hires_2027"], "source": h.get("source", "")}
+    globals_flat = {k: v["value"] for k, v in cfg["globals"].items()}
+    org = {k: v for k, v in cfg["org_chart"].items() if not k.startswith("_")}
     return {
         "globals": globals_flat,
-        "growth": growth,
-        "headcount": headcount,
         "profiles": cfg["profiles"],
-        "reference": {"cx_cap": cfg["reference"]["cx_capacity_model_cap"]["value"]},
+        "org_chart": org,
     }
 
 

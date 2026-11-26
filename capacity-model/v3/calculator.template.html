@@ -28,16 +28,19 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 Arial,
 main { max-width: 1040px; margin: 0 auto; padding-block: 24px 48px; }
 h1 { font-size: 22px; margin: 0 0 4px; color: var(--accent); }
 h2 { font-size: 16px; margin: 28px 0 8px; }
-h3 { font-size: 14px; margin: 16px 0 6px; }
 p.note { color: var(--muted); margin: 4px 0 12px; font-size: 13px; }
+p.small, .small { font-size: 12px; color: var(--muted); }
 .banner { border: 1px solid var(--warn); color: var(--warn); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 8px 0 16px; }
-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; display: block; overflow-x: auto; }
+.wrap { overflow-x: auto; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--muted); font-weight: 600; font-size: 12px; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.sel td { background: var(--panel); }
+tr.total td { font-weight: 600; }
 input, select { padding: 3px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--input-bg); color: var(--input-fg); font: inherit; }
 input[type="number"] { width: 92px; text-align: right; }
-select { min-width: 150px; }
+select { min-width: 130px; }
 .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 12px 0; }
 .controls label { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
@@ -49,127 +52,87 @@ select { min-width: 150px; }
 details { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 10px 0; }
 details summary { cursor: pointer; font-weight: 600; }
 ul.list li { margin: 4px 0; }
-.small { font-size: 12px; color: var(--muted); }
 button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; font: inherit; }
 </style>
 </head>
 <body>
 <main>
-<h1>CSM capacity calculator, v3.2 (prototype)</h1>
-<p class="note">Built from the managed P1/P2 book, with the pool for P3/P4. Company 2027 targets are applied to the team book. Change any yellow input. Everything else recalculates.</p>
+<h1>CSM capacity calculator, v4 (prototype)</h1>
+<p class="note">Mid Market and Upmarket only. SMB is left to product-led growth. Managed = tARR at or above the threshold, with a named CSM. Pooled = below it. Regions follow the Nov 2026 portfolio review.</p>
 <div class="banner" id="banner"></div>
 
 <div class="controls">
-  <label>Scope <select id="scope"></select></label>
+  <label>Segment <select id="seg"></select></label>
+  <label>Managed threshold (tARR) <select id="thr"></select></label>
   <label>Region <select id="region"></select></label>
-  <button id="reset">Reset to defaults</button>
-  <button id="export">Export scenario (JSON)</button>
+  <button id="reset">Reset inputs</button>
 </div>
-<p class="small" id="scopeNote"></p>
 
-<h2>Current position and optimal managed book</h2>
+<h2>Headline for this selection</h2>
 <div class="grid" id="cards"></div>
+<p class="small" id="cardNote"></p>
 
-<h2>Optimal managed book and the revenue it covers</h2>
-<p class="note">Accounts the planned managed CSMs can hold at target, taken from the highest-ARR P1/P2 accounts first. The rest of the managed ARR needs either extra CSMs or the pool.</p>
-<div class="grid" id="optCards"></div>
-<p class="small" id="optNote"></p>
+<h2>Accounts by priority tier and region</h2>
+<p class="note">Four-tier image, applied to tARR: P1 at 36k and above, P2 12k to 36k, P3 3.5k to 12k, P4 below 3.5k.</p>
+<div class="wrap"><table id="tierTable"></table></div>
 
-<h2>Attrition and expansion against the 2027 targets</h2>
+<h2>CSMs needed by leader region</h2>
+<p class="note">Managed CSMs cover accounts at or above the threshold. Pool CSMs cover the rest. Needed CSMs are demand divided by capacity at the target utilisation. Available CSMs are MM/UM ICs with active accounts in the review (editable below).</p>
+<div class="wrap"><table id="leaderTable"></table></div>
+<p class="small" id="leaderNote"></p>
+
+<h2>Headcount sources compared</h2>
+<div class="wrap"><table id="hcTable"></table></div>
+<p class="small">The org chart and the Nov 2026 review disagree on UKI. Confirm the roster before using per-region headcount.</p>
+
+<h2>2027 targets, implied for this selection</h2>
 <div class="grid" id="attrCards"></div>
 <p class="small" id="attrNote"></p>
 
-<h2>Monthly view</h2>
-<table><thead id="mhead"></thead><tbody id="monthly"></tbody></table>
-
-<h2>By segment and book</h2>
-<table><thead><tr>
-  <th>Segment</th><th>Book</th><th class="num">Accounts (start)</th><th class="num">Hours per account-month</th>
-  <th class="num">Avg demand (h/mo)</th><th class="num">Planned CSMs (M12)</th><th class="num">Avg utilisation</th>
-  <th class="num">CSMs needed at target (peak)</th><th class="num">Accounts per CSM at target</th>
-  <th class="num">ARR start (EUR m)</th><th class="num">ARR end M12 (EUR m)</th>
-</tr></thead><tbody id="segTable"></tbody></table>
-
-<h2>Pooling assessment (P2 and P3/P4)</h2>
-<p class="note">Moves managed accounts below an ARR threshold into the pool. Shows CSM hours freed against the ARR we accept at risk.</p>
-<div class="controls">
-  <label>Move managed accounts with ARR up to <select id="threshold"></select></label>
-</div>
-<div class="grid" id="revCards"></div>
-<p class="small" id="revNote"></p>
-
-<h2>Scenario inputs</h2>
-<details open><summary>2027 targets and company base</summary>
-<div class="controls">
-  <label>SLG, sales-led growth (EUR m) <input type="number" id="slg" step="0.1"></label>
-  <label>PLG, product-led growth (EUR m) <input type="number" id="plg" step="0.1"></label>
-  <label>LARR, lost ARR budget (EUR m) <input type="number" id="larr" step="0.1"></label>
-  <label>Company ARR base (EUR m) <input type="number" id="companyArr" step="0.1"></label>
-  <label>Average expansion deal (EUR k) <input type="number" id="asp" step="0.1"></label>
-  <label>Pool churn uplift on moved ARR (%) <input type="number" id="poolChurn" step="0.5"></label>
-</div>
-<p class="small" id="rateNote"></p>
-</details>
-
-<details open><summary>Growth (new accounts)</summary>
-<table><thead><tr><th>Segment</th><th class="num">New accounts per month</th><th class="num">Share of new accounts to pool</th></tr></thead>
-<tbody id="growthRows"></tbody></table>
-<p class="small">Churn and expansion come from the targets above, applied as company-wide rates. New-account inflow for Mid Market, Upmarket and Onboarding is a placeholder.</p>
-</details>
-
-<details open><summary>CSM capacity</summary>
-<div class="controls">
-  <label>Contracted hours per CSM per month <input type="number" id="hours" step="1"></label>
-  <label>Portfolio share (%) <input type="number" id="focus" step="1"></label>
-  <label>Availability (%) <input type="number" id="avail" step="1"></label>
-  <label>Target utilisation, managed (%) <input type="number" id="tM" step="1"></label>
-  <label>Target utilisation, pool (%) <input type="number" id="tP" step="1"></label>
-</div>
-<table><thead><tr><th>Segment and book</th><th class="num">CSMs at start</th><th class="num">Hires in 2027 (start M01)</th><th>Source</th></tr></thead>
-<tbody id="headRows"></tbody></table>
-<p class="small">Hires ramp 33% / 66% / 100% over their first three months. Region views scale each region's CSMs pro rata to its share of the segment's accounts, so a region shows whether it is more or less loaded than average.</p>
-</details>
-
-<details open><summary>Hours per account (profiles)</summary>
-<p class="small">Hours per account-month by activity. The buffer applies to proactive work only. Each activity uses one format: share of book (share x hours), touchpoints (touches per year x hours per touch, plus extra stakeholder hours), per account per month, per account per year, or onboarding total hours.</p>
-<div id="profiles"></div>
-</details>
-
-<h2>Region coverage (team book)</h2>
-<p class="note">From the Vitally tab (CX portfolio workbook), with country mapped to region. Check this before choosing a region scope.</p>
-<table><thead><tr><th>Region</th><th>Segment</th><th class="num">Accounts</th><th class="num">Managed (P1/P2)</th><th class="num">Pool (P3/P4/blank)</th><th class="num">ARR (EUR m)</th><th class="num">Managed ARR (EUR m)</th></tr></thead>
-<tbody id="regionTable"></tbody></table>
-
-<h2>Coverage check (AM portfolio)</h2>
-<p class="note">Team accounts matched to the AM extract on account ID. Former-employee owners need reassigning before any managed-book load can be trusted.</p>
-<table><thead><tr><th>Tier</th><th class="num">Accounts</th><th class="num">In AM extract</th><th class="num">Named CSM in AM</th><th class="num">Former employee in AM</th></tr></thead>
-<tbody id="coverageTable"></tbody></table>
-
 <h2>Source conflicts: AM vs Vitally</h2>
-<p class="note">Measured on the team population. The model uses Vitally for tier, segment, region, ARR and renewals. AM is used for coverage checks only.</p>
-<table><thead><tr><th>Check</th><th class="num">Count</th><th>Note</th></tr></thead>
-<tbody id="conflictTable"></tbody></table>
+<div class="wrap"><table id="conflictTable"></table></div>
 
 <h2>Considerations and open decisions</h2>
 <ul class="list" id="considerations"></ul>
 
+<h2>Inputs</h2>
+<details open><summary>CSMs available by region (MM/UM)</summary>
+<div class="wrap"><table><thead><tr><th>Region</th><th class="num">Available CSMs</th><th>Default</th></tr></thead><tbody id="availRows"></tbody></table></div>
+<p class="small">Defaults are active MM/UM CSMs in the Nov 2026 review. The Multi-region CSM is not counted in any region.</p>
+</details>
+<details open><summary>Capacity and targets</summary>
+<div class="controls" id="globalInputs"></div>
+</details>
+<details open><summary>Hours per account (profiles)</summary>
+<p class="small">Hours per account-month by activity. The buffer applies to proactive work only. Placeholders unless marked otherwise in the config.</p>
+<div id="profiles"></div>
+</details>
 </main>
 
 <script>
 const DATA = /*__DATA__*/null;
 const CONFIG = /*__CONFIG__*/null;
 
-const SEGS = ["SMB", "Mid Market", "Upmarket"];
-const SCOPE_SEGS = {
-  "Mid Market + Upmarket": ["Mid Market", "Upmarket"],
-  "All team": ["SMB", "Mid Market", "Upmarket"],
-  "SMB": ["SMB"], "Mid Market": ["Mid Market"], "Upmarket": ["Upmarket"], "Onboarding": []
-};
-const SCOPES = Object.keys(SCOPE_SEGS);
-const REGIONS = ["All", "UKI", "DACH", "Nordics", "Iberia", "Benelux", "France & Italy", "Other"];
-const BANDS = ["<5k", "5k-10k", "10k-20k", "20k-50k", "50k-100k", "100k+"];
-const BANDS_DESC = BANDS.slice().reverse();
-const MONTHS = Array.from({ length: 12 }, (_, i) => "M" + String(i + 1).padStart(2, "0"));
+const REGIONS = ["UKI", "Nordics", "Central & South", "Rest of World"];
+const SEG_OPTIONS = { "Both": ["Mid Market", "Upmarket"], "Mid Market": ["Mid Market"], "Upmarket": ["Upmarket"] };
+const EDGES = DATA.bin_edges;                       // [0, 3500, 5000, 10000, 12000, 20000, 36000]
+const BIN_LABEL = ["under 3.5k", "3.5k to 5k", "5k to 10k", "10k to 12k", "12k to 20k", "20k to 36k", "36k and above"];
+const TIER_OF_BIN = ["P4", "P3", "P3", "P3", "P2", "P2", "P1"];
+const TIERS = ["P1", "P2", "P3", "P4"];
+const TIER_LABEL = { P1: "P1, 36k and above", P2: "P2, 12k to 36k", P3: "P3, 3.5k to 12k", P4: "P4, below 3.5k" };
+const MONTHS = 12;
+const GLOBAL_INPUTS = [
+  { key: "contracted_hours_per_csm", label: "Contracted hours per CSM per month", div: 1, step: 1 },
+  { key: "portfolio_share", label: "Portfolio share (%)", div: 0.01, step: 1 },
+  { key: "availability", label: "Availability (%)", div: 0.01, step: 1 },
+  { key: "target_managed", label: "Target utilisation, managed (%)", div: 0.01, step: 1 },
+  { key: "target_pool", label: "Target utilisation, pool (%)", div: 0.01, step: 1 },
+  { key: "slg_eur", label: "SLG 2027 (EUR m)", div: 1e6, step: 0.1 },
+  { key: "plg_eur", label: "PLG 2027 (EUR m)", div: 1e6, step: 0.1 },
+  { key: "larr_eur", label: "LARR 2027 (EUR m)", div: 1e6, step: 0.1 },
+  { key: "company_arr_eur", label: "Company ARR base (EUR m)", div: 1e6, step: 0.1 },
+  { key: "asp_eur", label: "Average expansion deal (EUR k)", div: 1e3, step: 0.1 },
+];
 
 const fmt0 = n => Number(n || 0).toLocaleString("en-GB", { maximumFractionDigits: 0 });
 const fmt1 = n => Number(n || 0).toLocaleString("en-GB", { maximumFractionDigits: 1 });
@@ -177,44 +140,20 @@ const fmt2 = n => Number(n || 0).toLocaleString("en-GB", { maximumFractionDigits
 const pct = n => (Number(n || 0) * 100).toFixed(0) + "%";
 const pct1 = n => (Number(n || 0) * 100).toFixed(1) + "%";
 const eurm = n => "EUR " + (Number(n || 0) / 1e6).toLocaleString("en-GB", { maximumFractionDigits: 2 }) + "m";
+const clone = o => JSON.parse(JSON.stringify(o));
 
-function clone(o) { return JSON.parse(JSON.stringify(o)); }
-let S = clone(CONFIG);
-const DEFAULT = clone(CONFIG);
-const UI = { scope: "Mid Market + Upmarket", region: "All", threshold: 2 };
-function resetState() { S = clone(DEFAULT); }
-
-// ---------- data helpers ----------
-const bookOf = tier => (tier === "P1" || tier === "P2") ? "managed" : "pool";
-const scopeSegs = () => SCOPE_SEGS[UI.scope] || [];
-
-function scopeCounts(seg, book, region) {
-  let acc = 0, arr = 0, accAll = 0, arrAll = 0;
-  for (const r of DATA.region_segment_tier) {
-    if (r.segment !== seg || bookOf(r.tier) !== book) continue;
-    accAll += r.accounts; arrAll += r.arr_eur;
-    if (region === "All" || r.region === region) { acc += r.accounts; arr += r.arr_eur; }
-  }
-  return { acc, arr, accAll, arrAll, factor: accAll ? acc / accAll : 0 };
+// Available CSMs default from the review (active MM/UM, primary segment MM or UM).
+const DEFAULT_AVAIL = {};
+for (const r of REGIONS) {
+  const h = DATA.headcount_review[r];
+  DEFAULT_AVAIL[r] = h ? h.active_mm_um_csms : 0;
 }
-function segArrRegion(seg, region) { return scopeCounts(seg, "managed", region).arr + scopeCounts(seg, "pool", region).arr; }
-function renewalSeries(seg, book, factor) {
-  const out = Array(12).fill(0);
-  for (const r of DATA.renewals_2027) {
-    if (r.segment !== seg || bookOf(r.tier) !== book) continue;
-    out[r.month - 1] += r.renewals;
-  }
-  return out.map(v => v * factor);
-}
-const teamArr = () => DATA.region_segment_tier.reduce((s, r) => s + r.arr_eur, 0);
-const churnRate = () => S.globals.larr_eur / S.globals.company_arr_eur;
-const expRate = () => (S.globals.slg_eur + S.globals.plg_eur) / S.globals.company_arr_eur;
-const teamShare = () => teamArr() / S.globals.company_arr_eur;
+const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL) };
+let S = clone(DEFAULT_STATE);
+const UI = { seg: "Both", thrIdx: 3, region: "All" };   // thrIdx 3 = 10k
+const thrValue = () => EDGES[UI.thrIdx];
 
-function headKey(seg, book) { return seg === "Onboarding" ? "Onboarding|onb" : seg + "|" + book; }
-function ramp(m) { const r = S.globals.ramp; return m === 1 ? r[0] : m === 2 ? r[1] : r[2]; }
-function fteAt(seg, book, m) { const h = S.headcount[headKey(seg, book)]; return h.start + h.hires_2027 * ramp(m); }
-
+// ---------- engine ----------
 function activityHours(a) {
   if (a.type === "share") return a.share * a.hours;
   if (a.type === "per_month") return a.hours;
@@ -223,475 +162,261 @@ function activityHours(a) {
   if (a.type === "onboarding_total") return a.total_hours / a.over_months;
   return 0;
 }
-function hoursPerAccount(seg, book) {
-  const p = S.profiles[seg] && S.profiles[seg][book];
-  if (!p) return 0;
+function hoursPer(seg, book) {
+  const p = S.profiles[seg][book];
   const core = p.activities.reduce((s, a) => s + activityHours(a), 0);
   return core * (1 + (p.buffer || 0));
 }
+const renH = (seg, book) => S.profiles[seg][book].renewal_hours || 0;
+const bookOf = binIdx => binIdx >= UI.thrIdx ? "managed" : "pool";
+const blank = () => ({ accounts: 0, arr: 0, tarr: 0, acctHours: 0, renMonth: Array(MONTHS).fill(0), renewals: 0 });
 
-// ---------- engine ----------
-function run() {
+function compute(regs, segs) {
   const g = S.globals;
   const E = g.contracted_hours_per_csm * g.portfolio_share * g.availability;
-  const segs = scopeSegs();
-  const churnR = churnRate(), expR = expRate(), asp = g.asp_eur;
-  const isOnb = UI.scope === "Onboarding";
-  const res = { E, segs, startAcc: { managed: 0, pool: 0 }, startHeads: { managed: 0, pool: 0 },
-    accLost: 0, larr: 0, exp: 0, expDeals: Array(12).fill(0), books: {}, perSeg: [], onb: null };
-  const mk = () => ({ acc: Array(12).fill(0), dem: Array(12).fill(0), fte: Array(12).fill(0) });
-  const agg = { managed: mk(), pool: mk() };
-
-  for (const seg of segs) {
-    const gr = S.growth[seg];
-    const churnM = churnR / 12;
-    const cnt = { managed: scopeCounts(seg, "managed", UI.region), pool: scopeCounts(seg, "pool", UI.region) };
-    const accStart = cnt.managed.acc + cnt.pool.acc;
-    const arrStart = cnt.managed.arr + cnt.pool.arr;
-    const arrPerAcc = accStart ? arrStart / accStart : 0;
-    const row = { seg, arrStart, books: {}, arrM: [], lostM: [], expM: [] };
-
-    for (const book of ["managed", "pool"]) {
-      const start = cnt[book];
-      row.arrStartBook = row.arrStartBook || {};
-      row.arrStartBook[book] = start.arr;
-      const inflow = gr.inflow_per_month * (book === "pool" ? gr.pool_share_of_new : 1 - gr.pool_share_of_new);
-      const h = hoursPerAccount(seg, book);
-      const ren = renewalSeries(seg, book, start.factor).map(v => v * (S.profiles[seg][book].renewal_hours || 0));
-      res.startAcc[book] += start.acc;
-      res.startHeads[book] += S.headcount[headKey(seg, book)].start * start.factor;
-      let A = start.acc;
-      const accM = [], demM = [], fteM = [];
-      for (let m = 1; m <= 12; m++) {
-        res.accLost += A * churnM;
-        A = A * (1 - churnM) + inflow;
-        accM.push(A);
-        const d = A * h + ren[m - 1];
-        demM.push(d);
-        const f = fteAt(seg, book, m) * start.factor;
-        fteM.push(f);
-        agg[book].acc[m - 1] += A; agg[book].dem[m - 1] += d; agg[book].fte[m - 1] += f;
-      }
-      row.books[book] = { startAcc: start.acc, h, accM, demM, fteM, factor: start.factor };
-    }
-
-    // ARR roll-forward for the segment: company rates applied to the team book.
-    let arr = arrStart;
-    for (let m = 1; m <= 12; m++) {
-      const lost = arr * churnM;
-      const exp = arr * expR / 12;
-      const inflowArr = gr.inflow_per_month * arrPerAcc;
-      row.lostM.push(lost); row.expM.push(exp);
-      res.larr += lost; res.exp += exp;
-      res.expDeals[m - 1] += asp ? exp / asp : 0;
-      arr = arr - lost + exp + inflowArr;
-      row.arrM.push(arr);
-    }
-    res.perSeg.push(row);
+  const out = { E, managed: blank(), pool: blank() };
+  const segList = segs || SEG_OPTIONS[UI.seg];
+  for (const row of DATA.mm_um_bins) {
+    if (!segList.includes(row.segment) || !regs.includes(row.region)) continue;
+    const book = bookOf(row.bin), o = out[book];
+    o.accounts += row.accounts; o.arr += row.arr_eur; o.tarr += row.tarr_eur;
+    o.acctHours += row.accounts * hoursPer(row.segment, book);
   }
-
-  if (isOnb) {
-    const gr = S.growth.Onboarding;
-    const h = hoursPerAccount("Onboarding", "managed");
-    const pop = [], dem = [], fte = [];
-    for (let m = 1; m <= 12; m++) {
-      const p = gr.inflow_per_month * Math.min(m, gr.window_months);
-      pop.push(p); dem.push(p * h);
-      fte.push(fteAt("Onboarding", "managed", m));
-    }
-    res.onb = { pop, dem, fte, h };
-    res.startHeads.managed = S.headcount["Onboarding|onb"].start;
+  for (const r of DATA.mm_um_renewals_2027) {
+    if (!segList.includes(r.segment) || !regs.includes(r.region)) continue;
+    const book = bookOf(r.bin), o = out[book];
+    o.renMonth[r.month - 1] += r.renewals * renH(r.segment, book);
+    o.renewals += r.renewals;
   }
-
-  const books = isOnb ? ["managed"] : ["managed", "pool"];
-  const capOf = (book, m) => isOnb ? res.onb.fte[m - 1] * E : agg[book].fte[m - 1] * E;
-  const demOf = (book, m) => isOnb ? (book === "managed" ? res.onb.dem[m - 1] : 0) : agg[book].dem[m - 1];
-  const accOf = (book, m) => isOnb ? (book === "managed" ? res.onb.pop[m - 1] : 0) : agg[book].acc[m - 1];
-  const tgtOf = book => book === "pool" ? g.target_pool : g.target_managed;
-
-  for (const book of books) {
-    const dem = MONTHS.map((_, i) => demOf(book, i + 1));
-    const cap = MONTHS.map((_, i) => capOf(book, i + 1));
-    const acc = MONTHS.map((_, i) => accOf(book, i + 1));
-    const util = dem.map((d, i) => cap[i] ? d / cap[i] : 0);
-    const req = dem.map(d => d / (E * tgtOf(book)));
-    const sumDem = dem.reduce((a, b) => a + b, 0), sumAcc = acc.reduce((a, b) => a + b, 0);
-    const avgH = sumAcc ? sumDem / sumAcc : 0;
-    res.books[book] = {
-      util, dem, cap, acc, req, avgH,
-      accPerCsm: avgH ? (E * tgtOf(book)) / avgH : 0,
-      avgUtil: util.reduce((a, b) => a + b, 0) / 12,
-      peakUtil: Math.max(...util),
-      peakReq: Math.max(...req),
-      avgDem: sumDem / 12,
-      avgCap: cap.reduce((a, b) => a + b, 0) / 12,
-      avgFte: cap.reduce((a, b) => a + b, 0) / 12 / E,
-      fteM12: cap[11] / E,
-      startAcc: isOnb ? 0 : res.startAcc[book],
-      startHeads: res.startHeads[book]
-    };
+  for (const book of ["managed", "pool"]) {
+    const o = out[book];
+    o.avgDem = o.acctHours + o.renMonth.reduce((a, b) => a + b, 0) / MONTHS;
+    o.peakDem = o.acctHours + Math.max(0, ...o.renMonth);
+    const t = book === "managed" ? g.target_managed : g.target_pool;
+    o.need = E * t > 0 ? o.avgDem / (E * t) : 0;
+    o.needPeak = E * t > 0 ? o.peakDem / (E * t) : 0;
   }
-  return res;
+  return out;
 }
+const availFor = regs => regs.reduce((s, r) => s + (Number(S.avail[r]) || 0), 0);
 
-// ---------- rendering helpers ----------
+// ---------- rendering ----------
 function card(label, value, sub, cls) {
   return `<div class="card"><div class="label">${label}</div><div class="value ${cls || ""}">${value}</div><div class="sub">${sub || ""}</div></div>`;
 }
 
-function renderCards(r) {
-  const g = S.globals;
-  const bm = r.books.managed, bp = r.books.pool;
-  const cards = [];
-  cards.push(card("Scope", UI.scope + (UI.region !== "All" ? " / " + UI.region : ""), "Managed = P1/P2. Pool = P3/P4 and blank tiers."));
-  if (bm) {
-    const today = bm.startHeads ? bm.startAcc / bm.startHeads : 0;
-    cards.push(card("Managed accounts today", fmt0(bm.startAcc), "Starting managed CSMs: " + fmt1(bm.startHeads)));
-    cards.push(card("Accounts per managed CSM today", fmt0(today), "Optimal at target: " + fmt0(bm.accPerCsm), today > bm.accPerCsm ? "bad" : "ok"));
-    cards.push(card("Managed utilisation, 2027 (avg / peak)", pct(bm.avgUtil) + " / " + pct(bm.peakUtil), "Target " + pct(g.target_managed), bm.avgUtil > g.target_managed ? "bad" : "ok"));
-    cards.push(card("CSMs needed at target, managed (peak)", fmt1(bm.peakReq), "Planned M12: " + fmt1(bm.fteM12)));
-  }
-  if (bp) {
-    const today = bp.startHeads ? bp.startAcc / bp.startHeads : 0;
-    cards.push(card("Pool accounts today", fmt0(bp.startAcc), "Starting pool CSMs: " + fmt1(bp.startHeads)));
-    cards.push(card("Accounts per pool CSM today", fmt0(today), "Optimal at target: " + fmt0(bp.accPerCsm), today > bp.accPerCsm ? "bad" : "ok"));
-    cards.push(card("Pool utilisation, 2027 (avg / peak)", pct(bp.avgUtil) + " / " + pct(bp.peakUtil), "Target " + pct(g.target_pool), bp.avgUtil > g.target_pool ? "bad" : "ok"));
-    cards.push(card("CSMs needed at target, pool (peak)", fmt1(bp.peakReq), "Planned M12: " + fmt1(bp.fteM12)));
-  }
-  document.getElementById("cards").innerHTML = cards.join("");
+function renderCards() {
+  const regs = UI.region === "All" ? REGIONS : [UI.region];
+  const t = compute(regs);
+  const avail = availFor(regs);
+  const need = t.managed.need + t.pool.need;
+  const gap = avail - need;
+  const thrTxt = fmt0(thrValue()) + " tARR";
+  document.getElementById("cards").innerHTML = [
+    card("MM/UM accounts", fmt0(t.managed.accounts + t.pool.accounts), UI.region === "All" ? "All leader regions" : UI.region),
+    card("Managed (at or above " + thrTxt + ")", fmt0(t.managed.accounts), eurm(t.managed.arr) + " ARR"),
+    card("Pooled (below " + thrTxt + ")", fmt0(t.pool.accounts), eurm(t.pool.arr) + " ARR"),
+    card("CSMs needed: managed", fmt1(t.managed.need), "Peak month " + fmt1(t.managed.needPeak)),
+    card("CSMs needed: pool", fmt1(t.pool.need), "Peak month " + fmt1(t.pool.needPeak)),
+    card("CSMs needed: total", fmt1(need), "Average month"),
+    card("Available MM/UM CSMs", fmt0(avail), "From the review, editable below"),
+    card("Surplus / (gap)", (gap >= 0 ? "+" : "") + fmt1(gap), gap >= 0 ? "Covered at the target" : "Short of the target", gap >= 0 ? "ok" : "bad"),
+  ].join("");
+  document.getElementById("cardNote").textContent =
+    "Hours per account are placeholders and drive almost all of the result. Renewals use 2027 term-end dates; accounts without a date are excluded.";
 }
 
-function renderOptimal(r) {
-  const bm = r.books.managed;
-  if (!bm || UI.scope === "Onboarding") {
-    document.getElementById("optCards").innerHTML = card("Not applicable", "-", "Onboarding has no managed book. Choose a segment scope.");
-    document.getElementById("optNote").textContent = "";
-    return;
+function renderTiers() {
+  const segs = SEG_OPTIONS[UI.seg];
+  const cell = (tier, reg) => DATA.mm_um_image_tiers
+    .filter(x => segs.includes(x.segment) && x.image_tier === tier && (reg === "Total" || x.region === reg))
+    .reduce((s, x) => s + x.accounts, 0);
+  const tarrTotal = DATA.mm_um_image_tiers.filter(x => segs.includes(x.segment)).reduce((s, x) => s + x.tarr_eur, 0);
+  const tarrTier = tier => DATA.mm_um_image_tiers.filter(x => segs.includes(x.segment) && x.image_tier === tier).reduce((s, x) => s + x.tarr_eur, 0);
+  const cols = REGIONS.slice(0, 3).concat(["Rest of World", "Total"]);
+  let html = `<thead><tr><th>Tier</th>${cols.map(c => `<th class="num">${c}</th>`).join("")}<th class="num">Share of tARR</th></tr></thead><tbody>`;
+  for (const tier of TIERS) {
+    html += `<tr><td>${TIER_LABEL[tier]}</td>${cols.map(c => `<td class="num">${fmt0(cell(tier, c))}</td>`).join("")}<td class="num">${pct(tarrTotal ? tarrTier(tier) / tarrTotal : 0)}</td></tr>`;
   }
-  const optimal = bm.accPerCsm * bm.avgFte;
-  let remaining = optimal, covAcc = 0, covArr = 0, totAcc = 0, totArr = 0, cutoff = null;
-  for (const band of BANDS_DESC) {
-    let bandAcc = 0, bandArr = 0;
-    for (const seg of scopeSegs()) {
-      const f = scopeCounts(seg, "managed", UI.region).factor;
-      for (const b of DATA.managed_arr_bands) {
-        if (b.segment !== seg || b.band !== band) continue;
-        bandAcc += b.accounts * f; bandArr += b.arr_eur * f;
-      }
-    }
-    totAcc += bandAcc; totArr += bandArr;
-    const take = Math.min(Math.max(remaining, 0), bandAcc);
-    covAcc += take;
-    covArr += bandAcc ? bandArr * (take / bandAcc) : 0;
-    remaining -= take;
-    if (take > 0 && take < bandAcc && !cutoff) cutoff = band;
-  }
-  const cover = totArr ? covArr / totArr : 0;
-  const cards = [
-    card("Optimal managed book", fmt0(optimal), "Planned CSMs (avg) x " + fmt0(bm.accPerCsm) + " accounts per CSM at target"),
-    card("Managed accounts in scope", fmt0(totAcc), "Current P1/P2 accounts, region applied"),
-    card("Optimal book covers", fmt0(covAcc) + " accounts", pct(totAcc ? covAcc / totAcc : 0) + " of managed accounts"),
-    card("ARR in the optimal book", eurm(covArr), pct(cover) + " of managed ARR", cover < 0.7 ? "warn" : "ok"),
-    card("ARR outside the optimal book", eurm(totArr - covArr), "Needs extra CSMs, or moves to the pool"),
-    card("Cut-off band", cutoff ? cutoff + " ARR" : "All within capacity", cutoff ? "Accounts above this ARR are covered by the optimal book" : "Capacity exceeds managed accounts"),
-  ];
-  document.getElementById("optCards").innerHTML = cards.join("");
-  document.getElementById("optNote").textContent =
-    "Accounts are taken from the highest ARR bands first. Within the cut-off band, accounts are pro-rated. Use the pooling assessment below to see the revenue at risk from the rest.";
+  const regs3 = REGIONS.slice(0, 3);
+  const mgd = c => (c === "Total" ? compute(REGIONS) : compute([c])).managed.accounts;
+  const pl = c => (c === "Total" ? compute(REGIONS) : compute([c])).pool.accounts;
+  html += `<tr class="total"><td>Managed at ${fmt0(thrValue())} tARR and above</td>${cols.map(c => `<td class="num">${fmt0(mgd(c))}</td>`).join("")}<td class="num"></td></tr>`;
+  html += `<tr class="total"><td>Pooled below ${fmt0(thrValue())} tARR</td>${cols.map(c => `<td class="num">${fmt0(pl(c))}</td>`).join("")}<td class="num"></td></tr>`;
+  html += `</tbody>`;
+  document.getElementById("tierTable").innerHTML = html;
+  document.getElementById("tierTable").dataset.regs = regs3.join(",");
 }
 
-function renderAttrition(r) {
+function renderLeaders() {
+  const org = CONFIG.org_chart;
+  const rows = [];
+  let tot = { acc: 0, man: 0, pool: 0, nM: 0, nP: 0, avail: 0, dem: 0, E: 0 };
+  const sel = UI.region;
+  for (const r of REGIONS) {
+    const t = compute([r]);
+    const avail = Number(S.avail[r]) || 0;
+    const need = t.managed.need + t.pool.need;
+    const util = avail > 0 ? (t.managed.avgDem + t.pool.avgDem) / (avail * t.E) : 0;
+    const lead = org[r];
+    const leaderTxt = r === "Rest of World" ? "No leader on either chart" :
+      `${lead.leader_review}${lead.leader_chart !== lead.leader_review ? " (chart: " + lead.leader_chart + ")" : ""}`;
+    const openTxt = r === "Rest of World" ? "-" : `${lead.open_roles_chart} open${lead.vacant_senior_chart ? ", " + lead.vacant_senior_chart + " vacant" : ""}`;
+    rows.push(`<tr class="${sel === r ? "sel" : ""}"><td>${r}</td><td>${leaderTxt}</td>
+      <td class="num">${fmt0(t.managed.accounts + t.pool.accounts)}</td><td class="num">${fmt0(t.managed.accounts)}</td><td class="num">${fmt0(t.pool.accounts)}</td>
+      <td class="num">${fmt1(t.managed.need)}</td><td class="num">${fmt1(t.pool.need)}</td><td class="num">${fmt1(need)}</td>
+      <td class="num">${fmt0(avail)}</td><td class="num ${avail - need >= 0 ? "ok" : "bad"}">${(avail - need >= 0 ? "+" : "") + fmt1(avail - need)}</td>
+      <td class="num">${pct(util)}</td><td>${openTxt}</td></tr>`);
+    tot.acc += t.managed.accounts + t.pool.accounts; tot.man += t.managed.accounts; tot.pool += t.pool.accounts;
+    tot.nM += t.managed.need; tot.nP += t.pool.need; tot.avail += avail; tot.dem += t.managed.avgDem + t.pool.avgDem; tot.E = t.E;
+  }
+  const all = tot.nM + tot.nP;
+  const totUtil = tot.avail > 0 ? tot.dem / (tot.avail * tot.E) : 0;
+  rows.push(`<tr class="total"><td>Total</td><td></td><td class="num">${fmt0(tot.acc)}</td><td class="num">${fmt0(tot.man)}</td><td class="num">${fmt0(tot.pool)}</td>
+    <td class="num">${fmt1(tot.nM)}</td><td class="num">${fmt1(tot.nP)}</td><td class="num">${fmt1(all)}</td>
+    <td class="num">${fmt0(tot.avail)}</td><td class="num ${tot.avail - all >= 0 ? "ok" : "bad"}">${(tot.avail - all >= 0 ? "+" : "") + fmt1(tot.avail - all)}</td>
+    <td class="num">${pct(totUtil)}</td><td></td></tr>`);
+  document.getElementById("leaderTable").innerHTML =
+    `<thead><tr><th>Region</th><th>Leader</th><th class="num">MM/UM accounts</th><th class="num">Managed</th><th class="num">Pooled</th>
+     <th class="num">Managed CSMs needed</th><th class="num">Pool CSMs needed</th><th class="num">Total needed</th>
+     <th class="num">Available</th><th class="num">Surplus / (gap)</th><th class="num">Utilisation at available</th><th>Open roles (chart)</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+  document.getElementById("leaderNote").textContent =
+    `Segment: ${UI.seg}. Threshold: ${fmt0(thrValue())} tARR. Utilisation at available = demand divided by available CSMs x capacity. The Rest of World accounts have no named leader.`;
+}
+
+function renderHeadcount() {
+  const org = CONFIG.org_chart;
+  const rows = REGIONS.slice(0, 3).map(r => {
+    const h = DATA.headcount_review[r] || {};
+    const o = org[r];
+    return `<tr><td>${r}</td><td>${o.leader_chart}</td><td>${o.leader_review}</td>
+      <td class="num">${o.named_ics_chart}</td><td class="num">${h.active_mm_um_csms}</td>
+      <td class="num">${o.open_roles_chart + (o.vacant_senior_chart ? " + " + o.vacant_senior_chart + " vacant senior" : "")}</td>
+      <td class="num">${h.active_smb_primary_csms}</td><td class="num">${fmt0(h.mm_um_accounts_held_by_deactivated)} in ${h.deactivated_csms_holding_mm_um_accounts} deactivated CSMs</td></tr>`;
+  });
+  const m = DATA.headcount_review["Multi-region"];
+  rows.push(`<tr><td>Multi-region</td><td>-</td><td>-</td><td class="num">-</td><td class="num">${m.multi_region_mm_um_csms}</td><td class="num">-</td><td class="num">${m.active_smb_primary_csms}</td><td class="num">${fmt0(m.mm_um_accounts_held_by_deactivated)} in ${m.deactivated_csms_holding_mm_um_accounts} deactivated CSMs</td></tr>`);
+  document.getElementById("hcTable").innerHTML =
+    `<thead><tr><th>Region</th><th>Leader (chart)</th><th>Leader (review)</th><th class="num">Named ICs (chart)</th>
+     <th class="num">Active MM/UM CSMs (review)</th><th>Open roles (chart)</th><th class="num">Active SMB-primary CSMs (review)</th><th>MM/UM accounts held by deactivated CSMs</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+}
+
+function renderAttrition() {
   const g = S.globals;
-  const scopeArr = scopeSegs().reduce((s, seg) => s + segArrRegion(seg, UI.region), 0);
-  const companyShare = scopeArr / g.company_arr_eur;
-  const larrBudget = g.larr_eur * companyShare;
-  const expBudget = (g.slg_eur + g.plg_eur) * companyShare;
-  const deals = r.expDeals.reduce((a, b) => a + b, 0);
-  const bm = r.books.managed;
-  const dealsPerCsm = bm && bm.avgFte ? deals / 12 / bm.avgFte : 0;
-  const cards = [
-    card("Lost ARR, implied 2027", eurm(r.larr), "Budget share for this scope: " + eurm(larrBudget), r.larr > larrBudget ? "bad" : "ok"),
-    card("Expansion ARR, implied 2027", eurm(r.exp), "Target share for this scope: " + eurm(expBudget), r.exp < expBudget ? "warn" : "ok"),
-    card("Net ARR change, existing base", eurm(r.exp - r.larr), "Expansion less lost ARR, before new logos"),
-    card("Accounts lost, 2027", fmt0(r.accLost), "At the company churn rate of " + pct1(churnRate())),
-    card("Expansion deals, 2027", fmt0(deals), "Average deal " + fmt0(g.asp_eur) + " EUR"),
-    card("Expansion deals per managed CSM per month", bm ? fmt1(dealsPerCsm) : "-", "Sales-led expansion load on managed CSMs"),
-  ];
-  document.getElementById("attrCards").innerHTML = cards.join("");
+  const regs = UI.region === "All" ? REGIONS : [UI.region];
+  const t = compute(regs);
+  const arr = t.managed.arr + t.pool.arr;
+  const churn = g.larr_eur / g.company_arr_eur, exp = (g.slg_eur + g.plg_eur) / g.company_arr_eur;
+  const lost = arr * churn, expansion = arr * exp;
+  document.getElementById("attrCards").innerHTML = [
+    card("Scope ARR (MM/UM)", eurm(arr), "Selected region(s) and segment"),
+    card("Lost ARR at company rate", eurm(lost), pct1(churn) + " (LARR / company ARR)"),
+    card("Expansion ARR at company rate", eurm(expansion), pct1(exp) + " ((SLG + PLG) / company ARR)"),
+    card("Expansion deals", fmt0(g.asp_eur ? expansion / g.asp_eur : 0), "At an average deal of " + fmt0(g.asp_eur) + " EUR"),
+  ].join("");
   document.getElementById("attrNote").textContent =
-    "Company targets (SLG + PLG for expansion, LARR for lost ARR) are applied as rates to the team book. Team ARR is " + pct(teamShare()) +
-    " of the company base. The budget and implied figures are both derived from the company rates, so they match except for in-year ARR growth. Treat the match as a check for drift in the roll-forward, not as evidence the plan is achievable.";
+    "Company rates applied to MM/UM ARR, not a segment forecast. The result matches the budget by construction, so it is a drift check only. The 2027 targets are interpreted from the project brief (see considerations).";
 }
 
-function renderMonthly(r) {
-  const line = (label, arr, f) => `<tr><td>${label}</td>` + arr.map(v => `<td class="num">${f(v)}</td>`).join("") + `</tr>`;
-  document.getElementById("mhead").innerHTML = `<tr><th>Measure (2027)</th>` + MONTHS.map(m => `<th class="num">${m}</th>`).join("") + `</tr>`;
-  const rows = [];
-  const emit = (book, label) => {
-    const b = r.books[book];
-    if (!b) return;
-    rows.push(line(label + " accounts", b.acc, fmt0));
-    rows.push(line(label + " demand (h)", b.dem, fmt0));
-    rows.push(line(label + " capacity (h)", b.cap, fmt0));
-    rows.push(line(label + " utilisation", b.util, pct));
-    rows.push(line(label + " CSM gap at target", b.req.map((q, i) => q - b.cap[i] / r.E), v => (v >= 0 ? "+" : "") + fmt1(v)));
-  };
-  emit("managed", "Managed");
-  emit("pool", "Pool");
-  document.getElementById("monthly").innerHTML = rows.join("");
-}
-
-function renderSegTable(r) {
-  const rows = [];
-  const g = S.globals;
-  for (const row of r.perSeg) {
-    for (const book of ["managed", "pool"]) {
-      const b = row.books[book];
-      const fte12 = b.fteM[11];
-      const fteAvg = b.fteM.reduce((a, c) => a + c, 0) / 12;
-      const demAvg = b.demM.reduce((a, c) => a + c, 0) / 12;
-      const util = fteAvg ? demAvg / (fteAvg * r.E) : 0;
-      const tgt = book === "managed" ? g.target_managed : g.target_pool;
-      const peakReq = Math.max(...b.demM) / (r.E * tgt);
-      const accPerCsm = b.h ? (r.E * tgt) / b.h : 0;
-      // ARR per book: the book's share of segment ARR held constant through the year (approximation).
-      const arrBook = row.arrStartBook[book];
-      const share = row.arrStart ? arrBook / row.arrStart : 0;
-      rows.push(`<tr><td>${row.seg}</td><td>${book}</td>
-        <td class="num">${fmt0(b.startAcc)}</td><td class="num">${fmt2(b.h)}</td>
-        <td class="num">${fmt0(demAvg)}</td><td class="num">${fmt1(fte12)}</td>
-        <td class="num ${util > 1 ? "bad" : "ok"}">${pct(util)}</td>
-        <td class="num">${fmt1(peakReq)}</td><td class="num">${fmt0(accPerCsm)}</td>
-        <td class="num">${fmt2(arrBook / 1e6)}</td><td class="num">${fmt2(row.arrM[11] * share / 1e6)}</td></tr>`);
-    }
-  }
-  if (r.onb) {
-    const demAvg = r.onb.dem.reduce((a, c) => a + c, 0) / 12;
-    const fte12 = r.onb.fte[11];
-    const util = fte12 ? demAvg / (fte12 * r.E) : 0;
-    rows.push(`<tr><td>Onboarding</td><td>managed</td><td class="num">0</td><td class="num">${fmt2(r.onb.h)}</td>
-      <td class="num">${fmt0(demAvg)}</td><td class="num">${fmt1(fte12)}</td><td class="num ${util > 1 ? "bad" : "ok"}">${pct(util)}</td>
-      <td class="num">${fmt1(Math.max(...r.onb.dem) / (r.E * g.target_managed))}</td><td class="num">-</td><td class="num">-</td><td class="num">-</td></tr>`);
-  }
-  document.getElementById("segTable").innerHTML = rows.join("");
-}
-
-function renderRevenue() {
-  const g = S.globals;
-  const E = g.contracted_hours_per_csm * g.portfolio_share * g.availability;
-  const k = UI.threshold;
-  let movedAcc = 0, movedArr = 0, managedArr = 0, hoursSaved = 0;
-  for (const seg of scopeSegs()) {
-    const sc = scopeCounts(seg, "managed", UI.region);
-    managedArr += sc.arr;
-    const hM = hoursPerAccount(seg, "managed"), hP = hoursPerAccount(seg, "pool");
-    for (const b of DATA.managed_arr_bands) {
-      if (b.segment !== seg) continue;
-      const idx = BANDS.indexOf(b.band);
-      if (idx < 0 || idx >= k) continue;
-      const f = sc.factor;
-      movedAcc += b.accounts * f; movedArr += b.arr_eur * f;
-      hoursSaved += b.accounts * f * (hM - hP);
-    }
-  }
-  const freed = E * g.target_managed ? hoursSaved / (E * g.target_managed) : 0;
-  const risk = movedArr * g.pool_incremental_churn;
-  const cards = [
-    card("Managed accounts moved to pool", fmt0(movedAcc), "Accounts with ARR up to " + BANDS[k - 1] + " (P1/P2 only)"),
-    card("ARR moved", eurm(movedArr), pct(managedArr ? movedArr / managedArr : 0) + " of managed ARR in scope"),
-    card("CSM capacity freed (at target)", fmt1(freed) + " CSMs", "Hours saved per month at managed target"),
-    card("ARR at risk from pooling", eurm(risk), "At " + fmt1(g.pool_incremental_churn * 100) + "% extra churn on moved ARR"),
-  ];
-  document.getElementById("revCards").innerHTML = cards.join("");
-  const conc = scopeSegs().map(s => `${s}: top 10% of accounts hold ${pct(DATA.arr_concentration[s] ? DATA.arr_concentration[s].top10pct_arr_share : 0)} of ARR`).join("; ");
-  document.getElementById("revNote").textContent = (conc ? "Concentration: " + conc + ". " : "") +
-    "Pooling moves the lowest-ARR accounts first. Check renewal dates and open escalations before moving any account.";
-}
-
-function renderStatic() {
-  const byKey = {};
-  for (const r of DATA.region_segment_tier) {
-    const k = r.region + "|" + r.segment;
-    byKey[k] = byKey[k] || { region: r.region, segment: r.segment, acc: 0, mAcc: 0, pAcc: 0, arr: 0, mArr: 0 };
-    const o = byKey[k];
-    o.acc += r.accounts; o.arr += r.arr_eur;
-    if (bookOf(r.tier) === "managed") { o.mAcc += r.accounts; o.mArr += r.arr_eur; } else o.pAcc += r.accounts;
-  }
-  const order = { "UKI": 0, "DACH": 1, "Nordics": 2, "Iberia": 3, "Benelux": 4, "France & Italy": 5, "Other": 6 };
-  const rows = Object.values(byKey).sort((a, b) => (order[a.region] ?? 9) - (order[b.region] ?? 9) || a.segment.localeCompare(b.segment));
-  document.getElementById("regionTable").innerHTML = rows.map(o =>
-    `<tr><td>${o.region}</td><td>${o.segment}</td><td class="num">${fmt0(o.acc)}</td><td class="num">${fmt0(o.mAcc)}</td><td class="num">${fmt0(o.pAcc)}</td><td class="num">${fmt2(o.arr / 1e6)}</td><td class="num">${fmt2(o.mArr / 1e6)}</td></tr>`).join("");
-
-  document.getElementById("coverageTable").innerHTML = DATA.coverage.map(c =>
-    `<tr><td>${c.tier}</td><td class="num">${fmt0(c.accounts)}</td><td class="num">${fmt0(c.in_am_extract)}</td><td class="num">${fmt0(c.named_csm_in_am)}</td><td class="num ${c.former_employee_in_am ? "warn" : ""}">${fmt0(c.former_employee_in_am)}</td></tr>`).join("");
-
+function renderConflicts() {
   const sc = DATA.source_conflicts, ec = DATA.export_comparison;
-  const conflictRows = [
-    ["Team accounts in Vitally", fmt0(sc.team_accounts), "Population from the Vitally tab"],
-    ["Matched to AM on account ID", fmt0(sc.matched_in_am), pct(sc.matched_in_am / sc.team_accounts) + " of the team. " + fmt0(sc.not_in_am) + " are not in AM."],
-    ["ARR differs by more than 1%", fmt0(sc.arr_differs_over_1pct) + " of " + fmt0(sc.arr_both_positive), "Combined absolute difference " + eurm(sc.arr_abs_diff_eur) + ". The model uses Vitally."],
-    ["ARR only in AM", fmt0(sc.arr_only_in_am), "AM shows ARR where Vitally shows zero."],
-    ["ARR only in Vitally", fmt0(sc.arr_only_in_vitally), "Vitally shows ARR where AM shows zero."],
+  const rows = [
+    ["Team accounts in Vitally (all segments)", fmt0(sc.team_accounts), "The MM/UM view is a subset of this population"],
+    ["Not in AM extract", fmt0(sc.not_in_am), pct(sc.not_in_am / sc.team_accounts) + " of the team"],
+    ["ARR differs by more than 1%", fmt0(sc.arr_differs_over_1pct) + " of " + fmt0(sc.arr_both_positive), "Combined absolute difference " + eurm(sc.arr_abs_diff_eur) + ". Vitally used."],
     ["Owner names with no shared name", fmt0(sc.owner_name_no_shared_token), "Of " + fmt0(sc.owner_am_named_vitally_person) + " named in both. Nicknames and initials count as matches."],
-    ["Market label differs from region", fmt0(sc.market_differs_from_vitally_region), "No real conflicts. " + fmt0(sc.market_other_markets_for_named_region_country) + " accounts are AM 'OTHER MARKETS' in countries this model maps to a region."],
     ["Former-employee owner in AM", fmt0(sc.owner_am_former_employee), "Needs reassigning."],
-    ["Team accounts not in accounts export", fmt0(ec.team_not_in_export), "Owned by a roster CSM in Vitally. The export has " + fmt0(ec.export_not_in_team) + " accounts that are not in the team."],
-    ["Tier agreement with accounts export", pct(ec.tier_agreement_on_overlap), "Export blank tiers: " + fmt0(ec.export_blank_tiers) + ". Vitally blank tiers in the team: " + fmt0(ec.vitally_blank_tiers_in_team) + "."],
+    ["Adoption CSM differs from CSM", fmt0(sc.adoption_csm_differs_from_csm), "The review counts by Adoption CSM. This model uses CSM, as the accounts export does."],
+    ["Market label differs from region", fmt0(sc.market_differs_from_vitally_region), "No real conflicts. " + fmt0(sc.market_other_markets_for_named_region_country) + " accounts are AM 'OTHER MARKETS' in named regions."],
+    ["Team accounts not in accounts export", fmt0(ec.team_not_in_export), "The export has " + fmt0(ec.export_not_in_team) + " accounts not in the team."],
   ];
-  document.getElementById("conflictTable").innerHTML = conflictRows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+  document.getElementById("conflictTable").innerHTML = `<thead><tr><th>Check</th><th class="num">Count</th><th>Note</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td></tr>`).join("") + "</tbody>";
+}
 
-  const cons = [
-    "Population: the team is the set of Vitally accounts whose CSM is on the roster (the CSM names in the accounts export). That gives 8,270 accounts: 7,810 of the export's 7,813, plus 460 more. Three export accounts have a different CSM in Vitally and drop out.",
-    "Roster to confirm: the 45 names include former employees and group mailboxes (customersuccess@, ukimm@, dachmm@, iberiamm@). The project brief says 30 CSMs. Confirm the roster before the managed and pool counts are used.",
-    "Tiers come from Vitally, which has no blank tiers in the team. The accounts export has 277 blanks. Tiers agree with the export on 84% of the overlapping accounts.",
-    "ARR comes from Vitally: EUR 44.9m for the team (the export-based total was EUR 42.6m). AM differs by more than 1% on 569 of 4,756 accounts with ARR in both, a combined EUR 0.6m. Confirm the final ARR with Finance before the revenue lens is used.",
-    "AM coverage: 3,315 of 8,270 team accounts (40%) are not in the AM extract, so AM cannot check their owner or market.",
-    "Owners: AM and Vitally name the same person for 4,370 of 4,375 named accounts. Nicknames and initials count as matches. 5 records name different people. Check these before reassigning.",
-    "Market: AM's 'OTHER MARKETS' label covers 185 accounts in countries this model maps to a region (AT, NO, PT, BE, IT, FI, LU). The model uses Vitally's country, so no change is needed.",
-    "Former employees: 159 team accounts are owned by a former employee in AM. Reassign them before the managed/pool split is decided.",
-    "Segments: 20 accounts have no segment in Vitally. They sit in Unassigned and are not in any segment scope.",
-    "Renewals: 1,397 team accounts have no Zuora term end and are excluded from the renewal calendar, so renewal workload is understated. The calendar covers 5,304 renewals in 2027.",
-    "The CX example uses different base populations: 1,500 SMB accounts on 12 CSMs in its Hours tab, and 200 accounts on 10 CSMs in its WIP tab. The team book is 8,270 accounts. Do not carry the example's bases across without checking.",
-    "The CX example's workload leaves out its 'Net Expansion Playbooks' line (740h per month). It is not included here. Check whether that work belongs in the team's demand before reusing the structure.",
-    "Hours per account are the biggest unknown. Gong call data for the sampled CSMs shows about 4 hours of recorded calls per CSM per month, far below the model's demand. Calibrate with a time study before trusting utilisation.",
-    "Average expansion deal: the CX WIP tab shows USD 12,000 to 12,800. The calculator uses 12,800 as a EUR placeholder. Confirm the currency and the deal size for MM and UM, where it is likely higher.",
-    "The FY27 Org Plan link resolves to 'CX Org planning - Oct 2026'. It shows roles, vacancies and backfills marked 'Decision pending', and no numeric FY27 CSM target. Confirm the headcount plan before setting the start and hires inputs.",
-    "Headcount: the project brief says 30 CSMs (20 managed, 10 pool). The org deck shows Enterprise/High Touch and SMB Growth teams with open and vacant roles. The per-segment split in this calculator is a placeholder, and open roles are not in the default hires.",
-    "Availability (holidays, sickness, internal time) is set to 100% for like-for-like with v2. A realistic figure is roughly 85 to 90%.",
-    "Churn and expansion are company-level rates. Segment-level rates would need churn forecasts. The Vitally tab has churn fields that could support them, which are not used yet.",
-    "Revenue at risk from pooling uses a placeholder churn uplift. Replace it with observed churn for accounts already in the pool.",
+function renderConsiderations() {
+  const hm = DATA.headcount_review;
+  const deact = Object.values(hm).reduce((s, h) => s + (h.mm_um_accounts_held_by_deactivated || 0), 0);
+  const items = [
+    "Scope: SMB accounts and accounts with no segment are excluded from this view (3,559 team accounts). PLG covers SMB.",
+    "tARR, not ARR: the tiers and the managed threshold use vitally.custom.tarr. Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before setting the threshold.",
+    "The 10k threshold sits inside the image's P3 band (3.5k to 12k). About 240 accounts between 10k and 12k move into managed relative to the image's P2 floor of 12k.",
+    "Headcount: the review shows 10 active MM/UM CSMs in UKI, 6 in Nordics and 9 in Central & South. The org chart shows 11, 7 and 9 named ICs plus open or vacant roles. UKI names differ between the two. Confirm the roster.",
+    "One multi-region MM/UM CSM (Aida Selam, per the open items) is not counted in any region. Confirm which region's accounts she holds before the regional totals are used.",
+    `Deactivated CSMs still hold ${fmt0(deact)} MM/UM accounts. These need reassigning before any managed-book load is trusted.`,
+    "1,024 MM/UM accounts have no 2027 renewal date and are excluded from the renewal hours, so renewal workload is understated.",
+    "Rest of World holds 38 MM/UM accounts (the 'OTHER MARKETS' label), with no named leader and no MM/UM CSMs in the review.",
+    "France and Italy sit in Central & South in the review. The chart's leader is labelled DACH, Benelux, Spain.",
+    "Hours per account are placeholders and dominate the result. Gong shows about 4 hours of recorded calls per CSM per month for the sampled CSMs, far below the modelled demand. Calibrate with a time study before using the CSM numbers.",
+    "Availability is a 100% placeholder, for comparison with v2. Set it from holidays, sickness, meetings and internal time. Attrition, ramp and backfill lag are not modelled.",
+    "2027 targets: SLG + PLG (EUR 18.1m) is read as expansion and LARR (EUR 18.2m) as the lost-ARR budget. Both readings need Finance to confirm.",
+    "The average expansion deal (USD 12,000 to 12,800 in the CX WIP tab) is used as a EUR placeholder. Confirm the currency.",
   ];
-  document.getElementById("considerations").innerHTML = cons.map(c => `<li>${c}</li>`).join("");
+  document.getElementById("considerations").innerHTML = items.map(i => `<li>${i}</li>`).join("");
 }
 
 // ---------- inputs ----------
 function renderInputs() {
-  document.getElementById("scope").innerHTML = SCOPES.map(s => `<option ${s === UI.scope ? "selected" : ""}>${s}</option>`).join("");
-  document.getElementById("region").innerHTML = REGIONS.map(s => `<option ${s === UI.region ? "selected" : ""}>${s}</option>`).join("");
-  document.getElementById("threshold").innerHTML = BANDS.map((b, i) => `<option value="${i + 1}" ${i + 1 === UI.threshold ? "selected" : ""}>${b}</option>`).join("");
+  document.getElementById("seg").innerHTML = Object.keys(SEG_OPTIONS).map(s => `<option value="${s}" ${s === UI.seg ? "selected" : ""}>${s === "Both" ? "Mid Market + Upmarket" : s}</option>`).join("");
+  document.getElementById("thr").innerHTML = [1, 2, 3, 4, 5, 6].map(i => `<option value="${i}" ${i === UI.thrIdx ? "selected" : ""}>${fmt0(EDGES[i])} tARR</option>`).join("");
+  document.getElementById("region").innerHTML = ["All"].concat(REGIONS).map(r => `<option ${r === UI.region ? "selected" : ""}>${r}</option>`).join("");
 
-  const T = [["slg", "slg_eur", 1e6], ["plg", "plg_eur", 1e6], ["larr", "larr_eur", 1e6], ["companyArr", "company_arr_eur", 1e6],
-    ["asp", "asp_eur", 1e3], ["poolChurn", "pool_incremental_churn", 0.01], ["hours", "contracted_hours_per_csm", 1],
-    ["focus", "portfolio_share", 0.01], ["avail", "availability", 0.01], ["tM", "target_managed", 0.01], ["tP", "target_pool", 0.01]];
-  for (const [id, key, scale] of T) document.getElementById(id).value = Number((S.globals[key] / scale).toFixed(4));
+  document.getElementById("availRows").innerHTML = REGIONS.map(r =>
+    `<tr><td>${r}</td><td class="num"><input type="number" step="1" data-avail="${r}" value="${S.avail[r]}"></td><td class="small">${DEFAULT_AVAIL[r]} active MM/UM CSMs in the review</td></tr>`).join("");
 
-  document.getElementById("growthRows").innerHTML = SEGS.concat(["Onboarding"]).map(seg => {
-    const gr = S.growth[seg];
-    if (seg === "Onboarding") return `<tr><td>Onboarding (new accounts per month)</td><td class="num"><input type="number" data-g="${seg}|inflow_per_month" value="${gr.inflow_per_month}"></td><td class="num">-</td></tr>`;
-    return `<tr><td>${seg}</td>
-      <td class="num"><input type="number" data-g="${seg}|inflow_per_month" value="${gr.inflow_per_month}"></td>
-      <td class="num"><input type="number" data-g="${seg}|pool_share_of_new" step="0.05" value="${gr.pool_share_of_new}"></td></tr>`;
-  }).join("");
-
-  const keys = ["SMB|managed", "SMB|pool", "Mid Market|managed", "Mid Market|pool", "Upmarket|managed", "Upmarket|pool", "Onboarding|onb"];
-  document.getElementById("headRows").innerHTML = keys.map(k => {
-    const h = S.headcount[k];
-    return `<tr><td>${k.replace("|", " ")}</td>
-      <td class="num"><input type="number" data-h="${k}|start" value="${h.start}"></td>
-      <td class="num"><input type="number" data-h="${k}|hires_2027" value="${h.hires_2027}"></td>
-      <td class="small">${h.source}</td></tr>`;
-  }).join("");
+  document.getElementById("globalInputs").innerHTML = GLOBAL_INPUTS.map(gi =>
+    `<label>${gi.label} <input type="number" step="${gi.step}" data-glob="${gi.key}" data-div="${gi.div}" value="${Number((S.globals[gi.key] / gi.div).toFixed(4))}"></label>`).join("");
 
   const wrap = document.getElementById("profiles");
-  wrap.innerHTML = Object.keys(S.profiles).map(seg => {
-    return `<h3>${seg}</h3>` + Object.keys(S.profiles[seg]).map(book => {
-      const p = S.profiles[seg][book];
-      const acts = p.activities.map((a, i) => {
-        const fields = [];
-        const addF = (name, label, step) => fields.push(`<label class="small">${label} <input type="number" step="${step || 0.1}" data-p="${seg}|${book}|${i}|${name}" value="${a[name]}"></label>`);
-        if (a.type === "share") { addF("share", "share", 0.05); addF("hours", "hours per active account"); }
-        if (a.type === "per_month") addF("hours", "hours per account-month", 0.05);
-        if (a.type === "per_year") addF("hours_per_year", "hours per account-year", 1);
-        if (a.type === "touchpoints") { addF("touches_per_year", "touches per year", 1); addF("hours_per_touch", "hours per touch"); addF("stakeholders", "stakeholders", 1); addF("extra_stakeholder_hours", "extra hours per stakeholder", 0.25); }
-        if (a.type === "onboarding_total") { addF("total_hours", "total hours", 0.5); addF("over_months", "over months", 1); }
-        return `<tr><td>${a.label}<div class="small">${a.source || ""}</div></td><td>${fields.join(" ")}</td><td class="num">${fmt2(activityHours(a))} h/acct-mo</td></tr>`;
-      }).join("");
-      return `<div class="small"><b>${book}</b>: buffer <input type="number" step="0.01" data-p="${seg}|${book}|buffer|" value="${p.buffer || 0}"> renewal hours per renewal <input type="number" step="0.5" data-p="${seg}|${book}|renewal_hours|" value="${p.renewal_hours || 0}"> &nbsp; total <b>${fmt2(hoursPerAccount(seg, book))} h per account-month</b></div>
-        <table><tbody>${acts}</tbody></table>`;
+  wrap.innerHTML = Object.keys(S.profiles).map(seg => `<h3>${seg}</h3>` + ["managed", "pool"].map(book => {
+    const p = S.profiles[seg][book];
+    const acts = p.activities.map((a, i) => {
+      const f = [];
+      const add = (name, label, step) => f.push(`<label class="small">${label} <input type="number" step="${step || 0.1}" data-prof="${seg}|${book}|${i}|${name}" value="${a[name]}"></label>`);
+      if (a.type === "share") { add("share", "share", 0.05); add("hours", "hours per active account"); }
+      if (a.type === "per_month") add("hours", "hours per account-month", 0.05);
+      if (a.type === "per_year") add("hours_per_year", "hours per account-year", 1);
+      if (a.type === "touchpoints") { add("touches_per_year", "touches per year", 1); add("hours_per_touch", "hours per touch"); add("stakeholders", "stakeholders", 1); add("extra_stakeholder_hours", "extra hours per stakeholder", 0.25); }
+      return `<tr><td>${a.label}<div class="small">${a.source || ""}</div></td><td>${f.join(" ")}</td></tr>`;
     }).join("");
-  }).join("");
+    return `<div class="small"><b>${book}</b>: buffer <input type="number" step="0.01" data-prof="${seg}|${book}|buffer|x" value="${p.buffer || 0}"> renewal hours per renewal <input type="number" step="0.5" data-prof="${seg}|${book}|renewal_hours|x" value="${p.renewal_hours || 0}"></div>
+      <div class="wrap"><table><tbody>${acts}</tbody></table></div>`;
+  }).join("")).join("");
 }
 
-function updateRateNote() {
-  document.getElementById("rateNote").textContent =
-    `Company rates: expansion ${pct1(expRate())} (SLG + PLG over company ARR), lost ARR ${pct1(churnRate())} (LARR over company ARR). ` +
-    `Applied to the team book, which holds ${pct(teamShare())} of company ARR.`;
-}
-
-function bindInputs() {
-  document.getElementById("scope").onchange = e => { UI.scope = e.target.value; refresh(); };
-  document.getElementById("region").onchange = e => { UI.region = e.target.value; refresh(); };
-  document.getElementById("threshold").onchange = e => { UI.threshold = Number(e.target.value); refresh(); };
-  document.getElementById("reset").onclick = () => { resetState(); renderInputs(); bindRowInputs(); refresh(); };
-  document.getElementById("export").onclick = exportScenario;
-  const T = [["slg", "slg_eur", 1e6], ["plg", "plg_eur", 1e6], ["larr", "larr_eur", 1e6], ["companyArr", "company_arr_eur", 1e6],
-    ["asp", "asp_eur", 1e3], ["poolChurn", "pool_incremental_churn", 0.01], ["hours", "contracted_hours_per_csm", 1],
-    ["focus", "portfolio_share", 0.01], ["avail", "availability", 0.01], ["tM", "target_managed", 0.01], ["tP", "target_pool", 0.01]];
-  for (const [id, key, scale] of T) {
-    document.getElementById(id).oninput = e => {
-      const v = Number(e.target.value);
-      if (!isNaN(v)) S.globals[key] = v * scale;
-      refresh();
-    };
-  }
-}
-function bindRowInputs() {
-  document.querySelectorAll("[data-g]").forEach(el => el.oninput = e => {
-    const [seg, key] = el.dataset.g.split("|");
-    const v = Number(e.target.value);
-    if (!isNaN(v)) S.growth[seg][key] = v;
-    refresh();
-  });
-  document.querySelectorAll("[data-h]").forEach(el => el.oninput = e => {
-    const parts = el.dataset.h.split("|");
-    const key = parts[0] + "|" + parts[1];
-    const v = Number(e.target.value);
-    if (!isNaN(v)) S.headcount[key][parts[2]] = v;
-    refresh();
-  });
-  document.querySelectorAll("[data-p]").forEach(el => el.oninput = e => {
-    const parts = el.dataset.p.split("|");
-    const seg = parts[0], book = parts[1];
-    const v = Number(e.target.value);
-    if (isNaN(v)) return;
-    if (parts[2] === "buffer" || parts[2] === "renewal_hours") S.profiles[seg][book][parts[2]] = v;
-    else S.profiles[seg][book].activities[Number(parts[2])][parts[3]] = v;
-    refresh();
-  });
-}
-
-function exportScenario() {
-  const r = run();
-  const sum = b => b ? { avgDemand: b.avgDem, avgCapacity: b.avgCap, avgUtil: b.avgUtil, peakUtil: b.peakUtil, peakCsmsAtTarget: b.peakReq, optimalAccountsPerCsm: b.accPerCsm } : null;
-  const out = { exported: new Date().toISOString(), scope: UI.scope, region: UI.region, inputs: S,
-    results: { managed: sum(r.books.managed), pool: sum(r.books.pool), lostArr: r.larr, expansionArr: r.exp, accountsLost: r.accLost } };
-  const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "capacity-scenario-" + new Date().toISOString().slice(0, 10) + ".json";
-  a.click();
-}
+// Event delegation: inputs re-render outputs only, so focus is kept.
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset.avail) { const v = Number(el.value); if (!isNaN(v)) S.avail[el.dataset.avail] = v; }
+  else if (el.dataset.glob) { const v = Number(el.value); if (!isNaN(v)) S.globals[el.dataset.glob] = v * Number(el.dataset.div); }
+  else if (el.dataset.prof) {
+    const [seg, book, idx, field] = el.dataset.prof.split("|"); const v = Number(el.value);
+    if (!isNaN(v)) {
+      if (idx === "buffer") S.profiles[seg][book].buffer = v;
+      else if (idx === "renewal_hours") S.profiles[seg][book].renewal_hours = v;
+      else S.profiles[seg][book].activities[Number(idx)][field] = v;
+    }
+  } else return;
+  refresh();
+});
+document.getElementById("seg").onchange = e => { UI.seg = e.target.value; refresh(); };
+document.getElementById("thr").onchange = e => { UI.thrIdx = Number(e.target.value); refresh(); };
+document.getElementById("region").onchange = e => { UI.region = e.target.value; refresh(); };
+document.getElementById("reset").onclick = () => { S = clone(DEFAULT_STATE); renderInputs(); refresh(); };
 
 function refresh() {
-  const r = run();
-  renderCards(r);
-  renderOptimal(r);
-  renderAttrition(r);
-  renderMonthly(r);
-  renderSegTable(r);
-  renderRevenue();
-  updateRateNote();
-  document.getElementById("scopeNote").textContent = UI.scope === "Onboarding"
-    ? "Onboarding is a population of new accounts in their 90-day window, sized from new accounts per month. It is not part of the managed/pool split."
-    : "Managed = P1/P2 accounts; pool = P3/P4 and blank tiers. Region scales accounts and CSMs pro rata.";
+  renderCards();
+  renderTiers();
+  renderLeaders();
+  renderAttrition();
 }
 
 document.getElementById("banner").textContent =
-  "Prototype v3.2. Hours per account, touch cadence, hires, availability, the expansion deal size and pool churn are placeholders. Some inputs (focus share, ramp, SMB mix and buffer, SMB inflow) are illustrative values from the CX Capacity Model example, which shows structure rather than a spec. The 2027 targets are read as stated, and their segment split is unconfirmed.";
+  "Prototype v4. Mid Market and Upmarket only. Hours per account, touch cadence, availability and the expansion deal size are placeholders. The available-CSM counts come from the Nov 2026 review and need confirming.";
 renderInputs();
-bindInputs();
-bindRowInputs();
-renderStatic();
+renderHeadcount();
+renderConflicts();
+renderConsiderations();
 refresh();
 </script>
 </body>

@@ -1,13 +1,13 @@
 {
-  "_about": "Default assumptions for the v3.1 calculator. Every value is sourced (see 'source'), a PLACEHOLDER to be replaced, or ILLUSTRATIVE: taken from the CX Capacity Model example, which shows a structure to follow, not a spec to match. 2027 targets come from the project brief and are interpreted, not yet confirmed.",
+  "_about": "Default assumptions for the v4 calculator (Mid Market and Upmarket only). Every value is sourced (see 'source'), a PLACEHOLDER to be replaced, or ILLUSTRATIVE: taken from the CX Capacity Model example, which shows a structure to follow, not a spec to match.",
   "globals": {
     "contracted_hours_per_csm": {
       "value": 150,
-      "source": "v2 model / project instructions"
+      "source": "Project brief / v2 model (150 hours per CSM per month)."
     },
     "portfolio_share": {
       "value": 0.7,
-      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 70% customer-facing focus."
+      "source": "ILLUSTRATIVE. 70% customer-facing focus from the CX Capacity Model example."
     },
     "availability": {
       "value": 1.0,
@@ -15,11 +15,11 @@
     },
     "target_managed": {
       "value": 0.85,
-      "source": "Project instructions (managed book target)"
+      "source": "Project brief (managed book target)."
     },
     "target_pool": {
       "value": 0.8,
-      "source": "Project instructions (pool target; reactive queues need more slack)"
+      "source": "Project brief (pool target; reactive queues need more slack)."
     },
     "slg_eur": {
       "value": 5500000,
@@ -41,126 +41,12 @@
       "value": 12800,
       "source": "CX Capacity Model WIP tab: ASP USD 12,000 to 12,800. Currency not confirmed; top of range used as a EUR placeholder."
     },
-    "ramp": {
-      "value": [
-        0.33,
-        0.66,
-        1.0
-      ],
-      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. Ramp 33% / 66% / 100% over three months. Confirm against actual onboarding."
-    },
-    "pool_incremental_churn": {
-      "value": 0.05,
-      "source": "PLACEHOLDER. Extra churn on ARR moved to the pool. Needs evidence from pooled accounts."
-    }
-  },
-  "growth": {
-    "SMB": {
-      "inflow_per_month": 10,
-      "pool_share_of_new": 0.9,
-      "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. SMB inflow of 10 new accounts per month."
-    },
-    "Mid Market": {
-      "inflow_per_month": 10,
-      "pool_share_of_new": 0.5,
-      "source": "PLACEHOLDER. No Mid Market inflow in any source."
-    },
-    "Upmarket": {
-      "inflow_per_month": 2,
-      "pool_share_of_new": 0.3,
-      "source": "PLACEHOLDER. No Upmarket inflow in any source."
-    },
-    "Onboarding": {
-      "inflow_per_month": 22,
-      "window_months": 3,
-      "source": "PLACEHOLDER. Sum of new accounts across segments, 90-day onboarding window."
-    }
-  },
-  "headcount": {
-    "SMB|managed": {
-      "start": 3,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER split of the 20 managed CSMs (project instructions)"
-    },
-    "SMB|pool": {
-      "start": 6,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER split of the 10 pool CSMs (project instructions)"
-    },
-    "Mid Market|managed": {
-      "start": 10,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER"
-    },
-    "Mid Market|pool": {
-      "start": 2,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER"
-    },
-    "Upmarket|managed": {
-      "start": 7,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER"
-    },
-    "Upmarket|pool": {
-      "start": 2,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER"
-    },
-    "Onboarding|onb": {
-      "start": 6,
-      "hires_2027": 0,
-      "source": "PLACEHOLDER. Onboarding team size not confirmed."
+    "managed_threshold_default_eur": {
+      "value": 10000,
+      "source": "Set by the CX lead: accounts above 10k tARR are managed; below is pooled. Confirm."
     }
   },
   "profiles": {
-    "SMB": {
-      "managed": {
-        "buffer": 0.15,
-        "renewal_hours": 1.0,
-        "activities": [
-          {
-            "id": "adoption",
-            "label": "Adoption (share of book active)",
-            "type": "share",
-            "share": 0.35,
-            "hours": 2.0,
-            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 35% share x 2h."
-          },
-          {
-            "id": "at_risk",
-            "label": "At-risk (share of book active)",
-            "type": "share",
-            "share": 0.25,
-            "hours": 2.0,
-            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 25% share x 2h."
-          },
-          {
-            "id": "expansion",
-            "label": "Expansion (share of book active)",
-            "type": "share",
-            "share": 0.25,
-            "hours": 2.0,
-            "source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 25% share x 2h."
-          }
-        ],
-        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
-      },
-      "pool": {
-        "buffer": 0.0,
-        "renewal_hours": 0.5,
-        "activities": [
-          {
-            "id": "reactive",
-            "label": "Reactive inbound (per account per month)",
-            "type": "per_month",
-            "hours": 0.26,
-            "source": "PLACEHOLDER. Derived from the CX example's SMB core hours (about 1.7h) with its 15% buffer."
-          }
-        ],
-        "buffer_source": "No buffer on reactive work."
-      }
-    },
     "Mid Market": {
       "managed": {
         "buffer": 0.15,
@@ -265,29 +151,39 @@
         ],
         "buffer_source": "No buffer on reactive work."
       }
-    },
-    "Onboarding": {
-      "managed": {
-        "buffer": 0.15,
-        "renewal_hours": 0.0,
-        "activities": [
-          {
-            "id": "assisted_onboarding",
-            "label": "Assisted onboarding (total hours per account over the window)",
-            "type": "onboarding_total",
-            "total_hours": 6.0,
-            "over_months": 3,
-            "source": "PLACEHOLDER. Assisted onboarding touches across 90 days."
-          }
-        ],
-        "buffer_source": "ILLUSTRATIVE. From the CX Capacity Model example (Account Caps, Hours tab), not validated for this team. 15% buffer on proactive work."
-      }
     }
   },
   "reference": {
     "cx_capacity_model_cap": {
       "value": 57,
       "source": "ILLUSTRATIVE REFERENCE ONLY. Example cap from the CX Capacity Model. Not a target; the source gives no derivation."
+    }
+  },
+  "org_chart": {
+    "_about": "Leader structure from the Enterprise org chart image (shared Nov 2026). Counts only. Names of managers are shown; CSM names are not stored here.",
+    "UKI": {
+      "leader_chart": "Tom Macbride",
+      "leader_review": "Lucy Winter",
+      "named_ics_chart": 11,
+      "open_roles_chart": 2,
+      "vacant_senior_chart": 1,
+      "note": "The chart and the review disagree on who leads UKI. Chart shows 11 named ICs; the review shows 10 active MM/UM CSMs with different names."
+    },
+    "Nordics": {
+      "leader_chart": "Stina Grahn",
+      "leader_review": "Stina Grahn",
+      "named_ics_chart": 7,
+      "open_roles_chart": 1,
+      "vacant_senior_chart": 0,
+      "note": "Chart shows a Senior CSM (stepping up) and one open CSM I role. One chart IC (Nikol Rej Notlev) is marked vacant, decision pending."
+    },
+    "Central & South": {
+      "leader_chart": "Estefania Gambin",
+      "leader_review": "Estefania Gambin",
+      "named_ics_chart": 9,
+      "open_roles_chart": 0,
+      "vacant_senior_chart": 0,
+      "note": "Chart label is DACH, Benelux, Spain. The review region also includes France and Italy."
     }
   }
 }

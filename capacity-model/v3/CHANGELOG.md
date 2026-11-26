@@ -1,5 +1,18 @@
 # Changelog
 
+## v4 (prototype), 26 Nov 2026
+
+Narrows the calculator to Mid Market and Upmarket, and sizes the managed and pooled books by tARR tier and leader region.
+
+- **Scope:** SMB and the Onboarding population are removed, since PLG covers SMB. The SMB and Onboarding profiles, headcount and hires, ramp, growth, annual churn, FY26 expansion and pool churn inputs are removed.
+- **Segmentation:** the four priority tiers from the "Implementing Four Priority Tiers" image, applied to `vitally.custom.tarr` (P1 36k and above, P2 12k to 36k, P3 3.5k to 12k, P4 below 3.5k). The managed threshold is selectable, from 3.5k to 36k tARR, with 10,000 as the default. Accounts at or above it are managed; the rest are pooled.
+- **Regions and leaders:** accounts are mapped to the review's regions (UKI, Nordics, Central & South, Rest of World). Leaders come from the org chart and the review. Available MM/UM CSMs default to the review's active counts (UKI 10, Nordics 6, Central & South 9) and are editable.
+- **CSMs needed:** average monthly demand divided by effective hours (105 per CSM by default) at target utilisation, per book and per region, with the peak month. Renewal hours use 2027 term-end dates.
+- **Result at defaults:** 4,711 MM/UM accounts; 1,882 managed and 2,829 pooled at 10,000 tARR. 52.8 managed and 11.8 pool CSMs are needed (64.6 in total), against 25 available. Hours per account are placeholders, so this is not yet a usable headcount figure.
+- **Data:** `scripts/build_inputs.py` now also emits bins, renewals and image tiers by segment and region, review headcount, and AM vs Vitally conflicts. The team population is unchanged (8,270 accounts).
+- **Corrections:** the v3.2 status text and considerations have been rewritten for MM/UM only. Some v3.2 numbers no longer apply.
+- **Known gaps:** hours and touch cadence are placeholders; tARR's definition is unconfirmed; the org chart and the review disagree on UKI; 148 MM/UM accounts sit with deactivated CSMs; Rest of World has 38 accounts and no named leader.
+
 ## v3.2 (prototype), 24 Nov 2026
 
 Switches the account source to the Vitally tab and measures AM vs Vitally conflicts.

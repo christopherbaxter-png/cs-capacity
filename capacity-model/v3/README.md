@@ -1,19 +1,31 @@
-# CSM capacity calculator, v3.2 (prototype)
+# CSM capacity calculator, v4 (prototype)
 
-A single-page calculator for 2027 CSM capacity across SMB, Mid Market and Upmarket, with Onboarding as a separate population. It combines:
+A single-page calculator for 2027 CSM capacity in the Mid Market and Upmarket (MM/UM) team. SMB is excluded, since product-led growth covers it.
 
-- **Top-down:** a monthly roll-forward of accounts and ARR for 2027, using new accounts per month, annual gross churn and the FY26 expansion baseline.
-- **Bottom-up:** hours per account-month by activity (proactive touchpoints, at-risk, expansion, reactive, renewals, onboarding). Some values are illustrated from the CX Capacity Model example and the project's v2 assumptions. They show structure, not targets.
-- **Revenue lens:** ARR in the managed and pool books, what moving low-ARR accounts to the pool frees up, and what ARR we accept at risk.
+It answers one question: how many CSMs the MM/UM book needs, with accounts at or above a tARR threshold fully CSM-managed and the rest pooled. The result is shown by leader region, next to the CSMs the Nov 2026 review shows in each region.
 
 Open `index.html` in a browser. It has no dependencies and no server. Data is embedded, and nothing is sent anywhere.
 
 ## Status: read before using
 
-- **The CX Capacity Model is an example, not a spec.** Its values and structure show what a calculator can look like. Several inputs (marked ILLUSTRATIVE in `config/profiles.json`) come from it. They are not validated for this team and should be replaced with the team's own data.
-- **Placeholders drive the result.** Hours per account, touch cadence, hires, availability and pool churn are placeholders (marked in `config/profiles.json`). Utilisation is illustrative until they are replaced.
-- **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are entered as inputs. The model reads expansion as SLG + PLG (EUR 18.1m) and the lost-ARR budget as LARR. Both readings need confirming. The Growth & Retention deck still says "2027 Marketing Growth Target: TBD".
-- **Current default result (Mid Market + Upmarket, all regions):** managed utilisation about 217% on average (peak about 248%) against an 85% target, with 17 planned CSMs. Pool utilisation about 235% against 80%, with 4 planned CSMs. This comes from the placeholder touch cadence, not calibrated data. Gong's recorded call time for the sampled CSMs is far lower (about 4 hours per CSM per month), so the hours-per-account inputs need calibrating before anyone relies on the gap.
+- **Hours per account are placeholders, and they drive almost all of the result.** At the default 10,000 tARR threshold the calculator shows 52.8 managed and 11.8 pool CSMs needed (64.6 in total), against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
+- **The threshold is the brief's, but tARR is unconfirmed.** Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before the tiers are used for the managed split.
+- **Available CSMs come from the review, and the org chart disagrees.** The review and the chart differ on the UKI leader and roster. The Multi-region CSM is not counted in any region.
+- **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are inputs. The model reads expansion as SLG + PLG and the lost-ARR budget as LARR. Both readings need confirming.
+- **The CX Capacity Model is an example, not a spec.** Values marked ILLUSTRATIVE in `config/profiles.json` come from it and are not validated for this team.
+
+## Segmentation
+
+Accounts are tiered on Vitally's `vitally.custom.tarr`, using the four-tier image:
+
+| Tier | tARR band | Book |
+|---|---|---|
+| P1 | 36,000 and above | Managed (CSM named) |
+| P2 | 12,000 to 36,000 | Managed (CSM named) |
+| P3 | 3,500 to 12,000 | Pooled, or managed above the threshold |
+| P4 | Below 3,500 | Pooled |
+
+The managed threshold is a selectable input, from 3,500 to 36,000 tARR. The default is 10,000, which puts accounts at or above it in the managed book and everything below it in the pool. This moves about 240 accounts from P3 into managed, relative to the image's 12,000 floor.
 
 ## Files
 
@@ -21,8 +33,8 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 |---|---|
 | `index.html` | The calculator. Generated; do not edit by hand. |
 | `calculator.template.html` | Source for the calculator. Edit this, then rebuild. |
-| `config/profiles.json` | Every default assumption, with its source or a PLACEHOLDER flag. |
-| `data/team_book.json` | Aggregated team-book inputs. No account names, IDs or emails. |
+| `config/profiles.json` | Defaults for hours, targets, targets from the brief, and the org chart, each with a source or a PLACEHOLDER or ILLUSTRATIVE flag. |
+| `data/team_book.json` | Aggregated inputs: bins, renewals, tiers by region, review headcount and conflicts. No account names, IDs or emails. |
 | `scripts/build_inputs.py` | Builds `data/team_book.json` from the source exports. |
 | `scripts/build_calculator.py` | Builds `index.html` from the template, config and data. |
 | `CHANGELOG.md` | What changed in each revision. |
@@ -41,13 +53,9 @@ The v2 workbook and calculator in the parent folder are unchanged and kept for r
 
 ## How the model works
 
-**1. Accounts and ARR (top-down).** For each segment and book (managed = P1/P2; pool = P3/P4 and blank tiers):
+**1. Accounts.** Counts and tARR for each tier, region and book come from `data/team_book.json`. The population is the Vitally accounts whose CSM is on the roster: 8,270 accounts, of which 4,711 are MM/UM. The 3,559 SMB or unsegmented accounts are excluded.
 
-    accounts(m) = accounts(m-1) x (1 - annual churn / 12) + new accounts per month x book share
-
-Churn and expansion are company rates, derived from the 2027 targets: lost ARR = LARR / company ARR (18.2 / 87.9 = 20.7%), and expansion = (SLG + PLG) / company ARR (18.1 / 87.9 = 20.6%). Both are applied monthly to each team segment's ARR. New accounts enter at the segment's average ARR. The budget figures shown in the calculator are the same rates applied to the scope's ARR, so the match between budget and implied figures is a drift check, not evidence the plan is achievable.
-
-**2. Demand (bottom-up).** Hours per account-month, by activity:
+**2. Demand.** Hours per account-month by activity:
 
 | Activity type | Hours per account-month |
 |---|---|
@@ -57,56 +65,51 @@ Churn and expansion are company rates, derived from the 2027 targets: lost ARR =
 | `per_year` | hours per account-year / 12 |
 | `onboarding_total` | total hours / months in the onboarding window |
 
-A buffer (15% for proactive books, illustrative, from the CX example) is added. Renewals are added separately, as hours per renewal x renewals in that month from the 2027 Zuora calendar.
+The managed book's buffer (15%, illustrative) is added to its activities. The pool buffer is 0. Renewals are added separately, as hours per renewal x renewals in each month from the 2027 Zuora term-end dates. The model assumes P3 and P4 renewals sit with the pool. 1,024 MM/UM accounts have no renewal date and are excluded.
 
-**3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 100% by default). Planned CSMs = starting CSMs + hires, with hires ramping 33% / 66% / 100% over three months.
+**3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 100% = 105 by default).
 
-**4. Outputs.** Utilisation against the target for each book (managed 85%, pool 80%), CSMs needed at target, and accounts per CSM at target. The CX model's cap of 57 is shown as a reference only; its source gives no derivation.
+**4. CSMs needed.** Average monthly demand divided by (effective hours x target utilisation). Targets are 85% for managed and 80% for the pool, both from the v2 project instructions. The peak month is shown alongside the average.
 
-- **Managed book (P1/P2 only).** The optimal book is the planned managed CSMs (average) x accounts per CSM at target. Accounts are taken from the highest-ARR bands first, so the output shows which accounts the optimal book covers, the ARR share, and the cut-off band. ARR bands come from `managed_arr_bands` in the team book.
-- **Pool (P3/P4 and blank tiers).** Accounts per pool CSM at the 80% target, and pool utilisation.
-- **Pooling assessment.** Managed accounts up to a chosen ARR band move to the pool. The calculator reports accounts and ARR moved, CSM hours freed (managed minus pool hours per account, at the managed target), and ARR at risk (ARR moved x the pool churn placeholder).
+**5. Regions and leaders.** Accounts are assigned to the review's regions: UKI, Nordics, Central & South, and Rest of World. Leaders come from the org chart and the review. Available CSMs default to the review's active MM/UM CSM counts (UKI 10, Nordics 6, Central & South 9) and can be edited. Rest of World has 38 MM/UM accounts and no named leader or MM/UM CSM.
 
-**5. Region.** Filtering by region scales accounts, renewals and planned CSMs by the region's share of the segment's accounts. A region therefore shows whether it is more or less loaded than average. It does not model the real regional CSM allocation, which the AM extract would need to confirm.
-
-**6. Revenue.** Moving managed accounts below an ARR threshold to the pool frees CSM hours (difference between managed and pool hours per account, at the managed target). ARR at risk = ARR moved x placeholder churn uplift.
+**6. Attrition check.** Company rates are applied to the MM/UM ARR in scope: lost ARR = LARR / company ARR (20.7%), and expansion = (SLG + PLG) / company ARR (20.6%). This is a drift check against the budget, not a segment forecast.
 
 ## Sources
 
 | Input | Source |
 |---|---|
-| Team population (8,270 accounts), tiers, segments, country, renewals, ARR | Nov 2026 CX portfolio review workbook, Vitally tab `nov18vitally raw data` (`vitally.custom.arrEur`, `vitally.custom.gtmPriorityTier`). Team = accounts whose CSM is on the roster. |
-| Team roster (45 CSM names) | CSM list in the accounts export. Used only to define the roster. Needs confirming. |
-| AM coverage and conflict checks (owner, ARR, market) | AM portfolio extract (`am_customer_extract`). Not used for account numbers. |
-| Hours, mix, ramp, focus, buffer, cap reference | ILLUSTRATIVE. CX Capacity Model (Account Caps) example, Hours tab. Used to show structure; not validated for this team. |
-| Contracted hours, targets, managed/pool split | Project instructions (v2) |
-| FY26 expansion and lost ARR baselines | CX Strategy Offsite agenda, Nov 2026 |
-| 2027 targets: SLG EUR 5.5m, PLG EUR 12.6m, LARR EUR 18.2m | Project brief, 24 Nov 2026. Interpreted (see Open decisions). |
-| Company ARR base (EUR 87.9m) | CX offsite agenda, used for the 20.5% FY26 churn rate |
-| Average expansion deal (EUR 12.8k placeholder) | CX Capacity Model WIP tab, ASP USD 12,000 to 12,800. Currency unconfirmed. |
+| Accounts, tARR, ARR, country, segment, CSM, 2027 renewal dates | Nov 2026 CX portfolio review, Vitally tab `nov18vitally raw data` (`vitally.custom.tarr`, `vitally.custom.arrEur`, `hspot.zuora_termenddate`) |
+| Tier bands and coverage model (P1 to P4) | "Implementing Four Priority Tiers" image |
+| Region mapping, active CSM counts by region | Nov 2026 CX portfolio review: Country Analysis and Portfolio by CSM |
+| Leaders, named ICs, open and vacant roles | Enterprise org chart (image) |
+| Team roster (45 CSM names) | CSM list in the accounts export. Used only to define the team. Needs confirming. |
+| AM coverage and conflict checks | AM portfolio extract (`am_customer_extract`). Not used for account numbers. |
+| Contracted hours, portfolio share, targets, managed/pool split | Project instructions (v2). The 70% portfolio share also matches the CX example. |
+| 2027 targets: SLG EUR 5.5m, PLG EUR 12.6m, LARR EUR 18.2m | Project brief. Interpreted, not confirmed. |
+| Company ARR base (EUR 87.9m) | CX offsite agenda, Nov 2026 |
+| Average expansion deal (EUR 12.8k) | CX Capacity Model WIP tab, USD 12,000 to 12,800. Placeholder; currency unconfirmed. |
+| Hours per account, touch cadence, buffer | PLACEHOLDER or ILLUSTRATIVE. Structure from the CX Capacity Model example; not validated for this team. |
 
 ## Open decisions
 
-1. Managed/pool split (20 and 10 is the starting point) and CSMs by segment.
-2. Whether P3 and P4 renewals sit with the pool.
-3. Team roster: the 45 CSM names in the accounts export define the team. They include former employees and group mailboxes, and the project brief says 30 CSMs. Confirm the roster.
-4. Tiers: Vitally is the source (no blank tiers in the team; the accounts export has 277 blanks). Tiers agree with the export on 84% of overlapping accounts.
-5. Target utilisation for each book.
-6. Which base to size against: the team book (8,270 accounts on the Vitally tab), or the CX example's 1,500-account SMB base.
-7. What SLG, PLG and LARR mean. The model reads expansion = SLG + PLG and lost-ARR budget = LARR. Confirm with Finance.
-8. How the targets split by segment. PLG (EUR 12.6m) is larger than the team's whole SMB ARR (EUR 8.8m), so the targets cannot be allocated from the team book alone. The model applies them as company-wide rates.
-9. The FY27 CSM headcount plan. The org deck ("CX Org planning - Oct 2026") shows vacancies and backfills marked "Decision pending" and no numeric target.
-10. Whether former-employee accounts (159 team accounts in AM) are reassigned, and which of the 5 owner records with different names is correct.
+1. **Managed threshold.** 10,000 tARR is the proposal from the brief. Confirm it, and whether P2 should keep the image's 12,000 floor.
+2. **tARR definition.** Confirm what tARR measures, and whether tiers should use it rather than ARR.
+3. **P3 and P4 renewals.** The model assumes the pool handles them. Confirm.
+4. **Target utilisation** for each book (85% and 80% are the v2 placeholders).
+5. **Roster and leadership.** The review shows 25 MM/UM CSMs (UKI 10, Nordics 6, Central & South 9) plus one multi-region CSM. The org chart shows named ICs and open roles that differ, and its UKI leader is different from the review's. Confirm both. Aida Selam's region is unconfirmed.
+6. **Deactivated CSMs** still hold 148 MM/UM accounts. These need reassigning.
+7. **Adoption CSM vs CSM.** 224 accounts have a different Adoption CSM from the CSM field. The review counts by Adoption CSM; this model uses CSM.
+8. **Rest of World.** 38 MM/UM accounts have no leader. Confirm where they belong.
+9. **Renewal dates.** 1,024 MM/UM accounts have no 2027 renewal date, so renewal hours are understated.
+10. **Hours per account.** A two-week time study by tier is the largest open item.
+11. **Targets.** Confirm what SLG, PLG and LARR mean, and the currency of the expansion deal size.
+12. **FY27 headcount plan.** The model does not yet have a target headcount.
 
 ## Considerations for the next revision
 
-- **Calibration first.** A two-week time study by segment will replace most placeholder hours. Gong call data and email volumes per account (the `ask_account` sample) can cross-check it.
-- **Reactive load.** It is currently a percentage buffer. Ticket, escalation and fraud volumes per account per month would make it bottom-up.
-- **Availability.** Holidays, sickness, meetings and internal time are not modelled (100% by default). This is the largest structural gap against real capacity.
-- **Attrition and ramp.** Attrition, backfill lag and the cost of ramp (not just the three-month curve) are not modelled.
-- **Renewal workload.** Renewals are priced per renewal. Long contracts and auto-renewals may need a different treatment.
-- **Churn by segment.** Company-level churn is used. The churn probability field in Vitally is empty in the current export.
-- **Targets.** Confirm the meaning and segment split of SLG, PLG and LARR. Replace the company rates with segment-level rates once they are set.
-- **Governance.** Former-employee owners hold 159 team accounts in AM. Reassign them before the managed/pool split is decided. AM is missing 3,315 team accounts, and its ARR differs from Vitally on 569 accounts (EUR 0.6m combined). Both are measured in the calculator's conflicts table.
-- **Example model issues.** The CX example's workload leaves out its own "Net Expansion Playbooks" line (740h per month). Its WIP tab labels a surplus as a gap. Both are noted in the calculator's considerations list, to check before reusing the example's structure.
+- **Calibration first.** Replace the placeholder hours with a time study by tier. Gong call data can cross-check it.
+- **Availability and attrition.** Holidays, sickness, meetings, internal time, attrition and ramp are not modelled.
+- **Reactive load.** It is a percentage buffer for now. Ticket, escalation and fraud volumes per account per month would make it bottom-up.
+- **Region allocation.** The model compares demand with CSM counts by review region. It does not model which accounts each CSM actually holds.
 - **Privacy.** `data/team_book.json` holds aggregates only. Keep account-level exports out of the repo.
