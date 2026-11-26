@@ -42,8 +42,8 @@
       "source": "CX Capacity Model WIP tab: ASP USD 12,000 to 12,800. Currency not confirmed; top of range used as a EUR placeholder."
     },
     "managed_threshold_default_eur": {
-      "value": 10000,
-      "source": "Set by the CX lead: accounts above 10k tARR are managed; below is pooled. Confirm."
+      "value": 12000,
+      "source": "Confirmed 26 Nov 2026: managed at or above 12k tARR, the image's P2 floor; P3 and P4 pooled. Earlier 10k proposal withdrawn."
     }
   },
   "profiles": {

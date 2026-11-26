@@ -8,7 +8,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 
 ## Status: read before using
 
-- **Hours per account are placeholders, and they drive almost all of the result.** At the default 10,000 tARR threshold the calculator shows 52.8 managed and 11.8 pool CSMs needed (64.6 in total), against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
+- **Hours per account are placeholders, and they drive almost all of the result.** At the default 12,000 tARR threshold the calculator shows 46.3 managed and 12.8 pool CSMs needed (59.1 in total), against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
 - **The threshold is the brief's, but tARR is unconfirmed.** Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before the tiers are used for the managed split.
 - **Available CSMs come from the review, and the org chart disagrees.** The review and the chart differ on the UKI leader and roster. The Multi-region CSM is not counted in any region.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are inputs. The model reads expansion as SLG + PLG and the lost-ARR budget as LARR. Both readings need confirming.
@@ -22,10 +22,10 @@ Accounts are tiered on Vitally's `vitally.custom.tarr`, using the four-tier imag
 |---|---|---|
 | P1 | 36,000 and above | Managed (CSM named) |
 | P2 | 12,000 to 36,000 | Managed (CSM named) |
-| P3 | 3,500 to 12,000 | Pooled, or managed above the threshold |
+| P3 | 3,500 to 12,000 | Pooled |
 | P4 | Below 3,500 | Pooled |
 
-The managed threshold is a selectable input, from 3,500 to 36,000 tARR. The default is 10,000, which puts accounts at or above it in the managed book and everything below it in the pool. This moves about 240 accounts from P3 into managed, relative to the image's 12,000 floor.
+The managed threshold is a selectable input, from 3,500 to 36,000 tARR. The default is 12,000, the image's P2 floor, so P1 and P2 are managed and P3 and P4 are pooled. A 10,000 threshold would move about 240 P3 accounts into managed.
 
 ## Files
 
@@ -65,7 +65,7 @@ The v2 workbook and calculator in the parent folder are unchanged and kept for r
 | `per_year` | hours per account-year / 12 |
 | `onboarding_total` | total hours / months in the onboarding window |
 
-The managed book's buffer (15%, illustrative) is added to its activities. The pool buffer is 0. Renewals are added separately, as hours per renewal x renewals in each month from the 2027 Zuora term-end dates. The model assumes P3 and P4 renewals sit with the pool. 1,024 MM/UM accounts have no renewal date and are excluded.
+The managed book's buffer (15%, illustrative) is added to its activities. The pool buffer is 0. Renewals are added separately, as hours per renewal x renewals in each month from the 2027 Zuora term-end dates. P3 and P4 renewals sit with the pool, as confirmed on 26 Nov 2026. 1,024 MM/UM accounts have no renewal date and are excluded.
 
 **3. Capacity.** Effective hours per CSM = contracted hours x portfolio share x availability (150 x 70% x 100% = 105 by default).
 
@@ -93,9 +93,9 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 
 ## Open decisions
 
-1. **Managed threshold.** 10,000 tARR is the proposal from the brief. Confirm it, and whether P2 should keep the image's 12,000 floor.
+1. **Managed threshold.** Set at 12,000 tARR, the image's P2 floor (confirmed 26 Nov 2026). 10,000 remains selectable in the calculator.
 2. **tARR definition.** Confirm what tARR measures, and whether tiers should use it rather than ARR.
-3. **P3 and P4 renewals.** The model assumes the pool handles them. Confirm.
+3. **P3 and P4 renewals.** Confirmed: the pool handles them.
 4. **Target utilisation** for each book (85% and 80% are the v2 placeholders).
 5. **Roster and leadership.** The review shows 25 MM/UM CSMs (UKI 10, Nordics 6, Central & South 9) plus one multi-region CSM. The org chart shows named ICs and open roles that differ, and its UKI leader is different from the review's. Confirm both. Aida Selam's region is unconfirmed.
 6. **Deactivated CSMs** still hold 148 MM/UM accounts. These need reassigning.

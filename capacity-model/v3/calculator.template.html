@@ -150,7 +150,7 @@ for (const r of REGIONS) {
 }
 const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL) };
 let S = clone(DEFAULT_STATE);
-const UI = { seg: "Both", thrIdx: 3, region: "All" };   // thrIdx 3 = 10k
+const UI = { seg: "Both", thrIdx: 4, region: "All" };   // thrIdx 4 = 12k
 const thrValue = () => EDGES[UI.thrIdx];
 
 // ---------- engine ----------
@@ -340,7 +340,7 @@ function renderConsiderations() {
   const items = [
     "Scope: SMB accounts and accounts with no segment are excluded from this view (3,559 team accounts). PLG covers SMB.",
     "tARR, not ARR: the tiers and the managed threshold use vitally.custom.tarr. Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before setting the threshold.",
-    "The 10k threshold sits inside the image's P3 band (3.5k to 12k). About 240 accounts between 10k and 12k move into managed relative to the image's P2 floor of 12k.",
+    "The managed threshold is 12,000 tARR, the image's P2 floor. P3 and P4 accounts are pooled, including their renewals. A 10,000 threshold would move about 240 P3 accounts into managed.",
     "Headcount: the review shows 10 active MM/UM CSMs in UKI, 6 in Nordics and 9 in Central & South. The org chart shows 11, 7 and 9 named ICs plus open or vacant roles. UKI names differ between the two. Confirm the roster.",
     "One multi-region MM/UM CSM (Aida Selam, per the open items) is not counted in any region. Confirm which region's accounts she holds before the regional totals are used.",
     `Deactivated CSMs still hold ${fmt0(deact)} MM/UM accounts. These need reassigning before any managed-book load is trusted.`,
