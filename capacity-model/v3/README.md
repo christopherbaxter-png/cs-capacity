@@ -10,7 +10,7 @@ Open `index.html` in a browser. It has no dependencies and no server. Data is em
 
 - **Hours per account are placeholders, and they drive almost all of the result.** At the default 12,000 tARR threshold the calculator shows 46.3 managed and 12.8 pool CSMs needed (59.1 in total), against 25 active MM/UM CSMs in the review. Do not act on the gap until the hours are calibrated. Gong's recorded call time for the sampled CSMs is about 4 hours per CSM per month, far below the modelled demand.
 - **The threshold is the brief's, but tARR is unconfirmed.** Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before the tiers are used for the managed split.
-- **Available CSMs come from the review, and the org chart disagrees.** The review and the chart differ on the UKI leader and roster. The Multi-region CSM is not counted in any region.
+- **Leaders and available CSMs.** UKI is led by Tom Macbride (confirmed 26 Nov 2026). Stina Grahn is on maternity leave, and Jakob Klöfver manages Nordics while owning a book. His management share is entered as a leader-time input, 0 until set, so Nordics availability is overstated until then. The review and the chart still differ on the roster, and the Multi-region CSM is not counted in any region.
 - **The 2027 targets come from the project brief, not a finance source.** SLG EUR 5.5m, PLG EUR 12.6m and LARR EUR 18.2m are inputs. The model reads expansion as SLG + PLG and the lost-ARR budget as LARR. Both readings need confirming.
 - **The CX Capacity Model is an example, not a spec.** Values marked ILLUSTRATIVE in `config/profiles.json` come from it and are not validated for this team.
 
@@ -97,7 +97,7 @@ The managed book's buffer (15%, illustrative) is added to its activities. The po
 2. **tARR definition.** Confirm what tARR measures, and whether tiers should use it rather than ARR.
 3. **P3 and P4 renewals.** Confirmed: the pool handles them.
 4. **Target utilisation** for each book (85% and 80% are the v2 placeholders).
-5. **Roster and leadership.** The review shows 25 MM/UM CSMs (UKI 10, Nordics 6, Central & South 9) plus one multi-region CSM. The org chart shows named ICs and open roles that differ, and its UKI leader is different from the review's. Confirm both. Aida Selam's region is unconfirmed.
+5. **Roster and leadership.** Confirmed: UKI is led by Tom Macbride, and Nordics is managed by Jakob Klöfver (acting) while Stina Grahn is on leave. Still to do: enter Jakob's management share, and confirm the roster, since the review shows 25 MM/UM CSMs (UKI 10, Nordics 6, Central & South 9) and the chart shows named ICs and open roles that differ. Aida Selam's region is unconfirmed.
 6. **Deactivated CSMs** still hold 148 MM/UM accounts. These need reassigning.
 7. **Adoption CSM vs CSM.** 224 accounts have a different Adoption CSM from the CSM field. The review counts by Adoption CSM; this model uses CSM.
 8. **Rest of World.** 38 MM/UM accounts have no leader. Confirm where they belong.

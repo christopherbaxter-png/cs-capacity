@@ -97,7 +97,7 @@ button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); b
 
 <h2>Inputs</h2>
 <details open><summary>CSMs available by region (MM/UM)</summary>
-<div class="wrap"><table><thead><tr><th>Region</th><th class="num">Available CSMs</th><th>Default</th></tr></thead><tbody id="availRows"></tbody></table></div>
+<div class="wrap"><table><thead><tr><th>Region</th><th class="num">Available CSMs</th><th class="num">Leader time (CSM-eq.)</th><th>Default</th></tr></thead><tbody id="availRows"></tbody></table></div>
 <p class="small">Defaults are active MM/UM CSMs in the Nov 2026 review. The Multi-region CSM is not counted in any region.</p>
 </details>
 <details open><summary>Capacity and targets</summary>
@@ -148,7 +148,7 @@ for (const r of REGIONS) {
   const h = DATA.headcount_review[r];
   DEFAULT_AVAIL[r] = h ? h.active_mm_um_csms : 0;
 }
-const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL) };
+const DEFAULT_STATE = { globals: clone(CONFIG.globals), profiles: clone(CONFIG.profiles), avail: clone(DEFAULT_AVAIL), mgmt: { "UKI": 0, "Nordics": 0, "Central & South": 0, "Rest of World": 0 } };
 let S = clone(DEFAULT_STATE);
 const UI = { seg: "Both", thrIdx: 4, region: "All" };   // thrIdx 4 = 12k
 const thrValue = () => EDGES[UI.thrIdx];
@@ -198,7 +198,7 @@ function compute(regs, segs) {
   }
   return out;
 }
-const availFor = regs => regs.reduce((s, r) => s + (Number(S.avail[r]) || 0), 0);
+const availFor = regs => regs.reduce((s, r) => s + Math.max(0, (Number(S.avail[r]) || 0) - (Number(S.mgmt[r]) || 0)), 0);
 
 // ---------- rendering ----------
 function card(label, value, sub, cls) {
@@ -219,7 +219,7 @@ function renderCards() {
     card("CSMs needed: managed", fmt1(t.managed.need), "Peak month " + fmt1(t.managed.needPeak)),
     card("CSMs needed: pool", fmt1(t.pool.need), "Peak month " + fmt1(t.pool.needPeak)),
     card("CSMs needed: total", fmt1(need), "Average month"),
-    card("Available MM/UM CSMs", fmt0(avail), "From the review, editable below"),
+    card("Available MM/UM CSMs", fmt1(avail), "Review count less leader time, editable below"),
     card("Surplus / (gap)", (gap >= 0 ? "+" : "") + fmt1(gap), gap >= 0 ? "Covered at the target" : "Short of the target", gap >= 0 ? "ok" : "bad"),
   ].join("");
   document.getElementById("cardNote").textContent =
@@ -255,17 +255,17 @@ function renderLeaders() {
   const sel = UI.region;
   for (const r of REGIONS) {
     const t = compute([r]);
-    const avail = Number(S.avail[r]) || 0;
+    const avail = Math.max(0, (Number(S.avail[r]) || 0) - (Number(S.mgmt[r]) || 0));
     const need = t.managed.need + t.pool.need;
     const util = avail > 0 ? (t.managed.avgDem + t.pool.avgDem) / (avail * t.E) : 0;
     const lead = org[r];
     const leaderTxt = r === "Rest of World" ? "No leader on either chart" :
-      `${lead.leader_review}${lead.leader_chart !== lead.leader_review ? " (chart: " + lead.leader_chart + ")" : ""}`;
+      `${lead.leader_review}${lead.leader_chart !== lead.leader_review ? "; chart: " + lead.leader_chart : ""}`;
     const openTxt = r === "Rest of World" ? "-" : `${lead.open_roles_chart} open${lead.vacant_senior_chart ? ", " + lead.vacant_senior_chart + " vacant" : ""}`;
     rows.push(`<tr class="${sel === r ? "sel" : ""}"><td>${r}</td><td>${leaderTxt}</td>
       <td class="num">${fmt0(t.managed.accounts + t.pool.accounts)}</td><td class="num">${fmt0(t.managed.accounts)}</td><td class="num">${fmt0(t.pool.accounts)}</td>
       <td class="num">${fmt1(t.managed.need)}</td><td class="num">${fmt1(t.pool.need)}</td><td class="num">${fmt1(need)}</td>
-      <td class="num">${fmt0(avail)}</td><td class="num ${avail - need >= 0 ? "ok" : "bad"}">${(avail - need >= 0 ? "+" : "") + fmt1(avail - need)}</td>
+      <td class="num">${fmt1(avail)}</td><td class="num ${avail - need >= 0 ? "ok" : "bad"}">${(avail - need >= 0 ? "+" : "") + fmt1(avail - need)}</td>
       <td class="num">${pct(util)}</td><td>${openTxt}</td></tr>`);
     tot.acc += t.managed.accounts + t.pool.accounts; tot.man += t.managed.accounts; tot.pool += t.pool.accounts;
     tot.nM += t.managed.need; tot.nP += t.pool.need; tot.avail += avail; tot.dem += t.managed.avgDem + t.pool.avgDem; tot.E = t.E;
@@ -274,7 +274,7 @@ function renderLeaders() {
   const totUtil = tot.avail > 0 ? tot.dem / (tot.avail * tot.E) : 0;
   rows.push(`<tr class="total"><td>Total</td><td></td><td class="num">${fmt0(tot.acc)}</td><td class="num">${fmt0(tot.man)}</td><td class="num">${fmt0(tot.pool)}</td>
     <td class="num">${fmt1(tot.nM)}</td><td class="num">${fmt1(tot.nP)}</td><td class="num">${fmt1(all)}</td>
-    <td class="num">${fmt0(tot.avail)}</td><td class="num ${tot.avail - all >= 0 ? "ok" : "bad"}">${(tot.avail - all >= 0 ? "+" : "") + fmt1(tot.avail - all)}</td>
+    <td class="num">${fmt1(tot.avail)}</td><td class="num ${tot.avail - all >= 0 ? "ok" : "bad"}">${(tot.avail - all >= 0 ? "+" : "") + fmt1(tot.avail - all)}</td>
     <td class="num">${pct(totUtil)}</td><td></td></tr>`);
   document.getElementById("leaderTable").innerHTML =
     `<thead><tr><th>Region</th><th>Leader</th><th class="num">MM/UM accounts</th><th class="num">Managed</th><th class="num">Pooled</th>
@@ -297,7 +297,7 @@ function renderHeadcount() {
   const m = DATA.headcount_review["Multi-region"];
   rows.push(`<tr><td>Multi-region</td><td>-</td><td>-</td><td class="num">-</td><td class="num">${m.multi_region_mm_um_csms}</td><td class="num">-</td><td class="num">${m.active_smb_primary_csms}</td><td class="num">${fmt0(m.mm_um_accounts_held_by_deactivated)} in ${m.deactivated_csms_holding_mm_um_accounts} deactivated CSMs</td></tr>`);
   document.getElementById("hcTable").innerHTML =
-    `<thead><tr><th>Region</th><th>Leader (chart)</th><th>Leader (review)</th><th class="num">Named ICs (chart)</th>
+    `<thead><tr><th>Region</th><th>Leader (chart)</th><th>Leader (confirmed)</th><th class="num">Named ICs (chart)</th>
      <th class="num">Active MM/UM CSMs (review)</th><th>Open roles (chart)</th><th class="num">Active SMB-primary CSMs (review)</th><th>MM/UM accounts held by deactivated CSMs</th></tr></thead><tbody>${rows.join("")}</tbody>`;
 }
 
@@ -341,7 +341,8 @@ function renderConsiderations() {
     "Scope: SMB accounts and accounts with no segment are excluded from this view (3,559 team accounts). PLG covers SMB.",
     "tARR, not ARR: the tiers and the managed threshold use vitally.custom.tarr. Team tARR is about EUR 87.5m against EUR 44.9m of ARR. Confirm what tARR measures before setting the threshold.",
     "The managed threshold is 12,000 tARR, the image's P2 floor. P3 and P4 accounts are pooled, including their renewals. A 10,000 threshold would move about 240 P3 accounts into managed.",
-    "Headcount: the review shows 10 active MM/UM CSMs in UKI, 6 in Nordics and 9 in Central & South. The org chart shows 11, 7 and 9 named ICs plus open or vacant roles. UKI names differ between the two. Confirm the roster.",
+    "Headcount: the review shows 10 active MM/UM CSMs in UKI, 6 in Nordics and 9 in Central & South. The org chart shows 11, 7 and 9 named ICs plus open or vacant roles. The UKI leader is confirmed as Tom Macbride. Confirm the roster.",
+    "Nordics: Stina Grahn is on maternity leave. Jakob Klöfver manages the region while owning a 94-account UM book. His management time is not deducted until entered in the leader time input, so Nordics availability is overstated until then.",
     "One multi-region MM/UM CSM (Aida Selam, per the open items) is not counted in any region. Confirm which region's accounts she holds before the regional totals are used.",
     `Deactivated CSMs still hold ${fmt0(deact)} MM/UM accounts. These need reassigning before any managed-book load is trusted.`,
     "1,024 MM/UM accounts have no 2027 renewal date and are excluded from the renewal hours, so renewal workload is understated.",
@@ -362,7 +363,7 @@ function renderInputs() {
   document.getElementById("region").innerHTML = ["All"].concat(REGIONS).map(r => `<option ${r === UI.region ? "selected" : ""}>${r}</option>`).join("");
 
   document.getElementById("availRows").innerHTML = REGIONS.map(r =>
-    `<tr><td>${r}</td><td class="num"><input type="number" step="1" data-avail="${r}" value="${S.avail[r]}"></td><td class="small">${DEFAULT_AVAIL[r]} active MM/UM CSMs in the review</td></tr>`).join("");
+    `<tr><td>${r}</td><td class="num"><input type="number" step="1" data-avail="${r}" value="${S.avail[r]}"></td><td class="num"><input type="number" step="0.1" min="0" data-mgmt="${r}" value="${S.mgmt[r]}"></td><td class="small">${DEFAULT_AVAIL[r]} active MM/UM CSMs in the review${r === "Nordics" ? ". Jakob Klöfver manages the region and holds a book: enter his management share as CSM-equivalents" : ""}</td></tr>`).join("");
 
   document.getElementById("globalInputs").innerHTML = GLOBAL_INPUTS.map(gi =>
     `<label>${gi.label} <input type="number" step="${gi.step}" data-glob="${gi.key}" data-div="${gi.div}" value="${Number((S.globals[gi.key] / gi.div).toFixed(4))}"></label>`).join("");
@@ -388,6 +389,7 @@ function renderInputs() {
 document.addEventListener("input", e => {
   const el = e.target;
   if (el.dataset.avail) { const v = Number(el.value); if (!isNaN(v)) S.avail[el.dataset.avail] = v; }
+  else if (el.dataset.mgmt) { const v = Number(el.value); if (!isNaN(v)) S.mgmt[el.dataset.mgmt] = v; }
   else if (el.dataset.glob) { const v = Number(el.value); if (!isNaN(v)) S.globals[el.dataset.glob] = v * Number(el.dataset.div); }
   else if (el.dataset.prof) {
     const [seg, book, idx, field] = el.dataset.prof.split("|"); const v = Number(el.value);

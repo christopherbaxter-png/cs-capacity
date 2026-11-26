@@ -12,7 +12,8 @@ Narrows the calculator to Mid Market and Upmarket, and sizes the managed and poo
 - **Result at defaults:** 4,711 MM/UM accounts; 1,642 managed and 3,069 pooled at 12,000 tARR. 46.3 managed and 12.8 pool CSMs are needed (59.1 in total), against 25 available. Hours per account are placeholders, so this is not yet a usable headcount figure.
 - **Data:** `scripts/build_inputs.py` now also emits bins, renewals and image tiers by segment and region, review headcount, and AM vs Vitally conflicts. The team population is unchanged (8,270 accounts).
 - **Corrections:** the v3.2 status text and considerations have been rewritten for MM/UM only. Some v3.2 numbers no longer apply.
-- **Known gaps:** hours and touch cadence are placeholders; tARR's definition is unconfirmed; the org chart and the review disagree on UKI; 148 MM/UM accounts sit with deactivated CSMs; Rest of World has 38 accounts and no named leader.
+- **Leaders (26 Nov):** UKI is led by Tom Macbride. Stina Grahn is on maternity leave; Jakob Klöfver manages Nordics and owns a book. A leader-time input per region records management share, at 0 until set.
+- **Known gaps:** hours and touch cadence are placeholders; tARR's definition is unconfirmed; the roster differs between the review and the chart; Nordics management time is not yet deducted; 148 MM/UM accounts sit with deactivated CSMs; Rest of World has 38 accounts and no named leader.
 
 ## v3.2 (prototype), 24 Nov 2026
 

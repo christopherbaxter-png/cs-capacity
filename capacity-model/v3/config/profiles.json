@@ -163,19 +163,19 @@
     "_about": "Leader structure from the Enterprise org chart image (shared Nov 2026). Counts only. Names of managers are shown; CSM names are not stored here.",
     "UKI": {
       "leader_chart": "Tom Macbride",
-      "leader_review": "Lucy Winter",
+      "leader_review": "Tom Macbride",
       "named_ics_chart": 11,
       "open_roles_chart": 2,
       "vacant_senior_chart": 1,
-      "note": "The chart and the review disagree on who leads UKI. Chart shows 11 named ICs; the review shows 10 active MM/UM CSMs with different names."
+      "note": "Confirmed 26 Nov 2026: Tom Macbride leads UKI. The review's Vitally manager field still shows Lucy Winter on UKI rows. The chart shows 11 named ICs against the review's 10 active MM/UM CSMs."
     },
     "Nordics": {
       "leader_chart": "Stina Grahn",
-      "leader_review": "Stina Grahn",
+      "leader_review": "Jakob Klöfver (acting)",
       "named_ics_chart": 7,
       "open_roles_chart": 1,
       "vacant_senior_chart": 0,
-      "note": "Chart shows a Senior CSM (stepping up) and one open CSM I role. One chart IC (Nikol Rej Notlev) is marked vacant, decision pending."
+      "note": "Confirmed 26 Nov 2026: Stina Grahn is on maternity leave. Jakob Klöfver manages Nordics and owns a book (94 accounts, UM, in the review). His management share is entered in the leader time input, 0 until set. The chart still shows a Senior CSM stepping up and one open CSM I role. One chart IC (Nikol Rej Notlev) is marked vacant, decision pending."
     },
     "Central & South": {
       "leader_chart": "Estefania Gambin",
